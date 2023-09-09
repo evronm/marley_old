@@ -1,8 +1,8 @@
 
 
-(symbols 'entities 'rst 'r 'pico)
+(symbols 'entities 'pico)
 
-(local) (+User +Venue +Vendor +Event)
+(local) (+User +Venue +Provider +Service +Itinerary)
 
 (class +User +Rest)
   (rel id (+Key +Number))
@@ -15,26 +15,33 @@
 
 (class +Venue +User)
   (rel nm (+Idx +String))
-  (rel providers (+List +Joint) vendor (+Provider))
-  (rel itins (+List +Joint) venue (+Itinerary))
+  (rel providers (+List +Joint) venues (+Provider))
+  (rel services (+List +Joint) venues (+Service))
 
 (class +Provider +User)
   (rel nm (+Idx +String))
-  (rel vendues (+List +Joint) vendor (+Venue))
-  (rel itins (+List +Joint) vendor (+Itinerary))
+  (rel venues (+List +Joint) providers (+Venue))
+  (rel itins (+List +Joint) provider (+Itinerary))
 
 (class +Service +Rest)
-  (rel 
+  (rel nm (+Idx +String))
+  (rel duration (+Number))
+  (rel price (+Number))
+  (rel capacity (+Number))
+  (rel max_group (+Number))
+  (rel venue (+Joint) services (+Venue))
+
 
 (class +Itinerary +Rest)
   (dm T ()
-    (=: perms 666)
+    (=: perms 664)
     (=: owner 'cust)
-    (=: grp 'vendors 'vendors)
+    (=: grp 'provider)
   )
   (rel dt (+Idx +Date))
   (rel tm (+Time))
-  (rel cust (+Joint) event (+User))
+  (rel cust (+Joint) itins (+User))
+  (rel ppl (+Number))
   (rel services (+List +Joint) event (+Service))
   (rel provider (+Joint) event (+Venue))
 
