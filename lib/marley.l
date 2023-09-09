@@ -17,14 +17,10 @@
   T
 )
 
-(de Authz (Un Verb Path)
-)
-
-
 
 (de process_req (Verb Path Qs Post User)
   (default Path (confv '(default_path)))
-  (setq Thing (car pth) Ns (intern (confv '(ns))))
+  (setq Thing (car Path) Ns (intern (confv '(ns))))
   (or 
     (and 
       (setq Fn (car Path))
@@ -34,7 +30,7 @@
           (respond 200 (in (pack (confv '(static_dir)) Fn ) (till)))
           (respond 404))
         (respond 403)))
-    (respond 200 (let (Cls (or (isa '+Rest (intern (to_cls_nm Noun) Ns)) (intern (to_cls_nm (singularize Noun) Ns )))) (send Verb Cls Path Qs Post User)) )
+    (respond 200 (let (Cls (or (isa '+Rest (intern (to_cls_nm Thing) Ns)) (intern (to_cls_nm (singularize Thing) Ns )))) (send (any (pack Verb ">")) Cls Path Qs Post User)) )
     (respond 404)))
 
 
