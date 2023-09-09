@@ -47,7 +47,9 @@
   (rel services (+List +Joint) itins (+Service))
   (rel provider (+Joint) itins (+Venue))
 
-(when *Dbg
-
+(de go ()
+  (start authn process_req) 
 )
+(load T)
+(bye)
 

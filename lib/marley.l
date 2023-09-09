@@ -1,5 +1,4 @@
 
-(load "lib/proto.l")
 (load "lib/util.l")
 (load "lib/server.l")
 (load "config.l")
@@ -25,7 +24,7 @@
 
 (de process_req (Verb Path Qs Post User)
   (default Path (confv '(default_path)))
-  (setq Thing (car pth) Ns (intern (confv 'ns)))
+  (setq Thing (car pth) Ns (intern (confv '(ns))))
   (or 
     (and 
       (setq Fn (car Path))
