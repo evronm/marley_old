@@ -1,4 +1,5 @@
 
+(load "lib/marley.l")
 
 (symbols 'entities 'pico)
 
@@ -16,7 +17,7 @@
 (class +Venue +User)
   (rel nm (+Idx +String))
   (rel providers (+List +Joint) venues (+Provider))
-  (rel services (+List +Joint) venues (+Service))
+  (rel services (+List +Joint) venue (+Service))
 
 (class +Provider +User)
   (rel nm (+Idx +String))
@@ -30,6 +31,7 @@
   (rel capacity (+Number))
   (rel max_group (+Number))
   (rel venue (+Joint) services (+Venue))
+  (rel itins (+List +Joint) services (+Itinerary))
 
 
 (class +Itinerary +Rest)
@@ -42,8 +44,8 @@
   (rel tm (+Time))
   (rel cust (+Joint) itins (+User))
   (rel ppl (+Number))
-  (rel services (+List +Joint) event (+Service))
-  (rel provider (+Joint) event (+Venue))
+  (rel services (+List +Joint) itins (+Service))
+  (rel provider (+Joint) itins (+Venue))
 
 (when *Dbg
 
