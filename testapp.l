@@ -15,12 +15,10 @@
   (rel itins (+List +Joint) cust (+Itinerary))
 
 (class +Venue +User)
-  (rel nm (+Idx +String))
   (rel providers (+List +Joint) venues (+Provider))
   (rel services (+List +Joint) venue (+Service))
 
 (class +Provider +User)
-  (rel nm (+Idx +String))
   (rel venues (+List +Joint) providers (+Venue))
   (rel itins (+List +Joint) provider (+Itinerary))
 
@@ -48,6 +46,7 @@
   (rel provider (+Joint) itins (+Venue))
 
 (de go ()
+(!)
   (start authn process_req) 
 )
 (load T)

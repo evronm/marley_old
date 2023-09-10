@@ -1,31 +1,31 @@
 #(symbols 'util 'pico)
 (load "lib/plursing.l")
 
-
-
 (de pw_hash (Pw Salt)
-  (pipe (out (list 'argon2 Salt '-r) (prin Pw)) (read))
-)
+  (pipe (out (list 'argon2 Salt '-r) (prin Pw)) (read)))
 
 (de sc (Str Sep)
-  (split (chop Str) Sep)
-)
+  (split (chop Str) Sep))
 
 (de capitalize (Str)
   (let s (chop Str)
-    (pack (uppc (car s)) (cdr s))
-  )
-)
+    (pack (uppc (car s)) (cdr s))))
 
 (de camelize (Str)
-  (pack (mapcar 'capitalize (sc Str "_") ))
-)
+  (pack (mapcar 'capitalize (sc Str "_") )))
 
 (de to_cls_nm (Str)
-  (pack "+" (camelize Str))
-)
+  (pack "+" (camelize Str)))
 
 
+(de nil? (Foo)
+  (= NIL Foo))
+
+(de reject (Fun Lst Args)
+  (filter '((Foo) (not (Fun Foo))) Lst Args))
+
+(de rejectm (Lstr Lst Args)
+  (filter '((Foo) (not (member Foo Lstr))) Lst Args))
 
 (de surr (Str Surr)
   (let (Close (

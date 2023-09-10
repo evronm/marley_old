@@ -38,15 +38,14 @@
 
 (class +Rest +Entity)
   (dm owner_col> (
-    'uid
-  ))
+    'uid))
   (dm owner_at_creation> ()
-    (or (: owner_at_creation) current_user)
-  )
+    (or (: owner_at_creation) current_user))
   (dm perms> ()
-    (or (: perms) 611)
-  )
+    (or (: perms) 611))
   
+  (dm rels> () 
+    (reject 'nil? (cons (try 'rels> (car (type This))) (filter '((r) (<> (cdr r) '*Dbg)) (getl This)))))
   (dm get> () prinl 'get)
   (dm post> () prinl 'post)
   (dm put> () prinl 'put)
