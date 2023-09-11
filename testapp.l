@@ -8,7 +8,7 @@
 (class +User +Rest)
   (rel id (+Key +Number))
   (rel eml (+Key +String))
-  (rel pw (+Key +String))
+  (rel pw (+Key +Password))
   (rel salt (+String))
   (rel addr (+Idx +String))
   (rel nm (+String))

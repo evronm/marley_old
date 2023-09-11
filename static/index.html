@@ -1,13 +1,20 @@
 <html>
 <head>
-<script>
-  import van from "https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.1.3.min.js"
-  const {button, div, pre} = van.tags
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/umbrellajs"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.2.0.nomodule.min.js"></script>
+  <script>
+    const {div, p, pre, form, input, textarea, button, submit} = van.tags
+  </script>
 </head>
 <body>
 <h1>Foo Bar!</h1>
-<div>
-Create Account
+<nav id="account_nav">
+  <a href='/users/new'>Create Account</a>
+  <a href='/providers/new'>Become a spitter!</a>
+  <a href='/venues/new'>Register your tasting room</a>
+</nav>
+<div id="main">
 </div>
+
+</body>
 </html>

@@ -36,6 +36,8 @@
 
 (pool (confv '(pool)))
 
+(setq +Password +String)
+
 (class +Rest +Entity)
   (dm owner_col> (
     'uid))
@@ -45,8 +47,13 @@
     (or (: perms) 611))
   
   (dm rels> () 
-    (reject 'nil? (cons (try 'rels> (car (type This))) (filter '((r) (<> (cdr r) '*Dbg)) (getl This)))))
-  (dm get> () prinl 'get)
+    (reject 'nil? (append (try 'rels> (car (type This))) (filter '((r) (<> (cdr r) '*Dbg)) (getl This)))))
+  (dm get> (Path Qs Post User) 
+    (case (car Path)
+      ("new" (reggae))
+      ((NIL "list") )
+      ("search") 
+    )
   (dm post> () prinl 'post)
   (dm put> () prinl 'put)
   (dm delete> () prinl 'del)
