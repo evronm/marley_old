@@ -38,7 +38,7 @@
 
 (setq +Password +String)
 
-(class +Rest +Entity)
+(class +Rest +Entity) 
   (dm owner_col> (
     'uid))
   (dm owner_at_creation> ()
@@ -53,7 +53,7 @@
       ("new" (reggae))
       ((NIL "list") )
       ("search") 
-    )
+    ))
   (dm post> () prinl 'post)
   (dm put> () prinl 'put)
   (dm delete> () prinl 'del)

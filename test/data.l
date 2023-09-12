@@ -1,0 +1,17 @@
+(load 'testapp.l)
+(symbols 'entities 'pico)
+(del!> '+User)
+(request '(+User) 'eml "user1@eml.com" 'pw "asdf" 'salt "aa" 'addr "user1 address" 'nm "user1")
+(request '(+User) 'eml "user2@eml.com" 'pw "asdf" 'salt "aa" 'addr "user2 address" 'nm "user2")
+(request '(+User) 'eml "user3@eml.com" 'pw "asdf" 'salt "aa" 'addr "user3 address" 'nm "user3")
+(request '(+User) 'eml "user4@eml.com" 'pw "asdf" 'salt "aa" 'addr "user4 address" 'nm "user4")
+(request '(+User) 'eml "user5@eml.com" 'pw "asdf" 'salt "aa" 'addr "user5 address" 'nm "user5")
+
+(request '(+Provider) 'eml "prov1@eml.com" 'pw "asdf" 'salt "aa" 'addr "prov1 address" 'nm "prov1")
+(request '(+Provider) 'eml "prov2@eml.com" 'pw "asdf" 'salt "aa" 'addr "prov2 address" 'nm "prov2")
+(request '(+Provider) 'eml "prov3@eml.com" 'pw "asdf" 'salt "aa" 'addr "prov3 address" 'nm "prov3")
+
+(request '(+Venue) 'eml "ven1@eml.com" 'pw "asdf" 'salt "aa" 'addr "ven1 address" 'nm "ven1")
+(request '(+Venue) 'eml "ven2@eml.com" 'pw "asdf" 'salt "aa" 'addr "ven2 address" 'nm "ven2")
+(request '(+Venue) 'eml "ven3@eml.com" 'pw "asdf" 'salt "aa" 'addr "ven3 address" 'nm "ven3")
+(commit T)
