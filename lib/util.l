@@ -21,12 +21,6 @@
 (de nil? (Foo)
   (= NIL Foo))
 
-(de reject (Fun Lst Args)
-  (filter '((Foo) (not (Fun Foo))) Lst Args))
-
-(de rejectm (Lstr Lst Args)
-  (filter '((Foo) (not (member Foo Lstr))) Lst Args))
-
 (de surr (Str Surr)
   (let (Close (
     case Surr

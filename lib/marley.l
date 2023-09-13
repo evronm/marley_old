@@ -38,25 +38,32 @@
 
 (setq +Password +String)
 
-(class +Rest +Entity) 
-  (dm owner_col> (
-    'uid))
+(class +Rest) 
+  (dm owner_rel ()
+    'uid)
+
   (dm owner_at_creation> ()
     (or (: owner_at_creation) current_user))
-  (dm perms> ()
-    (or (: perms) 611))
+
+  (dm perms> () 744)
   
-  (dm rels> () 
-    (reject 'nil? (append (try 'rels> (car (type This))) (filter '((r) (<> (cdr r) '*Dbg)) (getl This)))))
+  (dm rels> (Cls) 
+    (setq Rels (delete NIL (append (try 'rels> (car (type This))) (filter '((r) (<> (cdr r) '*Dbg)) (getl This)))))
+    (if (> Cls Nil)
+      (filter '((r) (= Cls (sect Cls (type (car r))))) Rels)
+      Rels))
+
   (dm get> (Path Qs Post User) 
-    (case (car Path)
+    (case (cadr Path)
       ("new" (reggae))
       ((NIL "list") )
       ("search") 
     ))
+
   (dm post> () prinl 'post)
   (dm put> () prinl 'put)
   (dm delete> () prinl 'del)
+
 
 (when *Dbg
 
