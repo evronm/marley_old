@@ -1,3 +1,4 @@
+(setq *NEWREC 1 *SEARCH 2)
 
 (load "lib/util.l")
 (load "lib/server.l")
@@ -36,7 +37,30 @@
 
 (pool (confv '(pool)))
 
-(setq +Password +String)
+(extend +String)
+  (dm reggae> () "string")
+
+(extend +Number)
+  (dm reggae> () "number")
+
+(extend +Date)
+  (dm reggae> () "date")
+
+(extend +Time)
+  (dm reggae> () "time")
+
+(extend +Bool)
+  (dm reggae> () "bool")
+
+(extend +List)
+  (dm reggae> () "instances")
+
+(class +Password +String)
+  (dm reggae> () "password")
+
+(class +Email +String)
+  (dm reggae> () "email")
+
 
 (class +Rest) 
   (dm owner_rel ()
@@ -52,6 +76,11 @@
     (if (> Cls Nil)
       (filter '((r) (= Cls (sect Cls (type (car r))))) Rels)
       Rels))
+
+  (dm reggae> (Flgs)
+    (list 
+      Flgs
+      (mapcar '((r) (list (cdr r) (reggae> (car r)))) (rels> This))))
 
   (dm get> (Path Qs Post User) 
     (case (cadr Path)

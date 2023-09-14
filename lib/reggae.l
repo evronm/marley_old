@@ -1,5 +1,4 @@
 (load '@lib/json.l)
-(setq *NEWREC 1 *SEARCH 2)
 
 (de reggae @
   (glue "," (mapcar '((Arg) (packJson Arg))  (rest)) ) )
@@ -10,8 +9,8 @@
 (de url (Url Titl Desc)
   (list "url" Url Titl Desc))
 
-(de row (Flgs Spec Vals)
-  (list "row" Flgs Spec Vals))
+(de instance (Flgs Spec Vals)
+  (list "instance" Flgs Spec Vals))
 
 
 
