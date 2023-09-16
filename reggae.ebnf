@@ -30,7 +30,7 @@ field ::= string_value
 
 err ::= string_value
 
-type ::= "string" | "number" | "email" | "password" | "date" | "time" | "datetime" | "bool" | "instances"
+type ::= "text" | "number" | "email" | "password" | "date" | "time" | "datetime" | "bool" | "instances"
 
 restrictions ::= '[' restriction (',' restriction) ']'
 

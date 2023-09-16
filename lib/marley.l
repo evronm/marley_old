@@ -40,7 +40,7 @@
 
 (pool (confv '(pool)))
 
-(extend +String) (dm reggae> () "string")
+(extend +String) (dm reggae> () "text")
 
 (extend +Number) (dm reggae> () "number")
 
