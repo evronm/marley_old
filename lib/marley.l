@@ -1,5 +1,6 @@
 (setq *NEWREC 1 *SEARCH 2)
 
+(load '@lib/json.l)
 (load "lib/util.l")
 (load "lib/server.l")
 (load "config.l")
@@ -12,6 +13,8 @@
 (de confv (Lst)
   (cdr (conf Lst)))
 
+(de reggae (Args)
+  (glue "," (split (replace (chop (str (list Args)) " ") "(" "[" ")" "]") " ")))
 
 (de authn (Un Pw)
   (prinl Un "\n" Pw)
@@ -37,37 +40,27 @@
 
 (pool (confv '(pool)))
 
-(extend +String)
-  (dm reggae> () "string")
+(extend +String) (dm reggae> () "string")
 
-(extend +Number)
-  (dm reggae> () "number")
+(extend +Number) (dm reggae> () "number")
 
-(extend +Date)
-  (dm reggae> () "date")
+(extend +Date) (dm reggae> () "date")
 
-(extend +Time)
-  (dm reggae> () "time")
+(extend +Time) (dm reggae> () "time")
 
-(extend +Bool)
-  (dm reggae> () "bool")
+(extend +Bool) (dm reggae> () "bool")
 
-(extend +List)
-  (dm reggae> () "instances")
+(extend +List) (dm reggae> () "instances")
 
-(class +Password +String)
-  (dm reggae> () "password")
+(class +Password +String) (dm reggae> () "password")
 
-(class +Email +String)
-  (dm reggae> () "email")
+(class +Email +String) (dm reggae> () "email")
 
 
 (class +Rest) 
-  (dm owner_rel ()
-    'uid)
+  (dm owner_rel () 'uid)
 
-  (dm owner_at_creation> ()
-    (or (: owner_at_creation) current_user))
+  (dm owner_at_creation> () (or (: owner_at_creation) current_user))
 
   (dm perms> () 744)
   
@@ -77,16 +70,22 @@
       (filter '((r) (= Cls (sect Cls (type (car r))))) Rels)
       Rels))
 
-  (dm reggae> (Flgs)
-    (list 
-      Flgs
-      (mapcar '((r) (list (cdr r) (reggae> (car r)))) (rels> This))))
+  (dm reggae> (new?  search?)
+    (reggae (list "instance" 
+      (cond 
+        (new? (list 
+          *NEWREC
+          (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm +New)))))
+        (T (list
+          0
+          (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm)))))))))
+      
 
   (dm get> (Path Qs Post User) 
     (case (cadr Path)
-      ("new" (reggae))
+      ("new" (reggae> This T))
       ((NIL "list") )
-      ("search") 
+      ("search" (reggae> This NIL T)) 
     ))
 
   (dm post> () prinl 'post)

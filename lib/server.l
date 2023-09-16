@@ -45,9 +45,9 @@
   )
 )
 
-(de respond (Stat Body)
+(de respond (Stat Body Ty)
   (case Stat
-    (200 (out *Sock (prinl "HTTP/1.1 200 OK\n" "Server: Marley\n" "Content-Type: text/html; charset=UTF-8\n\n" "<!doctype html>\n" Body)))
+    (200 (out *Sock (prinl "HTTP/1.1 200 OK\n" "Server: Marley\n" "Content-Type: text/html; charset=UTF-8\n\n"  Body)))
     (401 (out *Sock (prinl "HTTP/1.1 401 Unauthorized\n" "WWW-Authenticate: Basic realm=\"Please Log In\"\n")))
     (403 (out *Sock (prinl "HTTP/1.1 403 Forbidden\n" )))
     (404 (out *Sock (prinl "HTTP/1.1 404 Not Found\n" )))

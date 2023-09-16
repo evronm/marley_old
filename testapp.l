@@ -7,7 +7,7 @@
 
 (class +User +Rest +Entity)
   (rel id (+Key +Number))
-  (rel eml (+Key +String +Frm +New))
+  (rel eml (+Key +Email +Frm +New))
   (rel pw (+Key +Password +Frm +New))
   (rel salt (+String))
   (rel addr (+Idx +String +Frm +New))
@@ -49,6 +49,6 @@
 
 (de dbg () (!))
 
-#(load T)
-#(bye)
+(load T)
+(bye)
 
