@@ -6,7 +6,7 @@
 (local) (+User +Venue +Provider +Service +Itinerary)
 
 (class +User +Rest +Entity)
-  (rel id (+Key +Number))
+  (rel id (+Key +Number) '111)
   (rel eml (+Key +Email +Frm +New))
   (rel pw (+Key +Password +Frm +New))
   (rel salt (+String))
@@ -35,7 +35,7 @@
 (class +Itinerary +Rest +Entity)
   (dm owner_rel () 'cust)
   (dm grp_rel () 'provider)
-  (dm perms () 664)
+  (dm perms () '221)
   (rel start_addr (+String +Frm +New))
   (rel dt (+Idx +Date +Frm +New))
   (rel tm (+Time +Frm +New))
@@ -49,6 +49,6 @@
 
 (de dbg () (!))
 
-(load T)
-(bye)
+#(load T)
+#(bye)
 

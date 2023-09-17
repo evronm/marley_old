@@ -1,4 +1,4 @@
-(setq *NEWREC 1 *SEARCH 2)
+(setq *NEWREC 1 *SEARCH 2 *READ 2 *WRITE 1)
 
 (load '@lib/json.l)
 (load "lib/util.l")
@@ -18,9 +18,7 @@
 
 (de authn (Un Pw)
   (prinl Un "\n" Pw)
-  T
-)
-
+  T)
 
 (de process_req (Verb Path Qs Post User)
   (default Path (confv '(default_path)))
@@ -41,28 +39,29 @@
 (pool (confv '(pool)))
 
 (extend +String) (dm reggae> () "text")
-
 (extend +Number) (dm reggae> () "number")
-
 (extend +Date) (dm reggae> () "date")
-
 (extend +Time) (dm reggae> () "time")
-
 (extend +Bool) (dm reggae> () "bool")
-
 (extend +List) (dm reggae> () "instances")
-
 (class +Password +String) (dm reggae> () "password")
-
 (class +Email +String) (dm reggae> () "email")
 
+(extend +relation)
+  (dm perms> (p)
+    (if p (=: perms p) (: perms)))
+
+
+(redef rel Lst
+  (if (and (num? (cdar (tail 1 Lst))) (not (num? (tail 1 Lst))))
+    (prog (eval (cons 'rel (head -1 Lst) ))
+      (perms> (get *Class (car Lst)) (tail 1 Lst)))
+    (eval (cons 'rel Lst))))
 
 (class +Rest) 
   (dm owner_rel () 'uid)
-
   (dm owner_at_creation> () (or (: owner_at_creation) current_user))
-
-  (dm perms> () 744)
+  (dm perms> () '211)
   
   (dm rels> (Cls) 
     (setq Rels (delete NIL (append (try 'rels> (car (type This))) (filter '((r) (<> (cdr r) '*Dbg)) (getl This)))))

@@ -32,7 +32,7 @@ err ::= string_value
 
 type ::= "text" | "number" | "email" | "password" | "date" | "time" | "datetime" | "bool" | "instances"
 
-restrictions ::= '[' restriction (',' restriction) ']'
+restrictions ::= '[' restriction (',' restriction)* ']'
 
 restriction ::= "ro" | "required" | min | max | permitted_values | pattern
 

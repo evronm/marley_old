@@ -22,3 +22,6 @@ function Field (spec) {
   }
 }
 
+function Instance(spec) {
+}
+
