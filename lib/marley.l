@@ -55,7 +55,7 @@
 (redef rel Lst
   (if (and (num? (cdar (tail 1 Lst))) (not (num? (tail 1 Lst))))
     (prog (eval (cons 'rel (head -1 Lst) ))
-      (perms> (get *Class (car Lst)) (tail 1 Lst)))
+      (perms> (get *Class (car Lst)) (car (tail 1 Lst))))
     (eval (cons 'rel Lst))))
 
 (class +Rest) 
