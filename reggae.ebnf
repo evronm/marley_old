@@ -14,9 +14,7 @@ url ::= url_value
 
 description ::= string_value
 
-desc ::= string_value
-
-instance_spec ::= '[' flgs ',' field_spec (',' field_spec)* ']'
+instance_spec ::= '[' flgs ',' url ',' '[' field_spec (',' field_spec)* ']' ']'
 
 flgs ::= int_value
 
@@ -32,7 +30,7 @@ err ::= string_value
 
 type ::= "text" | "number" | "email" | "password" | "date" | "time" | "datetime" | "bool" | "instances"
 
-restrictions ::= '[' restriction (',' restriction)* ']'
+restrictions ::= '[' restriction ( ',' restriction)* ']'
 
 restriction ::= "ro" | "required" | min | max | permitted_values | pattern
 

@@ -52,6 +52,7 @@
     (if p (=: perms p) (: perms)))
 
 
+#add permissions option
 (redef rel Lst
   (if (and (num? (cdar (tail 1 Lst))) (not (num? (tail 1 Lst))))
     (prog (eval (cons 'rel (head -1 Lst) ))
@@ -62,6 +63,7 @@
   (dm owner_rel () 'uid)
   (dm owner_at_creation> () (or (: owner_at_creation) current_user))
   (dm perms> () '211)
+  (dm url> () (pack "/" (lowc (cdr (chop This)))))
   
   (dm rels> (Cls) 
     (setq Rels (delete NIL (append (try 'rels> (car (type This))) (filter '((r) (<> (cdr r) '*Dbg)) (getl This)))))
@@ -74,9 +76,11 @@
       (cond 
         (new? (list 
           *NEWREC
+          (url> This)
           (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm +New)))))
         (T (list
           0
+          (url> This)
           (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm)))))))))
       
 
