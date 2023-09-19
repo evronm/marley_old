@@ -11,27 +11,36 @@ function init() {
 function navclick(e) {
   fetch(e.target.href)
     .then((res) => res.json())
-    .then((json) => foo=json)
+    .then((json) => show('#main', json))
     .catch((err) => console.error("error:", err));
 }
 
+function show(target, json) {
+  u(target).html(Reggae[json[0]](json));
 
+}
+const Reggae={
+  instance: (json) => {
+    var spec=json[1];
+    var newrec=spec[0] & NEW;
+    var srch=spec[0] & SRCH;
+    var url=spec[1]
+    var fields=spec[2].map((s) => {return field(s)});
+    return form({action: url}, fields);
 
-function Field (spec) {
-  this.name=spec[0];
-  this.type=spec[1].replace('bool', 'checkbox'); //god I hate this fucking line so fucking much!
-  this.restrictions=spec[2];
-  this.dom=() => {
-    return [label({for: this.name}, this.name + ":"), input({type: this.type, name: this.name})]
+  },
+  mesg: (title, content) => {
+    return "asdf";
   }
-  return this;
 }
 
-function Instance(spec) {
-  this.new=spec[0] & NEW;
-  this.srch=spec[0] & SRCH;
-  this.url=spec[1]
-  this.fields=spec[2].map((s) => {return new Field(s)});
-  return this
+
+function field (spec) {
+  var name=spec[0];
+  var type=spec[1].replace('bool', 'checkbox'); //yes, facepalm :/
+  var restrictions=spec[2];
+  return [label({for: name}, name + ":"), input({type: type, name: name})]
 }
+
+
 
