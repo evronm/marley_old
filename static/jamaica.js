@@ -16,7 +16,7 @@ function navclick(e) {
 }
 
 function show(target, json) {
-  u(target).html(Reggae[json[0]](json));
+  u(target).replace(Reggae[json[0]](json));
 
 }
 const Reggae={
