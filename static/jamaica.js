@@ -25,7 +25,7 @@ const Reggae={
     var newrec=spec[0] & NEW;
     var srch=spec[0] & SRCH;
     var url=spec[1]
-    var fields=spec[2].map((s) => {return field(s)});
+    var fields=spec[2].map((s) => {return new Field(s).dom()});
     return form({action: url}, fields);
 
   },
@@ -35,12 +35,27 @@ const Reggae={
 }
 
 
-function field (spec) {
-  var name=spec[0];
-  var type=spec[1].replace('bool', 'checkbox'); //yes, facepalm :/
-  var restrictions=spec[2];
-  return [label({for: name}, name + ":"), input({type: type, name: name})]
+function Field (spec) {
+  this.name=spec[0];
+  this.type=spec[1].replace('bool', 'checkbox'); //yes, facepalm :/
+  this.restrictions=spec[2];
 }
+
+Field.prototype.dom=function() {
+  if (this[this.type]){
+    return this[this.type]();
+  } else {
+    return this.default();
+  }
+}
+
+Field.prototype.default=function() {
+  return [label({for: this.name}, labels[this.name] + ":"), input({type: this.type, name: this.name})]
+}
+Field.prototype.password=function() {
+  return [this.default(), [label({for: "confirmpw"}, "Confirm Password:"), input({type: this.type, name: "confirmpw"})]];
+}
+
 
 
 
