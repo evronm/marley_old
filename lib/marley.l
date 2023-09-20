@@ -91,9 +91,9 @@
       ("search" (reggae> This NIL T)) 
     ))
 
-  (dm post> () prinl 'post)
-  (dm put> () prinl 'put)
-  (dm delete> () prinl 'del)
+  (dm post> (Path Qs Post User) prinl 'post)
+  (dm put> (Path Qs Post User) prinl 'put)
+  (dm delete> (Path Qs Post User) prinl 'del)
 
 
 (when *Dbg

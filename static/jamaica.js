@@ -16,17 +16,27 @@ function navclick(e) {
 }
 
 function show(target, json) {
-  u(target).replace(Reggae[json[0]](json));
-
+  u(target).empty().append(Reggae[json[0]](json));
+  u('form').on('submit', formSubmit);
 }
+
+function formSubmit(e) {
+  e.preventDefault();
+  fetch(e.target.action, new FormData(e.target)).
+    then((res) => res.json()).
+    then((json) => show('#main', json)).
+    catch((err) => console.error("error:", err));
+}
+
 const Reggae={
   instance: (json) => {
     var spec=json[1];
     var newrec=spec[0] & NEW;
     var srch=spec[0] & SRCH;
     var url=spec[1]
+    var method="post";
     var fields=spec[2].map((s) => {return new Field(s).dom()});
-    return form({action: url}, fields);
+    return form({action: url, method: method}, fields, input({type:"submit", value: "Save"}));
 
   },
   mesg: (title, content) => {
