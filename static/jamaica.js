@@ -22,7 +22,7 @@ function show(target, json) {
 
 function formSubmit(e) {
   e.preventDefault();
-  fetch(e.target.action, new FormData(e.target)).
+  fetch(e.target.action, {method: "POST", body: u(e.target).serialize()}).
     then((res) => res.json()).
     then((json) => show('#main', json)).
     catch((err) => console.error("error:", err));
