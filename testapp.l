@@ -5,13 +5,14 @@
 
 (local) (+User +Venue +Provider +Service +Itinerary)
 
+
 (class +User +Rest +Entity)
   (rel id (+Key +Number) '111)
   (rel eml (+Key +Email +Frm +New) '210)
   (rel pw (+Key +Password +Frm +New) '200)
   (rel salt (+String) '000)
   (rel addr (+Idx +String +Frm +New) '210)
-  (rel nm (+String +Frm +New) '210)
+  (rel nm (+Key +String +Frm +New) '210)
   (rel itins (+List +Joint +Frm) cust (+Itinerary) '210)
 
 (class +Venue +User +Entity)

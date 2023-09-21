@@ -47,12 +47,11 @@
 (class +Password +String) (dm reggae> () "password")
 (class +Email +String) (dm reggae> () "email")
 
+#add permissions option
 (extend +relation)
   (dm perms> (p)
     (if p (=: perms p) (: perms)))
 
-
-#add permissions option
 (redef rel Lst
   (if (and (num? (cdar (tail 1 Lst))) (not (num? (tail 1 Lst))))
     (prog (eval (cons 'rel (head -1 Lst) ))
@@ -92,7 +91,7 @@
     ))
 
   (dm post> (Path Qs Post User) (!) )
-  (dm put> (Path Qs Post User) prinl 'put)
+#this breaks the db  (dm put> (Path Qs Post User) prinl 'put)
   (dm delete> (Path Qs Post User) prinl 'del)
 
 
