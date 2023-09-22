@@ -6,7 +6,7 @@
 (local) (+User +Venue +Provider +Service +Itinerary)
 
 
-(class +User +Rest +Entity)
+(class +User +Entity +Rest)
   (rel id (+Key +Number) '111)
   (rel eml (+Key +Email +Frm +New) '210)
   (rel pw (+Key +Password +Frm +New) '200)
@@ -15,7 +15,7 @@
   (rel nm (+Key +String +Frm +New) '210)
   (rel itins (+List +Joint +Frm) cust (+Itinerary) '210)
 
-(class +Venue +User +Entity)
+(class +Venue +User)
   (rel providers (+List +Joint +Frm) venues (+Provider) '221)
   (rel services (+List +Joint +Frm) venue (+Service) '211)
 
@@ -23,7 +23,7 @@
   (rel venues (+List +Joint +Frm) providers (+Venue) '221)
   (rel itins (+List +Joint +Frm) provider (+Itinerary) '222)
 
-(class +Service +Rest +Entity)
+(class +Service +Entity +Rest)
   (rel nm (+Idx +String +Frm +New) '211)
   (rel duration (+Number +Frm +New) '211)
   (rel price (+Number +Frm +New) '211)
@@ -33,7 +33,7 @@
   (rel itins (+List +Joint) services (+Itinerary) '222)
 
 
-(class +Itinerary +Rest +Entity)
+(class +Itinerary +Entity +Rest)
   (dm owner_rel () 'cust)
   (dm grp_rel () 'provider)
   (dm perms () '221)
