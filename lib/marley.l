@@ -43,11 +43,12 @@
 (class +Rest) 
   (dm owner_rel () 'uid)
   (dm owner_at_creation> () (or (: owner_at_creation) current_user))
-  (dm perms> () '211)
+  (dm perms> () '311)
   (dm url> () (pack "/" (lowc (cdr (chop This)))))
-  
+  (dm cls> () (car (type This)))
+
   (dm rels> (Cls) 
-    (setq Rels (delete NIL (append (try 'rels> (car (type This))) (filter '((r) (<> (cdr r) '*Dbg)) (getl This)))))
+    (setq Rels (delete NIL (append (try 'rels> (cls> This)) (filter '((r) (<> (cdr r) '*Dbg)) (getl This)))))
     (if (> Cls Nil)
       (filter '((r) (= Cls (sect Cls (type (car r))))) Rels)
       Rels))
@@ -74,7 +75,11 @@
 
   (dm post> (Path Qs Post User) (!) )
   (dm delete> (Path Qs Post User) prinl 'del)
-  (dm check> () (mapcar '((rel) (mis> rel (get This rel))) (rels> This)  ))
+
+  (dm check> () 
+    (mapcar 
+      '((R) (check> (car R) )) 
+      (rels> (cls> This))  ))
 
 (when *Dbg
 

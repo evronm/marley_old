@@ -4,8 +4,8 @@
 (de pw_hash (Pw Salt)
   (pipe (out (list 'argon2 Salt '-r) (prin Pw)) (read)))
 
-(de sc (Str Sep)
-  (split (chop Str) Sep))
+(de sc (Str . @)
+  (eval (append '(split) '((chop Str)) (rest))))
 
 (de capitalize (Str)
   (let s (chop Str)

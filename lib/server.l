@@ -40,8 +40,8 @@
 (de parse_qs (Qs)
   (mapcar '((Pr) 
     (let  (Kv (split Pr "="))
-      (cons (url_dec (car Kv)) (url_dec (cdr Kv))) 
-    ) ) (sc Qs '&)
+      (cons (url_dec (car Kv)) (url_dec (cadr Kv))) 
+    ) ) (split Qs '&)
   )
 )
 
