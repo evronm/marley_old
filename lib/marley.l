@@ -73,12 +73,19 @@
       ("search" (reggae> This NIL T)) 
     ))
 
-  (dm post> (Path Qs Post User) (!) )
+  (dm post> (Path Qs Post User) 
+    (setq E (new (str This)))
+    (for R Post (! put> E (intern (car R)) (cdr R)))
+    (errs> E) )
+  
   (dm delete> (Path Qs Post User) prinl 'del)
 
-  (dm check> () 
+  (dm errs> () 
     (mapcar 
-      '((R) (check> (car R) )) 
+      '((R) 
+        (let (Err (err> (car R) (get This (cdr R)))) 
+          (when Err 
+            (list (cdr R) Err)))) 
       (rels> (cls> This))  ))
 
 (when *Dbg

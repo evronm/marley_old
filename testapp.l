@@ -14,7 +14,7 @@
   (rel addr (+Idx +String +Frm +New) '210)
   (rel nm (+Need +Key +String +Frm +New) '210)
   (rel itins (+List +Joint +Frm) cust (+Itinerary) '210)
-  (dm post> (Path Qs Post User) (!) )
+#  (dm post> (Path Qs Post User)  )
 
 (class +Venue +User)
   (rel providers (+List +Joint +Frm) venues (+Provider) '221)
@@ -51,6 +51,6 @@
 
 (de dbg () (!))
 
-#(load T)
-#(bye)
+(load T)
+(bye)
 
