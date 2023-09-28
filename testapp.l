@@ -22,7 +22,7 @@
     (put> U 'salt (sym (in "/dev/urandom" (rd 10))))
     (put> U 'pw (sym (pw_hash (assov 'pw Post) (get U 'salt))))
     (if (setq Errs (filter '((Err)(not (nil? Err))) (errs> U))) 
-      (respond 422 Errs)
+      (respond 422 (reggae (cons '(error) Errs)))
       (clone> U)
       (commit T)
       (respond 201 (reggae '("mesg" "Success" "Your account has been created successfully")))

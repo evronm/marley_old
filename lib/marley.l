@@ -44,10 +44,7 @@
           (respond 404)))
       (respond 401)))
 
-
-
 (pool (confv '(pool)))
-
 
 (class +Rest) 
   (dm owner_rel () 'uid)
