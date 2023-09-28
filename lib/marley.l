@@ -14,8 +14,11 @@
 (de confv (Lst)
   (cdr (conf Lst)))
 
-(de reggae (Args)
-  (glue "," (split (replace (chop (str (list Args)) " ") "(" "[" ")" "]") " ")))
+(de reggae (Lst)
+  (cond 
+    ((num? Lst) Lst)
+    ((or (sym? Lst) (str? Lst)) (pack "\"" Lst "\""))
+    (T (pack "[" (glue ", " (mapcar '((Foo)( reggae Foo)) Lst)) "]"))))
 
 (de authn (Un Pw)
   (prinl Un "\n" Pw)
