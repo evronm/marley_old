@@ -62,9 +62,9 @@ Field.prototype.dom=function() {
 Field.prototype.default=function() {
   return [label({for: this.name}, labels[this.name] + ":"), input({type: this.type, name: this.name})]
 }
-Field.prototype.password=function() {
+/*Field.prototype.password=function() {
   return [this.default(), [label({for: "confirmpw"}, "Confirm Password:"), input({type: this.type, name: "confirmpw"})]];
-}
+}*/
 
 
 

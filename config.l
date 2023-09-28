@@ -6,7 +6,7 @@
     (static_dir . "static/")
     (no_authn . 
       (
-        (get . ((user new) ""))
+        (get . ((user new) "" "app.js"))
         (post . ((user)))
       )
     )

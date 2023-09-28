@@ -7,6 +7,9 @@
 (de sc (Str . @)
   (eval (append '(split) '((chop Str)) (rest))))
 
+(de assov (K Lst)
+  (cdr (assoc K Lst)))
+
 (de capitalize (Str)
   (let s (chop Str)
     (pack (uppc (car s)) (cdr s))))

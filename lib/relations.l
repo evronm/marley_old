@@ -4,7 +4,7 @@
 (extend +relation)
   (dm perms> (p)
     (if p (=: perms p) (: perms)))
-  (dm err> ()  (mis> This))
+  (dm err> (Val Obj)  (mis> This Val Obj))
 
 (redef rel Lst
   (if (and (num? (cdar (tail 1 Lst))) (not (num? (tail 1 Lst))))
@@ -28,3 +28,4 @@
   (dm reggae> () "password")
 (class +Email +String) 
   (dm reggae> () "email")
+

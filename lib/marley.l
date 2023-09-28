@@ -21,20 +21,26 @@
   (prinl Un "\n" Pw)
   T)
 
-(de process_req (Verb Path Qs Post User)
-  (default Path (confv '(default_path)))
-  (setq Thing (car Path) Ns (intern (confv '(ns))))
-  (or 
-    (and 
-      (setq Fn (car Path))
-      (match (append '(@foo) '(.) '(@ext)) (chop Fn))
-      (if  (member (pack @ext) '(html htmx css js png gif))
-        (if ( info (pack (confv '(static_dir)) Fn)) 
-          (respond 200 (in (pack (confv '(static_dir)) Fn ) (till)))
-          (respond 404))
-        (respond 403)))
-    (respond 200 (let (Cls (or (isa '+Rest (intern (to_cls_nm Thing) Ns)) (intern (to_cls_nm (singularize Thing) Ns )))) (send (any (pack Verb ">")) Cls Path Qs Post User)) )
-    (respond 404)))
+(de process_req (Verb Path Qs Post User Creds)
+  (if (or 
+    (member Path (conf (append (list Verb) '(no_authn))))
+    (eval (append '(authn) Creds)))
+      (prog 
+        (default Path (confv '(default_path)))
+        (setq Thing (car Path) Ns (intern (confv '(ns))))
+        (or 
+          (and 
+            (setq Fn (car Path))
+            (match (append '(@foo) '(.) '(@ext)) (chop Fn))
+            (if  (member (pack @ext) '(html htmx css js png gif))
+              (if ( info (pack (confv '(static_dir)) Fn)) 
+                (respond 200 (in (pack (confv '(static_dir)) Fn ) (till)))
+                (respond 404))
+              (respond 403)))
+          (let (Cls (or (isa '+Rest (intern (to_cls_nm Thing) Ns)) (intern (to_cls_nm (singularize Thing) Ns )))) (send (any (pack Verb ">")) Cls Path Qs Post User)) 
+          (respond 404)))
+      (respond 401)))
+
 
 
 (pool (confv '(pool)))
@@ -67,15 +73,17 @@
       
 
   (dm get> (Path Qs Post User) 
-    (case (cadr Path)
-      ("new" (reggae> This T))
-      ((NIL "list") )
-      ("search" (reggae> This NIL T)) 
-    ))
+    (respond 200
+      (case (cadr Path)
+        ("new" (reggae> This T))
+        ((NIL "list") )
+        ("search" (reggae> This NIL T)) 
+      )))
 
   (dm post> (Path Qs Post User) 
     (setq E (new (str This)))
-    (for R Post (! put> E (intern (car R)) (cdr R)))
+    (for R Post (put> E (intern (car R)) (cdr R)))
+    (!)
     (errs> E) )
   
   (dm delete> (Path Qs Post User) prinl 'del)
@@ -83,7 +91,7 @@
   (dm errs> () 
     (mapcar 
       '((R) 
-        (let (Err (err> (car R) (get This (cdr R)))) 
+        (let (Err (err> (car R) (get This (cdr R)) This)) 
           (when Err 
             (list (cdr R) Err)))) 
       (rels> (cls> This))  ))
