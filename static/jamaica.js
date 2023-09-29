@@ -22,9 +22,16 @@ function show(target, json) {
 
 function processResponse(json) {
   if (json[0] == "error") {
-    alert ("error");
+    showError(json);
   } else {
     show('#main', json);
+  }
+}
+
+function showError(json) {
+  json.shift();
+  for (var e of json) {
+    u('[name=' + e[0] + ']').addClass('error')
   }
 }
 
