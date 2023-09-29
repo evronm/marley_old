@@ -20,11 +20,19 @@ function show(target, json) {
   u('form').on('submit', formSubmit);
 }
 
+function processResponse(json) {
+  if (json[0] == "error") {
+    alert ("error");
+  } else {
+    show('#main', json);
+  }
+}
+
 function formSubmit(e) {
   e.preventDefault();
   fetch(e.target.action, {method: "POST", body: u(e.target).serialize()}).
     then((res) => res.json()).
-    then((json) => show('#main', json)).
+    then((json) => processResponse(json)).
     catch((err) => console.error("error:", err));
 }
 
@@ -62,9 +70,9 @@ Field.prototype.dom=function() {
 Field.prototype.default=function() {
   return [label({for: this.name}, labels[this.name] + ":"), input({type: this.type, name: this.name})]
 }
-/*Field.prototype.password=function() {
+Field.prototype.password=function() {
   return [this.default(), [label({for: "confirmpw"}, "Confirm Password:"), input({type: this.type, name: "confirmpw"})]];
-}*/
+}
 
 
 
