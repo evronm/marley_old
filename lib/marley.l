@@ -23,11 +23,11 @@
 (de authn (Un Pw)
   (let (Cls (intern '+User (intern (confv '(ns)))))
     (setq User (db 'nm Cls Un)))
-    (= (pw_hash Pw (get User 'salt)) (get User 'pw)))
+    (and User (= (pw_hash Pw (get User 'salt)) (get User 'pw))))
 
 (de process_req (Verb Path Qs Post User Creds)
   (if (or 
-    (member Path (conf (append (list Verb) '(no_authn))))
+    (! member Path (confv (append (list Verb) '(no_authn))))
     (and (not (nil? Creds)) (eval (append '(authn) Creds))))
       (prog 
         (default Path (confv '(default_path)))
