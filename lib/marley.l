@@ -21,8 +21,9 @@
     (T (pack "[" (glue ", " (mapcar '((Foo)( reggae Foo)) Lst)) "]"))))
 
 (de authn (Un Pw)
-  (setq User (db 'nm '+User 'Un))
-  T)
+  (let (Cls (intern '+User (intern (confv '(ns)))))
+    (setq User (db 'nm Cls Un)))
+    (= (pw_hash Pw (get User 'salt)) (get User 'pw)))
 
 (de process_req (Verb Path Qs Post User Creds)
   (if (or 
