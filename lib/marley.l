@@ -21,13 +21,13 @@
     (T (pack "[" (glue ", " (mapcar '((Foo)( reggae Foo)) Lst)) "]"))))
 
 (de authn (Un Pw)
-  (prinl Un "\n" Pw)
+  (setq User (db 'nm '+User 'Un))
   T)
 
 (de process_req (Verb Path Qs Post User Creds)
   (if (or 
     (member Path (conf (append (list Verb) '(no_authn))))
-    (eval (append '(authn) Creds)))
+    (and (not (nil? Creds)) (eval (append '(authn) Creds))))
       (prog 
         (default Path (confv '(default_path)))
         (setq Thing (car Path) Ns (intern (confv '(ns))))
@@ -81,17 +81,21 @@
       )))
 
   (dm post> (Path Qs Post User) 
-    (setq E (new (str This)))
+    (setq E (new T (str This)))
     (for R Post (put> E (intern (car R)) (cdr R)))
-    (!)
-    (errs> E) )
+    (if (setq Errs (errs> E))
+      (prog 
+        (rollback)
+        (respond 422 (reggae (cons '(error) Errs))) )
+      (commit T)
+      (respond 201 (reggae '("mesg" "Success" "Your account has been created successfully")))))
   
   (dm delete> (Path Qs Post User) prinl 'del)
 
   (dm errs> () 
-    (mapcar 
+    (extract 
       '((R) 
-        (let (Err (err> (car R) (get This (cdr R)) This)) 
+        (let (Err (mis> (car R) (get This (cdr R)) This)) 
           (when Err 
             (list (cdr R) Err)))) 
       (rels> (cls> This))  ))

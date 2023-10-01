@@ -14,19 +14,7 @@
   (rel addr (+Idx +String +Frm +New) '210)
   (rel nm (+Need +Key +String +Frm +New) '210)
   (rel itins (+List +Joint +Frm) cust (+Itinerary) '210)
-  (dm post> (Path Qs Post User)  
-    (setq U (new '(+User)))
-    (put> U 'nm (assov 'nm Post))
-    (put> U 'addr (assov 'addr Post))
-    (put> U 'eml (assov 'eml Post))
-    (put> U 'salt (sym (in "/dev/urandom" (rd 10))))
-    (put> U 'pw (sym (pw_hash (assov 'pw Post) (get U 'salt))))
-    (if (setq Errs (filter '((Err)(not (nil? Err))) (errs> U))) 
-      (respond 422 (reggae (cons '(error) Errs)))
-      (clone> U)
-      (commit T)
-      (respond 201 (reggae '("mesg" "Success" "Your account has been created successfully")))
-      ))
+  
   
 
 (class +Venue +User)

@@ -2,7 +2,7 @@
 const NEW=1;
 const SRCH=2;
 
-const {div, p, pre, form, label, input, textarea, button, submit} = van.tags;
+const {div, p, span, pre, form, label, input, textarea, button, submit} = van.tags;
 function init() {
   u('#account_nav a').handle ('click', navclick)
 }
@@ -31,7 +31,7 @@ function processResponse(json) {
 function showError(json) {
   json.shift();
   for (var e of json) {
-    u('[name=' + e[0] + ']').addClass('error')
+    u('[name=' + e[0] + ']').addClass('error').after(span({class: "err_msg"}, e[1]));
   }
 }
 

@@ -4,7 +4,6 @@
 (extend +relation)
   (dm perms> (p)
     (if p (=: perms p) (: perms)))
-  (dm err> (Val Obj)  (mis> This Val Obj))
 
 (redef rel Lst
   (if (and (num? (cdar (tail 1 Lst))) (not (num? (tail 1 Lst))))
@@ -26,6 +25,11 @@
   (dm reggae> () "instances")
 (class +Password +String)
   (dm reggae> () "password")
+  (dm put> (Obj Old Pw)
+    (when (nil? (get Obj 'salt))
+      (put> Obj 'salt (sym (in "/dev/urandom" (rd 10)))))
+    (super Obj Old (sym (pw_hash Pw (get Obj 'salt))))
+  )
 (class +Email +String) 
   (dm reggae> () "email")
 
