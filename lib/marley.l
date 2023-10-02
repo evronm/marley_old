@@ -14,6 +14,8 @@
 (de confv (Lst)
   (cdr (conf Lst)))
 
+(load (pack (confv '(client)) "/client.l"))
+
 (de reggae (Lst)
   (cond 
     ((num? Lst) Lst)
@@ -27,7 +29,7 @@
 
 (de process_req (Verb Path Qs Post User Creds)
   (if (or 
-    (! member Path (confv (append (list Verb) '(no_authn))))
+    (member Path (confv (append (list Verb) '(no_authn))))
     (and (not (nil? Creds)) (eval (append '(authn) Creds))))
       (prog 
         (default Path (confv '(default_path)))
@@ -100,6 +102,7 @@
           (when Err 
             (list (cdr R) Err)))) 
       (rels> (cls> This))  ))
+
 
 (when *Dbg
 
