@@ -20,6 +20,8 @@
 (de to_cls_nm (Str)
   (pack "+" (camelize Str)))
 
+(de cls_to_str (Cls)
+  (pack (cdr (chop (name Cls)))))
 
 (de nil? (Foo)
   (= NIL Foo))
