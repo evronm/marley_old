@@ -37,8 +37,9 @@
         ($script '((type text/javascript) (src . https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.2.0.nomodule.min.js)))
         ($script '((type text/javascript)) (var: js))))
       ($body NIL (list 
-        ($div '((id . header)) ($h1 NIL (title> This))
-          ($div '((id . account)) (account> This)))
+        ($div '((id . header)) (list
+          ($h1 NIL (title> This))
+          ($div '((id . account)) (account> This))))
         ($div '((id . nav)))
         ($div '((id . main))))))))
    
