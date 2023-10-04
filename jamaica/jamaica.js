@@ -14,6 +14,15 @@ function init() {
   u('#account_nav a').handle ('click', navclick)
 }
 
+function val(name) {
+  return u('[name='+name+']').nodes[0].value;
+}
+
+function req(url, meth, body) {
+  if (! meth) {meth="get"}
+  return fetch(url, {method: meth, headers: {'Authorization': 'Basic ' + btoa(val('eml') + ":" + val('pw'))}})
+    .then((res) => res.json())
+}
 
 function navclick(e) {
   fetch(e.target.href)

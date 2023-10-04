@@ -52,6 +52,6 @@
 
 (de dbg () (!))
 
-#(load T)
-#(bye)
+(load T)
+(bye)
 
