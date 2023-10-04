@@ -27,7 +27,7 @@
       ($a '((href . /user/new)) "Sign up")
       (mapcar 
         '((U) ($a (list (cons 'href (pack (cls_to_str U) "/new") )) (pack "Register as a " (cls_to_str U)))) 
-        (filter '((E)(isa '+User E)) (all (intern (confv '(ns))))))))
+        (filter '((E)(isa (intern "+User" (intern (confv '(ns)))) E)) (all (intern (confv '(ns))))))))
 
   (dm title> () (confv '(title)) )
   (dm html> (User) 
