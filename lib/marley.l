@@ -43,7 +43,7 @@
                 (respond 200 (in (pack (confv '(static_dir)) Fn ) (till)))
                 (respond 404))
               (respond 403)))
-          (let (Cls (or (isa '+Rest (intern (to_cls_nm Thing) Ns)) (intern (to_cls_nm (singularize Thing) Ns )))) (send (any (pack Verb ">")) Cls Path Qs Post User)) 
+          (let (Cls (or (isa '+Rest (intern (to_cls_nm Thing) Ns)) NIL)) (send (any (pack Verb ">")) Cls Path Qs Post User)) 
           (respond 404)))
       (respond 401)))
 

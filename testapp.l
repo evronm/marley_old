@@ -6,6 +6,8 @@
 (local) (+User +Venue +Provider +Service +Itinerary)
 
 
+(class +Client +Jamaica +Rest)
+
 (class +User  +Rest +Entity)
   (rel id (+Key +Number) '111)
   (rel eml (+Need +Key +Email +Frm +New) '210)

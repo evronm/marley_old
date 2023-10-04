@@ -1,19 +1,18 @@
-(symbols (intern (confv '(ns))) 'pico)
 
 (de tag (Tag)
   (setq @Tag (name Tag))
   (fill '((Attrs Cont) 
     (pack "<" @Tag " "
       (mapcar '((A) (list (car A) "='" (cdr A) "' ")) Attrs)
-      ">" Cont "</ " @Tag ">"))))
+      ">" Cont "</" @Tag ">"))))
 
 (for Tag '(html head script body h1 h2 h3 a p em strong div form label input textarea submit button) (set (intern (pack "$" Tag)) (tag Tag)))
 
-(class +Client)
+(class +Jamaica)
   (var js  ~(pack (in "jamaica/jamaica.js" (till))))
   (dm get> (Path Qs Post User) 
-    (case Path 
-      (NIL (html> This))
+    (case (cadr Path)
+      (NIL (respond 200 (pack "<!doctype html>^J" (html> This))))
       ("nav" (nav> This User))))
 
   (dm nav> (User) )
@@ -36,10 +35,10 @@
       ($head NIL ( list
         ($script '((type text/javascript) (src . https://cdn.jsdelivr.net/npm/umbrellajs)))
         ($script '((type text/javascript) (src . https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.2.0.nomodule.min.js)))
-        ($script '((type text/javascript)) (: js))))
+        ($script '((type text/javascript)) (var: js))))
       ($body NIL (list 
-        ($h1 NIL (title> This))
-        ($div '((id . account)))
+        ($div '((id . header)) ($h1 NIL (title> This))
+          ($div '((id . account)) (account> This)))
         ($div '((id . nav)))
         ($div '((id . main))))))))
    

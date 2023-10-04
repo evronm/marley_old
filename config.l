@@ -4,7 +4,7 @@
     (title . "Change This Title in config.l")
     (pool . "DB")
     (ns . "entities")
-    (default_path . "index.html")
+    (default_path . (client))
     (static_dir . "static/")
     (no_authn . 
       (
