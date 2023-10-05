@@ -11,7 +11,7 @@ const labels={
 }
 
 function init() {
-  u('#account_nav a').handle ('click', navclick)
+  u('#account a').handle ('click', navclick)
 }
 
 function val(name) {
@@ -25,8 +25,7 @@ function req(url, meth, body) {
 }
 
 function navclick(e) {
-  fetch(e.target.href)
-    .then((res) => res.json())
+  req(e.target.href)
     .then((json) => show('#main', json))
     .catch((err) => console.error("error:", err));
 }
@@ -98,5 +97,5 @@ Field.prototype.password=function() {
 }
 
 
-
+window.onload=init;
 
