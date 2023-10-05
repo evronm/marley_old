@@ -22,35 +22,33 @@
     ((or (sym? Lst) (str? Lst)) (pack "\"" Lst "\""))
     (T (pack "[" (glue ", " (mapcar '((Foo)( reggae Foo)) Lst)) "]"))))
 
-(de authn (Un Pw)
+(de authn (Eml Pw)
   (let (Cls (intern '+User (intern (confv '(ns)))))
-    (setq User (db 'nm Cls Un)))
+    (setq User (db 'eml Cls Eml)))
     (and User (= (pw_hash Pw (get User 'salt)) (get User 'pw))))
 
-(de process_req (Verb Path Qs Post User Creds)
-  (if (or 
-    (member Path (confv (append (list Verb) '(no_authn))))
-    (and (not (nil? Creds)) (eval (append '(authn) Creds))))
-      (prog 
-        (default Path (confv '(default_path)))
-        (setq Thing (car Path) Ns (intern (confv '(ns))))
-        (or 
-          (and 
-            (setq Fn (car Path))
-            (match (append '(@foo) '(.) '(@ext)) (chop Fn))
-            (if  (member (pack @ext) '(html htmx css js png gif))
-              (if ( info (pack (confv '(static_dir)) Fn)) 
-                (respond 200 (in (pack (confv '(static_dir)) Fn ) (till)))
-                (respond 404))
-              (respond 403)))
-          (let (Cls (or (isa '+Rest (intern (to_cls_nm Thing) Ns)) NIL)) (send (any (pack Verb ">")) Cls Path Qs Post User)) 
-          (respond 404)))
-      (respond 401)))
+(de authz (User Obj Verb) 
+ T
+)
+
+(de process (Verb Path Qs Post Creds)
+  (default Path (confv '(default_path))) 
+  (setq Obj (or (isa '+Rest (intern (to_cls_nm (car Path)) Ns)) NIL))
+  (ifn Obj
+    (respond 404)
+    (if (and (need_auth> Obj) (nil? Creds))
+      (respond 401)
+      (setq User (eval (append '(authn) Creds)))
+      (ifn (authz User Obj Verb)
+        (respond 403)
+        (send (any (pack Verb ">")) Obj Path Qs Post User)))))
 
 (pool (confv '(pool)))
 
 (class +Rest) 
-  (dm owner_rel () 'uid)
+  (var noauth '(new list post))
+  (dm need_auth> (Verb Path) (not (or (member Verb (var: noauth)) (member (car Path) (var: noauth)) )))
+  (dm owner_rel> () 'uid)
   (dm owner_at_creation> () (or (: owner_at_creation) current_user))
   (dm perms> () '311)
   (dm url> () (pack "/" (lowc (cdr (chop This)))))
