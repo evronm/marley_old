@@ -8,7 +8,7 @@
     (static_dir . "static/")
     (no_authn . 
       (
-        (get . (("users" "new") "" ("app.js") ("reggae.js") ("jamaica.js")))
+        (get . (("user" "new") "" ("app.js") ("reggae.js") ("jamaica.js")))
         (post . ((user)))
       )
     )
