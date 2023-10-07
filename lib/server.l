@@ -71,6 +71,7 @@
       (setq Post (parse_qs (in *Sock (make (do (- Len 1) (link (char))))))))
     
     (setq Creds (mapcar 'pack (sc (decode64 (pack (tail 1 (sc (cdr (assoc "Authorization" Headers)) " ")))) ":")) )
-    (Processor Verb Path Qs Post Creds)
+    (apply 'respond
+      (Processor Verb Path Qs Post Creds))
 
     ( close *Sock) ))

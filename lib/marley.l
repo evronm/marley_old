@@ -32,19 +32,19 @@
   (default Path (confv '(default_path))) 
   (setq Cls (or (isa '+Rest (intern (to_cls_nm (++ Path)) Ns)) NIL))
   (ifn Cls
-    (respond 404)
+    (404)
     (setq Obj (get> Cls Path Qs Post Creds))
     (ifn (need_auth> Obj)
       (if (setq R (try 'html> Obj))
-        (respond 200 R "html")
-        (respond 200 (reggae> Obj)))
+        (list 200 R "html")
+        (list 200 (reggae> Obj)))
       (ifn (authz> Obj)
-        (respond 403)
+        (403)
         (if (= "get" Verb)
           (if (setq R (try 'html> Obj))
-            (respond 200 R "html")
-            (respond 200 (reggae> Obj)))
-          (respond 204 (send (any (pack "rest_" Verb ">")) Obj Path Qs Post User)))))))
+            (list 200 R "html")
+            (list 200 (reggae> Obj)))
+          (send (any (pack "rest_" Verb ">")) Obj Path Qs Post User))))))
 
 (pool (confv '(pool)))
 
@@ -55,7 +55,7 @@
   (dm authz> (User Verb Path) 
     T)
   (dm owner> () This)
-  (dm url> () (pack "/" (lowc (cdr (chop This)))))
+  (dm url> () (pack "/" (lowc (cdr (chop (cls> This))))))
   (dm cls> () (car (type This)))
 
   (dm rels> (Cls) 
@@ -90,9 +90,9 @@
     (if (setq Errs (errs> E))
       (prog 
         (rollback)
-        (respond 422 (reggae (cons '(error) Errs))) )
+        (list 422 (reggae (cons '(error) Errs))) )
       (commit T)
-      (respond 201 (reggae '("mesg" "Success" "Your account has been created successfully")))))
+      (list 201 (reggae '("mesg" "Success" "Your account has been created successfully")))))
   
   (dm rest_put> (Path Qs Post User) prinl 'put)
   (dm rest_delete> (Path Qs Post User) prinl 'del)
