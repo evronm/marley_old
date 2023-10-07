@@ -44,11 +44,13 @@
     ) ) (split Qs '&)))
 
 (de respond (Stat Body Ty)
+  (default Ty "json")
   (out *Sock
     (case Stat
-      (200 (prinl "HTTP/1.1 200 OK\n" "Server: Marley\n" "Content-Type: text/html; charset=UTF-8\n\n"  Body))
-      (201 (prinl "HTTP/1.1 201 CREATED\n" "Server: Marley\n" "Content-Type: text/html; charset=UTF-8\n\n" Body))
-      (422 (prinl "HTTP/1.1 422 Validation Failed\n" "Server: Marley\n" "Content-Type: text/html; charset=UTF-8\n\n" Body))
+      (200 (prinl "HTTP/1.1 200 OK\n" "Server: Marley\n" "Content-Type: text/" Ty "; charset=UTF-8\n\n"  Body))
+      (201 (prinl "HTTP/1.1 201 CREATED\n" "Server: Marley\n" "Content-Type: text/" Ty "; charset=UTF-8\n\n" Body))
+      (204 (prinl "HTTP/1.1 204 NO CONTENT\n" "Server: Marley\n"))
+      (422 (prinl "HTTP/1.1 422 Validation Failed\n" "Server: Marley\n" "Content-Type: text/" Ty "; charset=UTF-8\n\n" Body))
       (401 (prinl "HTTP/1.1 401 Unauthorized\n" "WWW-Authenticate: Basic realm=\"Please Log In\"\n"))
       (403 (prinl "HTTP/1.1 403 Forbidden\n" ))
       (404 (prinl "HTTP/1.1 404 Not Found\n" ))

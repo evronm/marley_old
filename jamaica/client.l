@@ -10,10 +10,9 @@
 
 (class +Jamaica)
   (var js  ~(pack (in "jamaica/jamaica.js" (till))))
+  (dm need_auth> () NIL)
   (dm get> (Path Qs Post User) 
-    (case (cadr Path)
-      (NIL (respond 200 (pack "<!doctype html>^J" (html> This))))
-      ("nav" (nav> This User))))
+    This)
 
   (dm nav> (User) )
   (dm account> (User)

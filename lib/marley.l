@@ -27,30 +27,34 @@
     (setq User (db 'eml Cls Eml)))
     (and User (= (pw_hash Pw (get User 'salt)) (get User 'pw))))
 
-(de authz (User Obj Verb) 
- T
-)
 
 (de process (Verb Path Qs Post Creds)
   (default Path (confv '(default_path))) 
-  (setq Obj (or (isa '+Rest (intern (to_cls_nm (car Path)) Ns)) NIL))
-  (ifn Obj
+  (setq Cls (or (isa '+Rest (intern (to_cls_nm (++ Path)) Ns)) NIL))
+  (ifn Cls
     (respond 404)
-    (if (and (need_auth> Obj) (nil? Creds))
-      (respond 401)
-      (setq User (eval (append '(authn) Creds)))
-      (ifn (authz User Obj Verb)
+    (setq Obj (get> Cls Path Qs Post Creds))
+    (ifn (need_auth> Obj)
+      (if (setq R (try 'html> Obj))
+        (respond 200 R "html")
+        (respond 200 (reggae> Obj)))
+      (ifn (authz> Obj)
         (respond 403)
-        (send (any (pack Verb ">")) Obj Path Qs Post User)))))
+        (if (= "get" Verb)
+          (if (setq R (try 'html> Obj))
+            (respond 200 R "html")
+            (respond 200 (reggae> Obj)))
+          (respond 204 (send (any (pack "rest_" Verb ">")) Obj Path Qs Post User)))))))
 
 (pool (confv '(pool)))
 
 (class +Rest) 
   (var noauth '(new list post))
+  (var perms '(()))
   (dm need_auth> (Verb Path) (not (or (member Verb (var: noauth)) (member (car Path) (var: noauth)) )))
-  (dm owner_rel> () 'uid)
-  (dm owner_at_creation> () (or (: owner_at_creation) current_user))
-  (dm perms> () '311)
+  (dm authz> (User Verb Path) 
+    T)
+  (dm owner> () This)
   (dm url> () (pack "/" (lowc (cdr (chop This)))))
   (dm cls> () (car (type This)))
 
@@ -73,15 +77,14 @@
           (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm)))))))))
       
 
+  (dm get_new> (Path Qs Post User) (new (append (str This) '(+New))))
+  (dm get_search> (Path Qs Post User) (new (append (str This) '(+Seach))))
+  (dm get_list (Path Qs Post User) ())
+  
   (dm get> (Path Qs Post User) 
-    (respond 200
-      (case (cadr Path)
-        ("new" (reggae> This T))
-        ((NIL "list") )
-        ("search" (reggae> This NIL T)) 
-      )))
+    (try (intern (pack "get_" (car Path) ">")) This))
 
-  (dm post> (Path Qs Post User) 
+  (dm rest_post> (Path Qs Post User) 
     (setq E (new T (str This)))
     (for R Post (put> E (intern (car R)) (cdr R)))
     (if (setq Errs (errs> E))
@@ -91,7 +94,8 @@
       (commit T)
       (respond 201 (reggae '("mesg" "Success" "Your account has been created successfully")))))
   
-  (dm delete> (Path Qs Post User) prinl 'del)
+  (dm rest_put> (Path Qs Post User) prinl 'put)
+  (dm rest_delete> (Path Qs Post User) prinl 'del)
 
   (dm errs> () 
     (extract 

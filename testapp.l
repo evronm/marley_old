@@ -9,7 +9,6 @@
 (class +Client +Jamaica +Rest)
 
 (class +User  +Rest +Entity)
-  (rel id (+Key +Number) '111)
   (rel eml (+Need +Key +Email +Frm +New) '210)
   (rel pw (+Need +Key +Password +Frm +New) '200)
   (rel salt (+String) '000)
@@ -26,6 +25,7 @@
   (rel itins (+List +Joint +Frm) provider (+Itinerary) '222)
 
 (class +Service +Rest +Entity)
+  (dm owner>r() (venue This))
   (rel nm (+Need +Idx +String +Frm +New) '211)
   (rel duration (+Need +Number +Frm +New) '211)
   (rel price (+Need +Number +Frm +New) '211)
@@ -36,9 +36,9 @@
 
 
 (class +Itinerary +Rest +Entity)
-  (dm owner_rel () 'cust)
-  (dm grp_rel () 'provider)
-  (dm perms () '221)
+  (dm owner> () (cust This))
+  (dm grp> () (provider This))
+  (dm perms> () '221)
   (rel start_addr (+Need +String +Frm +New) '211)
   (rel dt (+Need +Idx +Date +Frm +New) '211)
   (rel tm (+Need +Time +Frm +New) '211)
