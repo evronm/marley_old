@@ -64,10 +64,10 @@
       (filter '((r) (= Cls (sect Cls (type (car r))))) Rels)
       Rels))
 
-  (dm reggae> (new?  search?)
+  (dm reggae> ()
     (reggae (list "instance" 
       (cond 
-        (new? (list 
+        ((isa '+New This) (list 
           *NEWREC
           (url> This)
           (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm +New)))))
