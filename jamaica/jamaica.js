@@ -63,10 +63,10 @@ const Reggae={
     var spec=json[1];
     var newrec=spec[0] & NEW;
     var srch=spec[0] & SRCH;
-    var url=spec[1]
-    var method="post";
+    var url=spec[1] + (newrec ? "/new" : "") + (srch ? "/search" : "");
+    var method= (srch ? "get" : "post");
     var fields=spec[2].map((s) => {return new Field(s).dom()});
-    return form({action: url, method: method}, fields, input({type:"submit", value: "Save"}));
+    return form({action: url, method: method}, fields, input({type:"submit", value: (srch ? "Search" : "Save")}));
 
   },
   mesg: (title, content) => {

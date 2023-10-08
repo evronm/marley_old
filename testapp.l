@@ -11,7 +11,7 @@
 (class +User  +Rest +Entity)
   (rel eml (+Need +Key +Email +Frm +New) '210)
   (rel pw (+Need +Key +Password +Frm +New) '200)
-  (rel salt (+String) '000)
+  (rel salt (+String) NIL)
   (rel addr (+Idx +String +Frm +New) '210)
   (rel nm (+Need +Key +String +Frm +New) '210)
   (rel itins (+List +Joint +Frm) cust (+Itinerary) '210)

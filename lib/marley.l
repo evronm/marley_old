@@ -49,8 +49,12 @@
 (pool (confv '(pool)))
 
 (class +Rest) 
+  (dm T @ (put This 'eid (genKey 'eid This)))
   (var noauth '(new list post))
   (var perms '(()))
+
+  (rel eid (+Idx +Need +Number) NIL)
+
   (dm need_auth> (Verb Path) (not (or (member Verb (var: noauth)) (member (car Path) (var: noauth)) )))
   (dm authz> (User Verb Path) 
     T)
@@ -59,7 +63,7 @@
   (dm cls> () (car (type This)))
 
   (dm rels> (Cls) 
-    (setq Rels (delete NIL (append (try 'rels> (cls> This)) (filter '((r) (<> (cdr r) '*Dbg)) (getl This)))))
+    (setq Rels (delete NIL (append (try 'rels> (cls> This)) (filter '((r) (type (car r))) (getl This)))))
     (if (> Cls Nil)
       (filter '((r) (= Cls (sect Cls (type (car r))))) Rels)
       Rels))
@@ -85,7 +89,7 @@
     (try (intern (pack "get_" (car Path) ">")) This))
 
   (dm rest_post> (Path Qs Post User) 
-    (setq E (new T (str This)))
+    (setq E (new T (list (cls> This))))
     (for R Post (put> E (intern (car R)) (cdr R)))
     (if (setq Errs (errs> E))
       (prog 
