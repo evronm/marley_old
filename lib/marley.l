@@ -30,7 +30,7 @@
 
 (de process (Verb Path Qs Post Creds)
   (default Path (confv '(default_path))) 
-  (setq Cls (or (isa '+Rest (intern (to_cls_nm (++ Path)) Ns)) NIL))
+  (setq Cls (or (isa '+Rest (intern (to_cls_nm (++ Path)) (intern (confv '(ns))))) NIL))
   (ifn Cls
     (404)
     (setq Obj (get> Cls Path Qs Post Creds))
