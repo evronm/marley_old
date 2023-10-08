@@ -14,9 +14,7 @@ url ::= url_value
 
 description ::= string_value
 
-instance_spec ::= '[' flgs ',' url ',' '[' field_spec (',' field_spec)* ']' ']'
-
-flgs ::= int_value
+instance_spec ::= '[' url ',' '[' field_spec (',' field_spec)* ']' ']'
 
 field_spec ::= '[' name ',' type ',' restrictions ']'
 

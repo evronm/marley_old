@@ -61,11 +61,10 @@ function formSubmit(e) {
 const Reggae={
   instance: (json) => {
     var spec=json[1];
-    var newrec=spec[0] & NEW;
-    var srch=spec[0] & SRCH;
-    var url=spec[1] + (newrec ? "/new" : "") + (srch ? "/search" : "");
+    var url=spec[0];
+    var srch=false;
     var method= (srch ? "get" : "post");
-    var fields=spec[2].map((s) => {return new Field(s).dom()});
+    var fields=spec[1].map((s) => {return new Field(s).dom()});
     return form({action: url, method: method}, fields, input({type:"submit", value: (srch ? "Search" : "Save")}));
 
   },

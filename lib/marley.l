@@ -1,4 +1,4 @@
-(setq *NEWREC 1 *SEARCH 2 *READ 2 *WRITE 1)
+(setq *READ 2 *WRITE 1)
 
 (load '@lib/json.l)
 (load "lib/util.l")
@@ -59,7 +59,7 @@
   (dm authz> (User Verb Path) 
     T)
   (dm owner> () This)
-  (dm url> () (pack "/" (lowc (cdr (chop (cls> This))))))
+  (dm url> () (pack "/" (lowc (cdr (chop (cls> This)))) "/" (if (isa '+New This)) "new" (get 'eid This) ))
   (dm cls> () (car (type This)))
 
   (dm rels> (Cls) 
@@ -72,11 +72,9 @@
     (reggae (list "instance" 
       (cond 
         ((isa '+New This) (list 
-          *NEWREC
           (url> This)
           (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm +New)))))
         (T (list
-          0
           (url> This)
           (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm)))))))))
       
