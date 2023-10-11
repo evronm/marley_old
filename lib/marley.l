@@ -33,33 +33,27 @@
   (setq Cls (or (isa '+Rest (intern (to_cls_nm (++ Path)) (intern (confv '(ns))))) NIL))
   (ifn Cls
     (404)
-    (setq Obj (get> Cls Path Qs Post Creds))
-    (ifn (need_auth> Obj)
-      (if (setq R (try 'html> Obj))
-        (list 200 R "html")
-        (list 200 (reggae> Obj)))
-      (ifn (authz> Obj)
-        (403)
-        (if (= "get" Verb)
-          (if (setq R (try 'html> Obj))
-            (list 200 R "html")
-            (list 200 (reggae> Obj)))
-          (send (any (pack "rest_" Verb ">")) Obj Path Qs Post User))))))
+    (if (need_auth> Cls Verb Path)
+      (ifn (setq User (authn Creds))
+        (401)
+        (ifn (authz> Cls Verb Path Qs Post User)
+          (403)
+          (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User)))
+      (send (any (pack "rest_" Verb ">")) Cls Path Qs Post))))
 
 (pool (confv '(pool)))
 
-(class +Rest) 
-  (dm T @ (put This 'eid (genKey 'eid This)))
-  (var noauth '(new list post))
+(class +REntity +Entity) 
+  (var noauth '("new" "list" "post"))
   (var perms '(()))
+  (var foo "asdf")
 
-  (rel eid (+Idx +Need +Number) NIL)
 
-  (dm need_auth> (Verb Path) (not (or (member Verb (var: noauth)) (member (car Path) (var: noauth)) )))
+  (dm need_auth> (Verb Path) (not (or (member Verb (car (var: noauth))) (member (car Path) (car (var: noauth))) )))
   (dm authz> (User Verb Path) 
     T)
   (dm owner> () This)
-  (dm url> () (pack "/" (lowc (cdr (chop (cls> This)))) "/" (if (isa '+New This)) "new" (get 'eid This) ))
+  (dm url> (Path) (pack "/" (lowc (cdr (chop (cls> This)))) "/" Path  ))
   (dm cls> () (car (type This)))
 
   (dm rels> (Cls) 
@@ -84,17 +78,17 @@
   (dm get_list (Path Qs Post User) ())
   
   (dm get> (Path Qs Post User) 
-    (try (intern (pack "get_" (car Path) ">")) This))
+    (try (intern (pack "get_" (car Path) ">")) This)) #this needs to change
 
   (dm rest_post> (Path Qs Post User) 
-    (setq E (new T (list (cls> This))))
+    (setq E (new T (list This)))
     (for R Post (put> E (intern (car R)) (cdr R)))
     (if (setq Errs (errs> E))
       (prog 
         (rollback)
         (list 422 (reggae (cons '(error) Errs))) )
       (commit T)
-      (list 201 (reggae '("mesg" "Success" "Your account has been created successfully")))))
+      (list 201 (reggae '("mesg" "Success" "created successfully")))))
   
   (dm rest_put> (Path Qs Post User) prinl 'put)
   (dm rest_delete> (Path Qs Post User) prinl 'del)

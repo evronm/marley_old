@@ -8,7 +8,9 @@
 
 (class +Client +Jamaica +Rest)
 
-(class +User  +Rest +Entity)
+(class +User  +REntity +Rest)
+  (dm T @ (put> This 'eid (genKey 'eid '+User)))
+  (rel eid (+Key +Number) NIL)
   (rel eml (+Need +Key +Email +Frm +New) '210)
   (rel pw (+Need +Key +Password +Frm +New) '200)
   (rel salt (+String) NIL)
@@ -24,7 +26,7 @@
   (rel venues (+List +Joint +Frm) providers (+Venue) '221)
   (rel itins (+List +Joint +Frm) provider (+Itinerary) '222)
 
-(class +Service +Rest +Entity)
+(class +Service +Entity +Rest)
   (dm owner>r() (venue This))
   (rel nm (+Need +Idx +String +Frm +New) '211)
   (rel duration (+Need +Number +Frm +New) '211)
@@ -35,7 +37,7 @@
   (rel itins (+List +Joint) services (+Itinerary) '222)
 
 
-(class +Itinerary +Rest +Entity)
+(class +Itinerary +REntity +Rest)
   (dm owner> () (cust This))
   (dm grp> () (provider This))
   (dm perms> () '221)

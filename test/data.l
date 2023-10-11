@@ -4,11 +4,16 @@
   (process "post" (list (next) "new") NIL (car (rest)) ))
 
 (symbols 'entities 'pico)
-(proc_test 'user '(("eml" . "user1@eml.com") ("pw" . "asdf") ("addr" . "user1 address") ("nm" . "user1")))
+(proc_test 'user '(("eml" . "user1@eml.com") ("pw" . "asdf") ("addr" . "user1 address") ("nm" . "user1") ))
 (proc_test 'user '(("eml" . "user2@eml.com") ("pw" . "asdf") ("addr" . "user2 address") ("nm" . "user2")))
 (proc_test 'user '(("eml" . "user3@eml.com") ("pw" . "asdf") ("addr" . "user3 address") ("nm" . "user3")))
 (proc_test 'user '(("eml" . "user4@eml.com") ("pw" . "asdf") ("addr" . "user4 address") ("nm" . "user4")))
 (proc_test 'user '(("eml" . "user5@eml.com") ("pw" . "asdf") ("addr" . "user5 address") ("nm" . "user5")))
+#(proc_test 'user '(("eml" . "user1@eml.com") ("pw" . "asdf") ("addr" . "user1 address") ("nm" . "user1") ("eid" . 1)))
+#(proc_test 'user '(("eml" . "user2@eml.com") ("pw" . "asdf") ("addr" . "user2 address") ("nm" . "user2") ("eid" . 2)))
+#(proc_test 'user '(("eml" . "user3@eml.com") ("pw" . "asdf") ("addr" . "user3 address") ("nm" . "user3") ("eid" . 3)))
+#(proc_test 'user '(("eml" . "user4@eml.com") ("pw" . "asdf") ("addr" . "user4 address") ("nm" . "user4") ("eid" . 4)))
+#(proc_test 'user '(("eml" . "user5@eml.com") ("pw" . "asdf") ("addr" . "user5 address") ("nm" . "user5") ("eid" . 5)))
 
 (proc_test 'provider '(("eml" . "prov1@eml.com") ("pw" . "asdf") ("addr" . "prov1 address") ("nm" . "prov1")))
 (proc_test 'provider '(("eml" . "prov2@eml.com") ("pw" . "asdf") ("addr" . "prov2 address") ("nm" . "prov2")))
