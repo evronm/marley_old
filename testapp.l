@@ -16,7 +16,7 @@
       ()))
   (dm nav> (Qs User)
     (cond 
-      ((not User) '(url (href . "venues") ))
+      ((not User) '((url "/venue/list" "Browse Venues") (url "/provider/list" "Browse providers") ))
       ((isa '+Vendor User))
       ((isa '+Provider User))
       ((isa '+User User))

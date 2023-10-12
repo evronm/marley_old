@@ -31,6 +31,7 @@
       ($head NIL ( list
         ($script '((type text/javascript) (src . https://cdn.jsdelivr.net/npm/umbrellajs)))
         ($script '((type text/javascript) (src . https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.2.0.nomodule.min.js)))
+        ($script '((type text/javascript)) (list "var nav=" (reggae (nav> This Qs User))))
         ($script '((type text/javascript)) (var: js))))
       ($body NIL (list 
         ($div '((id . header)) (list

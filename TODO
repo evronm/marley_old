@@ -1,8 +1,10 @@
 
+Move eid rel to +REntity
 Authentication
 Authorization
 Display data
 Select lists
+Password Match check
 Regions
 Travel Time
 Mapping stuff

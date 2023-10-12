@@ -2,7 +2,7 @@
 const NEW=1;
 const SRCH=2;
 
-const {div, p, span, pre, form, label, input, textarea, button, submit} = van.tags;
+const {div, p, a, span, pre, form, label, input, textarea, button, submit} = van.tags;
 const labels={
   nm: "Name",
   pw: "Password",
@@ -11,6 +11,7 @@ const labels={
 }
 
 function init() {
+  show("#nav", nav);
   u('#account a').handle ('click', navclick)
 }
 
@@ -31,7 +32,7 @@ function navclick(e) {
 }
 
 function show(target, json) {
-  u(target).empty().append(Reggae[json[0]](json));
+  u(target).empty().append(reggae2dom(json));
   u('form').on('submit', formSubmit);
 }
 
@@ -58,6 +59,13 @@ function formSubmit(e) {
     catch((err) => console.error("error:", err));
 }
 
+function reggae2dom(json) {
+  if (typeof(json[0])=="string") {
+    return (Reggae[json[0]](json));
+  } else {
+    return json.map((m) => Reggae[m[0]](m));
+  }
+}
 const Reggae={
   instance: (json) => {
     var spec=json[1];
@@ -70,6 +78,9 @@ const Reggae={
   },
   mesg: (title, content) => {
     return "asdf";
+  },
+  url: (json) => {
+    return a({href: json[1]}, json[2]);
   }
 }
 
