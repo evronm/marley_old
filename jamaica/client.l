@@ -11,9 +11,6 @@
 (class +Jamaica)
   (var js  ~(pack (in "jamaica/jamaica.js" (till))))
   (dm need_auth> () NIL)
-  (dm get> (Path Qs Post User) 
-    This)
-
   (dm nav> (User) )
   (dm account> (User)
     (list 
@@ -29,8 +26,8 @@
         (filter '((E)(isa (intern "+User" (intern (confv '(ns)))) E)) (all (intern (confv '(ns))))))))
 
   (dm title> () (confv '(title)) )
-  (dm html> (User) 
-    ($html NIL (list 
+  (dm rest_get> (Path Qs Post User) 
+    (list 200($html NIL (list 
       ($head NIL ( list
         ($script '((type text/javascript) (src . https://cdn.jsdelivr.net/npm/umbrellajs)))
         ($script '((type text/javascript) (src . https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.2.0.nomodule.min.js)))
@@ -40,6 +37,6 @@
           ($h1 NIL (title> This))
           ($div '((id . account)) (account> This))))
         ($div '((id . nav)))
-        ($div '((id . main))))))))
+        ($div '((id . main))))))) "html")) 
    
 

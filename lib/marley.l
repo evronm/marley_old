@@ -53,7 +53,7 @@
   (dm authz> (User Verb Path) 
     T)
   (dm owner> () This)
-  (dm url> (Path) (pack "/" (lowc (cdr (chop (cls> This)))) "/" Path  ))
+  (dm url> (Path) (pack "/" (lowc (cdr (chop (sym This)))) "/" Path  ))
   (dm cls> () (car (type This)))
 
   (dm rels> (Cls) 
@@ -62,23 +62,23 @@
       (filter '((r) (= Cls (sect Cls (type (car r))))) Rels)
       Rels))
 
-  (dm reggae> ()
+  (dm reggae> (New Srch)
     (reggae (list "instance" 
-      (cond 
-        ((isa '+New This) (list 
-          (url> This)
-          (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm +New)))))
+      (if New 
+        (list 
+          (url> This "new")
+          (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm +New))))
         (T (list
           (url> This)
           (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm)))))))))
       
 
-  (dm get_new> (Path Qs Post User) (new (append (str This) '(+New))))
+  (dm get_new> (Path Qs Post User) (list 200 (reggae> This T Nil)))
   (dm get_search> (Path Qs Post User) (new (append (str This) '(+Seach))))
   (dm get_list (Path Qs Post User) ())
   
-  (dm get> (Path Qs Post User) 
-    (try (intern (pack "get_" (car Path) ">")) This)) #this needs to change
+  (dm rest_get> (Path Qs Post User) 
+    (or (try (intern (pack "get_" (car Path) ">")) This) (404))) 
 
   (dm rest_post> (Path Qs Post User) 
     (setq E (new T (list This)))
@@ -102,6 +102,3 @@
       (rels> (cls> This))  ))
 
 
-(when *Dbg
-
-)
