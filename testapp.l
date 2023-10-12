@@ -7,6 +7,20 @@
 
 
 (class +Client +Jamaica +Rest)
+  (dm home> (Qs User)
+    (cond 
+      ((not User))
+      ((isa '+Vendor User))
+      ((isa '+Provider User))
+      ((isa '+User User))
+      ()))
+  (dm nav> (Qs User)
+    (cond 
+      ((not User) '(url (href . "venues") ))
+      ((isa '+Vendor User))
+      ((isa '+Provider User))
+      ((isa '+User User))
+      ()))
 
 (class +User  +REntity +Rest)
   (dm T @ (put> This 'eid (genKey 'eid '+User)))
