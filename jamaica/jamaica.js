@@ -12,7 +12,7 @@ const labels={
 
 function init() {
   show("#nav", nav);
-  u('#account a').handle ('click', navclick)
+  u('a').handle ('click', navclick)
 }
 
 function val(name) {

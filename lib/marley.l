@@ -25,7 +25,7 @@
 (de authn (Eml Pw)
   (let (Cls (intern '+User (intern (confv '(ns)))))
     (setq User (db 'eml Cls Eml)))
-    (and User (= (pw_hash Pw (get User 'salt)) (get User 'pw))))
+    (and User (= (pw_hash Pw (get User 'salt)) (get User 'pw)) User)) #User needs to show up twice to prevent error and return User.
 
 
 (de process (Verb Path Qs Post Creds)
@@ -46,7 +46,8 @@
 (class +REntity +Entity) 
   (var noauth '("new" "list" "post"))
   (var perms '(()))
-  (var foo "asdf")
+  (dm T @ (put> This 'eid (genKey 'eid '+REntity))) # might want to move this to individual entities.
+  (rel eid (+Key +Number) NIL)
 
 
   (dm need_auth> (Verb Path) (not (or (member Verb (car (var: noauth))) (member (car Path) (car (var: noauth))) )))
@@ -81,7 +82,11 @@
     (or (try (intern (pack "get_" (car Path) ">")) This) (404))) 
 
   (dm rest_post> (Path Qs Post User) 
-    (setq E (new T (list This)))
+    (if (= (car Path) "new")
+      (prog 
+        (setq E (new T (list This)))
+        (try 'set_owner> This User))
+      (setq E (db 'id This (car Path))))
     (for R Post (put> E (intern (car R)) (cdr R)))
     (if (setq Errs (errs> E))
       (prog 

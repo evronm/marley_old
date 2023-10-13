@@ -23,8 +23,6 @@
       ()))
 
 (class +User  +REntity +Rest)
-  (dm T @ (put> This 'eid (genKey 'eid '+User)))
-  (rel eid (+Key +Number) NIL)
   (rel eml (+Need +Key +Email +Frm +New) '210)
   (rel pw (+Need +Key +Password +Frm +New) '200)
   (rel salt (+String) NIL)
@@ -40,8 +38,9 @@
   (rel venues (+List +Joint +Frm) providers (+Venue) '221)
   (rel itins (+List +Joint +Frm) provider (+Itinerary) '222)
 
-(class +Service +Entity +Rest)
+(class +Service +REntity +Rest)
   (dm owner>r() (venue This))
+  (dm set_owner>(User) (put This 'venue User))
   (rel nm (+Need +Idx +String +Frm +New) '211)
   (rel duration (+Need +Number +Frm +New) '211)
   (rel price (+Need +Number +Frm +New) '211)
