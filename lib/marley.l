@@ -22,10 +22,10 @@
     ((or (sym? Lst) (str? Lst)) (pack "\"" Lst "\""))
     (T (pack "[" (glue ", " (mapcar '((Foo)( reggae Foo)) Lst)) "]"))))
 
-(de authn (Eml Pw)
+(de authn (Creds)
   (let (Cls (intern '+User (intern (confv '(ns)))))
-    (setq User (db 'eml Cls Eml)))
-    (and User (= (pw_hash Pw (get User 'salt)) (get User 'pw)) User)) #User needs to show up twice to prevent error and return User.
+    (setq User (db 'eml Cls (car Creds))))
+    (and User (= (pw_hash (cdr Creds) (get User 'salt)) (get User 'pw)) User)) #User needs to show up twice to prevent error and return User.
 
 
 (de process (Verb Path Qs Post Creds)
