@@ -39,6 +39,7 @@
   (rel itins (+List +Joint +Frm) provider (+Itinerary) '222)
 
 (class +Service +REntity +Rest)
+  (var noauth '("list"))
   (dm owner>r() (venue This))
   (dm set_owner>(User) (put This 'venue User))
   (rel nm (+Need +Idx +String +Frm +New) '211)

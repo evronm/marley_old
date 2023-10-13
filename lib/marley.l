@@ -50,7 +50,8 @@
   (rel eid (+Key +Number) NIL)
 
 
-  (dm need_auth> (Verb Path) (not (or (member Verb (car (var: noauth))) (member (car Path) (car (var: noauth))) )))
+  (dm need_auth> (Verb Path) 
+    (let (Noauth (car (get This 'noauth))) (not (or (member Verb Noauth) (member (car Path) Noauth) ))))
   (dm authz> (User Verb Path) 
     T)
   (dm owner> () This)
