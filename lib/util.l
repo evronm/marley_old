@@ -1,6 +1,13 @@
 #(symbols 'util 'pico)
 (load "lib/plursing.l")
 
+(de conf (Lst)
+  (if (= 1 (length Lst))
+    (assoc (car Lst) *CONFIG)
+    (assoc (car Lst) (conf (cdr Lst)))))
+
+(de confv (Lst)
+  (cdr (conf Lst)))
 (de pw_hash (Pw Salt)
   (pipe (out (list 'argon2 Salt '-r) (prin Pw)) (read)))
 

@@ -6,13 +6,6 @@
 (load "config.l")
 (load "lib/relations.l")
 
-(de conf (Lst)
-  (if (= 1 (length Lst))
-    (assoc (car Lst) *CONFIG)
-    (assoc (car Lst) (conf (cdr Lst)))))
-
-(de confv (Lst)
-  (cdr (conf Lst)))
 
 (load (pack (confv '(client)) "/client.l"))
 
@@ -52,8 +45,12 @@
 
   (dm need_auth> (Verb Path) 
     (let (Noauth (car (or (get This 'noauth) (var: noauth)))) (not (or (member Verb Noauth) (member (car Path) Noauth) ))))
-  (dm authz> (User Verb Path) 
-    T)
+  (de auth_get> (Path Qs Post User))
+  (de auth_post> (Path Qs Post User))
+  (de auth_del> (Path Qs Post User))
+
+  (dm authz> (Verb Path Qs Post User) 
+    ((intern (pack "auth_" Verb ">")) This))
   (dm owner> () This)
   (dm url> (Path) (pack "/" (lowc (cdr (chop (sym This)))) "/" Path  ))
   (dm cls> () (car (type This)))
