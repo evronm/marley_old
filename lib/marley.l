@@ -51,7 +51,7 @@
 
 
   (dm need_auth> (Verb Path) 
-    (let (Noauth (car (get This 'noauth))) (not (or (member Verb Noauth) (member (car Path) Noauth) ))))
+    (let (Noauth (car (or (get This 'noauth) (var: noauth)))) (not (or (member Verb Noauth) (member (car Path) Noauth) ))))
   (dm authz> (User Verb Path) 
     T)
   (dm owner> () This)
@@ -86,7 +86,7 @@
     (if (= (car Path) "new")
       (prog 
         (setq E (new T (list This)))
-        (try 'set_owner> This User))
+        (try 'set_owner> E User))
       (setq E (db 'id This (car Path))))
     (for R Post (put> E (intern (car R)) (cdr R)))
     (if (setq Errs (errs> E))
@@ -105,6 +105,6 @@
         (let (Err (mis> (car R) (get This (cdr R)) This)) 
           (when Err 
             (list (cdr R) Err)))) 
-      (rels> (cls> This))  ))
+      (filter '((R)(not (ext? (car R)))) (rels> (cls> This))  )))
 
 
