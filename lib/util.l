@@ -1,6 +1,12 @@
 #(symbols 'util 'pico)
 (load "lib/plursing.l")
 
+(de reggae (Lst)
+  (cond 
+    ((num? Lst) Lst)
+    ((or (sym? Lst) (str? Lst)) (pack "\"" Lst "\""))
+    (T (pack "[" (glue ", " (mapcar '((Foo)( reggae Foo)) Lst)) "]"))))
+
 (de conf (Lst)
   (if (= 1 (length Lst))
     (assoc (car Lst) *CONFIG)

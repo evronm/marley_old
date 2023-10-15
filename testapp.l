@@ -42,6 +42,8 @@
   (var noauth '("list"))
   (dm owner>r() (venue This))
   (dm set_owner>(User) (put This 'venue User))
+  (dm auth_post> (Path Qs Post User) (and (isa '+Venue User) (super)))
+
   (rel nm (+Need +Idx +String +Frm +New) '211)
   (rel duration (+Need +Number +Frm +New) '211)
   (rel price (+Need +Number +Frm +New) '211)

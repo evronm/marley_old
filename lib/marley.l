@@ -9,14 +9,8 @@
 
 (load (pack (confv '(client)) "/client.l"))
 
-(de reggae (Lst)
-  (cond 
-    ((num? Lst) Lst)
-    ((or (sym? Lst) (str? Lst)) (pack "\"" Lst "\""))
-    (T (pack "[" (glue ", " (mapcar '((Foo)( reggae Foo)) Lst)) "]"))))
-
 (de authn (Creds)
-  (let (Cls (intern '+User (intern (confv '(ns)))))
+  (let (Cls (intern "+User" (intern (confv '(ns)))))
     (setq User (db 'eml Cls (car Creds))))
     (and User (= (pw_hash (cdr Creds) (get User 'salt)) (get User 'pw)) User)) #User needs to show up twice to prevent error and return User.
 
@@ -24,14 +18,22 @@
 (de process (Verb Path Qs Post Creds)
   (default Path (confv '(default_path))) 
   (setq Cls (or (isa '+Rest (intern (to_cls_nm (++ Path)) (intern (confv '(ns))))) NIL))
+  (setq Eid (any (car Path)))
   (ifn Cls
     (404)
     (if (need_auth> Cls Verb Path)
       (ifn (setq User (authn Creds))
         (401)
-        (ifn (authz> Cls Verb Path Qs Post User)
-          (403)
-          (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User)))
+        (if (num? Eid)
+          (let (Obj (db 'id Cls Eid))
+            (ifn Obj
+              (404)
+              (ifn (authz> Obj Verb Path Qs Post User)
+                (403)
+                (send (any (pack "rest_" Verb ">")) Obj Path Qs Post User))))
+          ( ifn (authz> Cls Verb Path Qs Post User)
+            (403)
+            (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User))))
       (send (any (pack "rest_" Verb ">")) Cls Path Qs Post))))
 
 (pool (confv '(pool)))
@@ -45,12 +47,12 @@
 
   (dm need_auth> (Verb Path) 
     (let (Noauth (car (or (get This 'noauth) (var: noauth)))) (not (or (member Verb Noauth) (member (car Path) Noauth) ))))
-  (de auth_get> (Path Qs Post User))
-  (de auth_post> (Path Qs Post User))
-  (de auth_del> (Path Qs Post User))
+  (dm auth_get> (Path Qs Post User) T)
+  (dm auth_post> (Path Qs Post User) (or (= "new" (car Path))(nil? Path)))
+  (dm auth_del> (Path Qs Post User) (= (owner> This) User))
 
   (dm authz> (Verb Path Qs Post User) 
-    ((intern (pack "auth_" Verb ">")) This))
+    (send (intern (pack "auth_" Verb ">")) This Path Qs Post User))
   (dm owner> () This)
   (dm url> (Path) (pack "/" (lowc (cdr (chop (sym This)))) "/" Path  ))
   (dm cls> () (car (type This)))
@@ -77,7 +79,7 @@
   (dm get_list (Path Qs Post User) ())
   
   (dm rest_get> (Path Qs Post User) 
-    (or (try (intern (pack "get_" (car Path) ">")) This) (404))) 
+    (or (try (intern (pack "get_" (car Path) ">")) This Path Qs Post User) (404))) 
 
   (dm rest_post> (Path Qs Post User) 
     (if (= (car Path) "new")
