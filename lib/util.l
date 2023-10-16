@@ -14,6 +14,14 @@
 
 (de confv (Lst)
   (cdr (conf Lst)))
+
+(de req_action (Verb Path) 
+  (if (= "new" (car Path))
+    'c
+    (if (and (= "post" Verb) (num? (any (car Path)))) 
+      'u 
+      (if (= "del" (car Path) 'd 'r)))))
+
 (de pw_hash (Pw Salt)
   (pipe (out (list 'argon2 Salt '-r) (prin Pw)) (read)))
 

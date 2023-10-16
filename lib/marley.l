@@ -36,35 +36,25 @@
             (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User))))
       (send (any (pack "rest_" Verb ">")) Cls Path Qs Post))))
 
+
 (pool (confv '(pool)))
 
 (class +REntity +Entity) 
-  (var noauth '("new" "list" "post"))
-  (var perms '((r w d)(r) (c)))
+  (var perms ((r c u d)(r) (c)))
 
   (dm T @ (put> This 'eid (genKey 'eid '+REntity)))  #Every addressable entity has a unique ID.
   (rel eid (+Key +Number) NIL)
 
   (dm perms> (User)
-    (setq Perms 
-      (car (if (ext? This)
-        (var: perms)
-        (get (cls> This) 'perms))))
-  (ifn User 
-    (caddar Perms) 
-    (if (= User (owner> This)) #Need to figure out how to handle groups here
-      (cadr Perms)
-      (cadddr Perms))))
+    (setq Perms (car (or (get This 'perms) (var: perms))))
+    (ifn User 
+      (caddr Perms) 
+      (if (= User (owner> This)) #Need to figure out how to handle groups here
+        (car Perms)
+        (cadr Perms))))
 
-  (dm auth_req?> (Verb Path)
+  (dm need_auth> (Verb Path) (not (member (req_action Verb Path) (perms> This NIL))))
 
-    (if (nil? ) 
-      ()
-      ())
-    )
-
-  (dm need_auth> (Verb Path) 
-    (let (Noauth (car (or (get This 'noauth) (var: noauth)))) (not (or (member Verb Noauth) (member (car Path) Noauth) ))))
   (dm auth_get> (Path Qs Post User) T)
   (dm auth_post> (Path Qs Post User) (or (= "new" (car Path))(nil? Path)))
   (dm auth_del> (Path Qs Post User) (= (owner> This) User))

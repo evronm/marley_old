@@ -31,17 +31,17 @@
   (rel itins (+List +Joint +Frm) cust (+Itinerary) '((r w) (r)))
 
 (class +Venue +User)
-  (var perms '((r c u d)(r)(r)))
+  (var perms ((r c u d)(r)(c)))
   (rel providers (+List +Joint +Frm) venues (+Provider) '((r w d)(r w d)(r)))
   (rel services (+List +Joint +Frm) venue (+Service) '((r w d)(r)(r)))
 
 (class +Provider +User)
-  (var perms '((r c u d)(r)(r)))
+  (var perms ((r c u d)(r)(c)))
   (rel venues (+List +Joint +Frm) providers (+Venue) '((r w d)(r w d)(r)))
   (rel itins (+List +Joint +Frm) provider (+Itinerary) '((r w d)(r w d)))
 
 (class +Service +REntity +Rest)
-  (var perms '((r c u d)(r)(r)))
+  (var perms ((r c u d)(r)(r)))
   (var noauth '("list"))
   (dm owner> () (get This 'venue))
   (dm set_owner>(User) (put This 'venue User))
