@@ -47,9 +47,14 @@
 
   (dm perms> (User)
     (setq Perms 
-      (if (ext? This)
+      (car (if (ext? This)
         (var: perms)
         (get (cls> This) 'perms))))
+  (ifn User 
+    (caddar Perms) 
+    (if (= User (owner> This)) #Need to figure out how to handle groups here
+      (cadr Perms)
+      (cadddr Perms))))
 
   (dm auth_req?> (Verb Path)
 

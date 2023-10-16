@@ -6,8 +6,8 @@
     (if p (=: perms p) (: perms)))
 
 (redef rel Lst
- (eval (cons 'rel (head -1 Lst) ))
- (perms> (get *Class (car Lst)) (car (tail 1 Lst))))
+  (eval (cons 'rel (head -1 Lst) ))
+  (perms> (get *Class (car Lst)) (car (tail 1 Lst))))
 
 (extend +String)
   (dm reggae> () "text")

@@ -43,7 +43,7 @@
 (class +Service +REntity +Rest)
   (var perms '((r c u d)(r)(r)))
   (var noauth '("list"))
-  (dm owner>r() (venue This))
+  (dm owner> () (get This 'venue))
   (dm set_owner>(User) (put This 'venue User))
   (dm auth_post> (Path Qs Post User) (and (isa '+Venue User) (super)))
 
