@@ -40,10 +40,23 @@
 
 (class +REntity +Entity) 
   (var noauth '("new" "list" "post"))
-  (var perms '(()))
-  (dm T @ (put> This 'eid (genKey 'eid '+REntity))) # might want to move this to individual entities.
+  (var perms '((r w d)(r) (c)))
+
+  (dm T @ (put> This 'eid (genKey 'eid '+REntity)))  #Every addressable entity has a unique ID.
   (rel eid (+Key +Number) NIL)
 
+  (dm perms> (User)
+    (setq Perms 
+      (if (ext? This)
+        (var: perms)
+        (get (cls> This) 'perms))))
+
+  (dm auth_req?> (Verb Path)
+
+    (if (nil? ) 
+      ()
+      ())
+    )
 
   (dm need_auth> (Verb Path) 
     (let (Noauth (car (or (get This 'noauth) (var: noauth)))) (not (or (member Verb Noauth) (member (car Path) Noauth) ))))
