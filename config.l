@@ -5,4 +5,5 @@
     (pool . "DB")
     (ns . "entities")
     (default_path . (client))
+    (default_cls_perms . ((r c u d)(r) (c)))
     (static_dir . "static/")))

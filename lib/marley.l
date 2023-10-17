@@ -40,7 +40,7 @@
 (pool (confv '(pool)))
 
 (class +REntity +Entity) 
-  (var perms ((r c u d)(r) (c)))
+  (var perms (~(confv '(default_cls_perms)))) #kind of ugly; requires some thought to grok; bear in mind `var` is an f-expression
 
   (dm T @ (put> This 'eid (genKey 'eid '+REntity)))  #Every addressable entity has a unique ID.
   (rel eid (+Key +Number) NIL)

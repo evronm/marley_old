@@ -6,6 +6,7 @@
 (local) (+User +Venue +Provider +Service +Itinerary)
 
 
+#Jamaica is the only client to date.  It is, however settable in config.l
 (class +Client +Jamaica +Rest)
   (dm home> (Qs User)
     (cond 
@@ -21,6 +22,10 @@
       ((isa '+Provider User))
       ((isa '+User User))
       ()))
+
+#+REntity inherits from +Entity and adds REST functionality.  URL syntax is /entity/[new|search|eid] .
+#eid is unique for all addressable entitities in the DB.
+#additional required parameter for rel's is permissions:  read/write for user, group, other.  Group has not yet been implemented.
 
 (class +User  +REntity +Rest)
   (rel eml (+Need +Key +Email +Frm +New) '((r w)(r)))
