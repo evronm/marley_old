@@ -55,12 +55,8 @@
 
   (dm need_auth> (Verb Path) (not (member (req_action Verb Path) (perms> This NIL))))
 
-  (dm auth_get> (Path Qs Post User) T)
-  (dm auth_post> (Path Qs Post User) (or (= "new" (car Path))(nil? Path)))
-  (dm auth_del> (Path Qs Post User) (= (owner> This) User))
+  (dm authz> (Verb Path Qs Post User) (member (req_action Verb Path) (perms> This User)))
 
-  (dm authz> (Verb Path Qs Post User) 
-    (send (intern (pack "auth_" Verb ">")) This Path Qs Post User))
   (dm owner> () This)
   (dm url> (Path) (pack "/" (lowc (cdr (chop (sym This)))) "/" Path  ))
   (dm cls> () (car (type This)))
