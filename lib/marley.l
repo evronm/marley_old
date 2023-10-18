@@ -52,13 +52,16 @@
       (caddr Perms) 
       (if (= User (owner> This)) #Need to figure out how to handle groups here
         (car Perms)
-        (cadr Perms))))
+        (if (group_mem> This User)
+          (cadr Perms)
+          (car (tail 1) Perms)))))
 
   (dm need_auth> (Verb Path) (not (member (req_action Verb Path) (perms> This NIL))))
 
   (dm authz> (Verb Path Qs Post User) (member (req_action Verb Path) (perms> This User)))
 
   (dm owner> () This)
+  (dm group_mem> (User) NIL)
   (dm url> (Path) (pack "/" (lowc (cdr (chop (sym This)))) "/" Path  ))
   (dm cls> () (car (type This)))
 

@@ -51,18 +51,19 @@
   (rel itins (+List +Joint +Frm) provider (+Itinerary) '((r w d)(r w d)))
 
 (class +Service +REntity +Rest)
-  (var perms ((r c u d)(r)(r)))
+  (var perms ((r c u d)(r c)(r)))
   (var noauth '("list"))
   (dm owner> () (get This 'venue))
+  (dm group_mem> (User) (isa '+Venue User))
   (dm set_owner>(User) (put> This 'venue User))
-  (dm authz> (Verb Path Qs Post User) (or (and (isa '+Venue User) (= "post" Verb)) (super)))
+  #(dm authz> (Verb Path Qs Post User) (or (and (isa '+Venue User) (= "post" Verb)) (super)))
 
   (rel nm (+Need +Idx +String +Frm +New) '((r w d)(r)(r)))
   (rel duration (+Need +Number +Frm +New) '((r w d)(r)(r)))
   (rel price (+Need +Number +Frm +New) '((r w d)(r)(r)))
   (rel capacity (+Need +Number +Frm +New) '((r w d)(r)(r)))
   (rel max_group (+Number +Frm +New) '((r w d)(r)(r)))
-  (rel venue (+Need +Joint +Frm +New) services (+Venue) '((r w d)(r)(r)))
+  (rel venue (+Need +Joint) services (+Venue) '((r w d)(r)(r)))
   (rel itins (+List +Joint) services (+Itinerary) '((r w d)(r)(r)))
 
 
@@ -84,4 +85,4 @@
 
 (load T)
 (bye)
-#
+
