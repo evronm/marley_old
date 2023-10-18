@@ -19,10 +19,11 @@
   (default Path (confv '(default_path))) 
   (setq Cls (or (isa '+Rest (intern (to_cls_nm (++ Path)) (intern (confv '(ns))))) NIL))
   (setq Eid (any (car Path)))
+  (when Creds (setq User (authn Creds)))
   (ifn Cls
     (404)
     (if (need_auth> Cls Verb Path)
-      (ifn (setq User (authn Creds))
+      (ifn User
         (401)
         (if (num? Eid)
           (let (Obj (db 'id Cls Eid))
@@ -34,7 +35,7 @@
           ( ifn (authz> Cls Verb Path Qs Post User)
             (403)
             (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User))))
-      (send (any (pack "rest_" Verb ">")) Cls Path Qs Post))))
+      (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User))))  #send user even though auth not required; could be logged in anyway.
 
 
 (pool (confv '(pool)))

@@ -11,14 +11,17 @@ const labels={
 }
 
 function init() {
-  show("#nav", nav);
-  u('a').handle ('click', navclick)
+  u('#nav a').handle ('click', navclick)
   u('#creds').handle('submit',login);
 }
 
 function login(e){
   e.preventDefault();
-  alert('asdf');
+  fetch('/', { headers: {method: "POST",'Authorization': 'Basic ' + getCreds()}}).then((res) => res.text()).then((text) => {u('html').html(text);init()});
+}
+
+function getCreds() {
+  return btoa(val('eml') + ":" + val('pw'));
 }
 
 function val(name) {

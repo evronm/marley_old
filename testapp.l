@@ -7,24 +7,24 @@
 
 
 #Jamaica is the only client to date.  It is, however settable in config.l
+#`process looks in the ns (from config.l) namespace (default 'enitities as above) for classes with (isa '+Rest) for "entity"
 (class +Client +Jamaica +Rest)
   (dm home> (Qs User)
     (cond 
       ((not User))
-      ((isa '+Vendor User))
+      ((isa '+Venue User))
       ((isa '+Provider User))
       ((isa '+User User))
       ()))
   (dm nav> (Qs User)
     (cond 
-      ((not User) '((url "/venue/list" "Browse Venues") (url "/provider/list" "Browse providers") ))
-      ((isa '+Vendor User))
+      ((not User) (list ($a '((href . "/venue/list")) "Browse Venues") ($a '((href . "/provider/list")) "Browse providers") ))
+      ((isa '+Venue User) (list ($a '((href . "/service/new")) "New Service") ($a '((href . "/itineraries/list")) "Browse Upcoming visitors") ))
       ((isa '+Provider User))
       ((isa '+User User))
       ()))
 
 #+REntity inherits from +Entity and adds REST functionality.  URL syntax is /entity/[new|search|eid] .
-#`process looks in the ns (from config.l) namespace (default 'enitities as above) for classes with (isa '+Rest) for "entity"
 #eid is unique for all addressable entitities in the DB.
 #additional required parameter for rel's is permissions:  read/write for user, group, other.  Group has not yet been implemented.
 #default class perms can be set in config.l
@@ -84,4 +84,4 @@
 
 (load T)
 (bye)
-
+#
