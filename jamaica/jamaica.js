@@ -13,6 +13,12 @@ const labels={
 function init() {
   show("#nav", nav);
   u('a').handle ('click', navclick)
+  u('#creds').handle('submit',login);
+}
+
+function login(e){
+  e.preventDefault();
+  alert('asdf');
 }
 
 function val(name) {
@@ -33,7 +39,7 @@ function navclick(e) {
 
 function show(target, json) {
   u(target).empty().append(reggae2dom(json));
-  u('form').on('submit', formSubmit);
+  u('#main form').on('submit', formSubmit);
 }
 
 function processResponse(json) {

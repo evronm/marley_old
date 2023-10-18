@@ -24,8 +24,13 @@
       ()))
 
 #+REntity inherits from +Entity and adds REST functionality.  URL syntax is /entity/[new|search|eid] .
+#`process looks in the ns (from config.l) namespace (default 'enitities as above) for classes with (isa '+Rest) for "entity"
 #eid is unique for all addressable entitities in the DB.
 #additional required parameter for rel's is permissions:  read/write for user, group, other.  Group has not yet been implemented.
+#default class perms can be set in config.l
+
+#This default app is an abstraction of a bespoke wine tour app.  The vendors corresond to tasting rooms, the providers to drivers, and the users to tasters.
+#The framework, and the test app, should be sufficiently abstract that customisation required should be minimal for most gig/service oriented apps.
 
 (class +User  +REntity +Rest)
   (rel eml (+Need +Key +Email +Frm +New) '((r w)(r)))
@@ -77,6 +82,6 @@
 
 (de dbg () (!))
 
-#(load T)
-#(bye)
+(load T)
+(bye)
 

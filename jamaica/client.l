@@ -14,11 +14,12 @@
   (dm nav> (User) )
   (dm account> (User)
     (list 
-      ($label '((for . eml)) "Email:") 
+    ($form '((id . creds))  
+      (list ($label '((for . eml)) "Email:") 
       ($input '((name . eml)(type . text)) )
       ($label '((for . pw)) "Password:") 
       ($input '((name . pw)(type . password)) )
-      ($button '((id . login)) "Login")
+      ($button '((id . login)) "Login")))
 
       ($a '((href . /user/new)) "Sign up")
       (mapcar 
