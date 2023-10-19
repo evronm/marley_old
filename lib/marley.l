@@ -1,6 +1,5 @@
 (setq *READ 2 *WRITE 1)
 
-(load '@lib/json.l)
 (load "lib/util.l")
 (load "lib/server.l")
 (load "config.l")
@@ -95,7 +94,7 @@
         (setq E (new T (list This)))
         (try 'set_owner> E User))
       (setq E (db 'id This (car Path))))
-    (for R Post (put> E (intern (car R)) (cdr R)))
+    (for R Post (put> E (intern (car R)) (if (num? (any (cdr R))) (any (cdr R)) (cdr R))))
     (if (setq Errs (errs> E))
       (prog 
         (rollback)
