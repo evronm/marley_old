@@ -19,11 +19,11 @@
 (proc_test 'venue '(("eml" . "ven3@eml.com") ("pw" . "asdf") ("addr" . "ven3 address") ("nm" . "ven3")))
 
 
-(proc_test 'service '(  ("nm" . "serv11") ("duration" . 1) ("price" . 10) ("capacity" . 12) ("max_group" . 4)) '("ven1@eml.com" . "asdf"))
-(proc_test 'service '(  ("nm" . "serv12") ("duration" . 2) ("price" . 20) ("capacity" . 13) ("max_group" . 5)) '("ven1@eml.com" . "asdf"))
-(proc_test 'service '(  ("nm" . "serv13") ("duration" . 3) ("price" . 30) ("capacity" . 14) ("max_group" . 6)) '("ven1@eml.com" . "asdf"))
+(proc_test 'service '(  ("nm" . "serv11") ("duration" . 1) ("price" . 10) ("capacity" . 12) ("max_grp" . 4)) '("ven1@eml.com" . "asdf"))
+(proc_test 'service '(  ("nm" . "serv12") ("duration" . 2) ("price" . 20) ("capacity" . 13) ("max_grp" . 5)) '("ven1@eml.com" . "asdf"))
+(proc_test 'service '(  ("nm" . "serv13") ("duration" . 3) ("price" . 30) ("capacity" . 14) ("max_grp" . 6)) '("ven1@eml.com" . "asdf"))
 
-(proc_test 'service '(  ("nm" . "serv21") ("duration" . 4) ("price" . 15) ("capacity" . 12) ("max_group" . 4)) '("ven2@eml.com" . "asdf"))
-(proc_test 'service '(  ("nm" . "serv22") ("duration" . 5) ("price" . 16) ("capacity" . 13) ("max_group" . 5)) '("ven2@eml.com" . "asdf"))
+(proc_test 'service '(  ("nm" . "serv21") ("duration" . 4) ("price" . 15) ("capacity" . 12) ("max_grp" . 4)) '("ven2@eml.com" . "asdf"))
+(proc_test 'service '(  ("nm" . "serv22") ("duration" . 5) ("price" . 16) ("capacity" . 13) ("max_grp" . 5)) '("ven2@eml.com" . "asdf"))
 
-(proc_test 'service '(  ("nm" . "serv31") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_group" . 6)) '("ven3@eml.com" . "asdf"))
+(proc_test 'service '(  ("nm" . "serv31") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_grp" . 6)) '("ven3@eml.com" . "asdf"))

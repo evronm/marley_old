@@ -45,15 +45,15 @@
   (dm T @ (put> This 'eid (genKey 'eid '+REntity)))  #Every addressable entity has a unique ID.
   (rel eid (+Key +Number) NIL)
 
+  (dm role_pos> (User)
+    (cond 
+    ((= User (owner> This)) 'car)
+    ((group_mem> This User) 'cadr)
+    (T 'last )))
+
   (dm perms> (User)
     (setq Perms (car (or (get This 'perms) (var: perms))))
-    (ifn User 
-      (caddr Perms) 
-      (if (= User (owner> This)) #Need to figure out how to handle groups here
-        (car Perms)
-        (if (group_mem> This User)
-          (cadr Perms)
-          (car (tail 1) Perms)))))
+    ((role_pos> This User) Perms))
 
   (dm need_auth> (Verb Path) (not (member (req_action Verb Path) (perms> This NIL))))
 
@@ -64,21 +64,19 @@
   (dm url> (Path) (pack "/" (lowc (cdr (chop (sym This)))) "/" Path  ))
   (dm cls> () (car (type This)))
 
-  (dm rels> (Cls) 
-    (setq Rels (delete NIL (append (try 'rels> (cls> This)) (filter '((r) (type (car r))) (getl This)))))
-    (if (> Cls Nil)
-      (filter '((r) (= Cls (sect Cls (type (car r))))) Rels)
-      Rels))
+  (dm rels> (User) 
+    (setq role_pos (role_pos> This User))
+    (delete NIL (append (try 'rels> (cls> This)) (filter '((r)
+      (and 
+        ( type (car r))
+        (member 'r (role_pos (perms> (car r)))))) 
+      (getl This)))))
 
-  (dm reggae> (New Srch)
+  (dm reggae> (User)
     (reggae (list "instance" 
-      (if New 
-        (list 
-          (url> This "new")
-          (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm +New))))
-        (T (list
+        (list
           (url> This)
-          (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This '(+Frm)))))))))
+          (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This User))))))
       
 
   (dm get_new> (Path Qs Post User) (list 200 (reggae> This T Nil)))

@@ -33,22 +33,22 @@
 #The framework, and the test app, should be sufficiently abstract that customisation required should be minimal for most gig/service oriented apps.
 
 (class +User  +REntity +Rest)
-  (rel eml (+Need +Key +Email +Frm +New) '((r w)(r)))
-  (rel pw (+Need +Key +Password +Frm +New) '((w)))
+  (rel eml (+Need +Key +Email) '((r w)(r)))
+  (rel pw (+Need +Key +Password) '((w)))
   (rel salt (+String) NIL)
-  (rel addr (+Idx +String +Frm +New) '((r w)(r)))
-  (rel nm (+Need +Key +String +Frm +New) '((r w)(r)))
-  (rel itins (+List +Joint +Frm) cust (+Itinerary) '((r w) (r)))
+  (rel addr (+Idx +String) '((r w)(r)))
+  (rel nm (+Need +Key +String) '((r w)(r)))
+  (rel itins (+List +Joint) cust (+Itinerary) '((r w) (r)))
 
 (class +Venue +User)
   (var perms ((r c u d)(r)(c)))
-  (rel providers (+List +Joint +Frm) venues (+Provider) '((r w d)(r w d)(r)))
-  (rel services (+List +Joint +Frm) venue (+Service) '((r w d)(r)(r)))
+  (rel providers (+List +Joint) venues (+Provider) '((r w d)(r w d)(r)))
+  (rel services (+List +Joint) venue (+Service) '((r w d)(r)(r)))
 
 (class +Provider +User)
   (var perms ((r c u d)(r)(c)))
-  (rel venues (+List +Joint +Frm) providers (+Venue) '((r w d)(r w d)(r)))
-  (rel itins (+List +Joint +Frm) provider (+Itinerary) '((r w d)(r w d)))
+  (rel venues (+List +Joint) providers (+Venue) '((r w d)(r w d)(r)))
+  (rel itins (+List +Joint) provider (+Itinerary) '((r w d)(r w d)))
 
 (class +Service +REntity +Rest)
   (var perms ((r c u d)(r c)(r)))
@@ -56,11 +56,11 @@
   (dm group_mem> (User) (isa '+Venue User))
   (dm set_owner>(User) (put> This 'venue User))
 
-  (rel nm (+Need +Idx +String +Frm +New) '((r w d)(r)(r)))
-  (rel duration (+Need +Number +Frm +New) '((r w d)(r)(r)))
-  (rel price (+Need +Number +Frm +New) '((r w d)(r)(r)))
-  (rel capacity (+Need +Number +Frm +New) '((r w d)(r)(r)))
-  (rel max_grp (+Number +Frm +New) '((r w d)(r)(r)))
+  (rel nm (+Need +Idx +String) '((r w d)(r)(r)))
+  (rel duration (+Need +Number) '((r w d)(r)(r)))
+  (rel price (+Need +Number) '((r w d)(r)(r)))
+  (rel capacity (+Need +Number) '((r w d)(r)(r)))
+  (rel max_grp (+Number) '((r w d)(r)(r)))
   (rel venue (+Need +Joint) services (+Venue) '((r w d)(r)(r)))
   (rel itins (+List +Joint) services (+Itinerary) '((r w d)(r)(r)))
 
@@ -68,12 +68,12 @@
 (class +Itinerary +REntity +Rest)
   (dm owner> () (cust This))
   (dm grp> () (provider This))
-  (rel start_addr (+Need +String +Frm +New) '((r w d)(r)))
-  (rel dt (+Need +Idx +Date +Frm +New) '((r w d)(r)))
-  (rel tm (+Need +Time +Frm +New) '((r w d)(r)))
+  (rel start_addr (+Need +String) '((r w d)(r)))
+  (rel dt (+Need +Idx +Date) '((r w d)(r)))
+  (rel tm (+Need +Time) '((r w d)(r)))
   (rel cust (+Need +Joint) itins (+User) '((r w d)(r)))
-  (rel ppl (+Need +Number +Frm +New) '((r w d)(r)()))
-  (rel services (+List +Joint +Frm) itins (+Service) '((r w d)(r u)))
+  (rel ppl (+Need +Number) '((r w d)(r)()))
+  (rel services (+List +Joint) itins (+Service) '((r w d)(r u)))
   (rel provider (+Joint) itins (+Venue) '((r w d)(r u)))
 
 (de go ()
@@ -82,5 +82,5 @@
 (de dbg () (!))
 
 (load T)
-(bye)
+#(bye)
 
