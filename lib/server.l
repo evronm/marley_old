@@ -37,11 +37,6 @@
   )
 )
 
-(de parse_qs (Qs)
-  (mapcar '((Pr) 
-    (let  (Kv (split Pr "="))
-      (cons (url_dec (car Kv)) (url_dec (cadr Kv))) 
-    ) ) (split Qs '&)))
 
 (de respond (Stat Body Ty)
   (default Ty "json")

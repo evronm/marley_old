@@ -19,12 +19,12 @@
   (dm nav> (Qs User)
     (cond 
       ((not User) (list ($a '((href . "/venue/list")) "Browse Venues") ($a '((href . "/provider/list")) "Browse providers") ))
-      ((isa '+Venue User) (list ($a '((href . "/service/new")) "New Service") ($a '((href . "/itineraries/list")) "Browse Upcoming visitors") ))
+      ((isa '+Venue User) (list ($a '((href . "/service/new")) "New Service") ($a '((href . "/service/list")) "Browse Services") ($a '((href . "/itineraries/list")) "Browse Upcoming visitors") ))
       ((isa '+Provider User))
       ((isa '+User User))
       ()))
 
-#+REntity inherits from +Entity and adds REST functionality.  URL syntax is /entity/[new|search|eid] .
+#+REntity inherits from +Entity, adding rest methods and overriding a couple.  URL syntax is /entity/[new|search|eid] .
 #eid is unique for all addressable entitities in the DB.
 #additional required parameter for rel's is permissions:  read/write for user, group, other. Implemented in lib/relations.l
 #default class perms can be set in config.l
@@ -83,4 +83,3 @@
 
 (load T)
 #(bye)
-

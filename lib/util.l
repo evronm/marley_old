@@ -15,6 +15,12 @@
 (de confv (Lst)
   (cdr (conf Lst)))
 
+(de parse_qs (Qs)
+  (mapcar '((Pr) 
+    (let  (Kv (split Pr "="))
+      (cons (url_dec (car Kv)) (url_dec (cadr Kv))) 
+    ) ) (split Qs '&)))
+
 (de req_action (Verb Path) 
   (if (or (= "new" (car Path) ) (nil? (car Path)))
     'c

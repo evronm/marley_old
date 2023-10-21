@@ -6,7 +6,7 @@
       (mapcar '((A) (list (car A) "='" (cdr A) "' ")) Attrs)
       ">" Cont "</" @Tag ">"))))
 
-(for Tag '(html head script body h1 h2 h3 a p em strong div form label input textarea submit button) (set (intern (pack "$" Tag)) (tag Tag)))
+(for Tag '(html head script link body h1 h2 h3 a p em strong div form label input textarea submit button) (set (intern (pack "$" Tag)) (tag Tag)))
 
 (class +Jamaica)
   (var js  ~(pack (in "jamaica/jamaica.js" (till))))
@@ -30,6 +30,7 @@
   (dm rest_get> (Path Qs Post User) 
     (list 200($html NIL (list 
       ($head NIL ( list
+        #($link '((rel . stylesheet) (href . https://unpkg.com/mvp.css)))
         ($script '((type text/javascript) (src . https://cdn.jsdelivr.net/npm/umbrellajs)))
         ($script '((type text/javascript) (src . https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.2.0.nomodule.min.js)))
         ($script '((type text/javascript)) (var: js))))
