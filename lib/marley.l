@@ -73,10 +73,14 @@
       (getl This)))))
 
   (dm reggae> (User)
+    (setq Rels 
+      (if (ext? This)
+        (rels> This User)
+        (filter '((R)(not (isa '+Link (car R)))) (rels> This User))))
     (reggae (list "instance" 
         (list
           (url> This)
-          (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) (rels> This User))))))
+          (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) Rels)))))
       
 
   (dm get_new> (Path Qs Post User) (list 200 (reggae> This T Nil)))
