@@ -91,7 +91,7 @@
     (or (try (intern (pack "get_" (car Path) ">")) This Path Qs Post User) (404))) 
 
   (dm rest_post> (Path Qs Post User) 
-    (if (= (car Path) "new")
+    (if (or (= (car Path) "new") (nil? (car Path)))
       (prog 
         (setq E (new T (list This)))
         (try 'set_owner> E User))

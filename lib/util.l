@@ -16,7 +16,7 @@
   (cdr (conf Lst)))
 
 (de req_action (Verb Path) 
-  (if (= "new" (car Path))
+  (if (or (= "new" (car Path) ) (nil? (car Path)))
     'c
     (if (and (= "post" Verb) (num? (any (car Path)))) 
       'u 
