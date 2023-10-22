@@ -1,9 +1,9 @@
 
-
 #add permissions option
 (extend +relation)
-  (dm perms> (p)
-    (if p (=: perms p) (: perms)))
+  (dm perms> (P) (if P (=: perms p) (: perms)))
+  (dm req> () (isa '+Need This))
+  (dm ro> (Pos) ())
 
 (redef rel Lst
   (eval (cons 'rel (head -1 Lst) ))
@@ -69,11 +69,14 @@
           (url> This)
           (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) Rels)))))
       
-
   (dm get_new> (Path Qs Post User) (list 200 (reggae> This T Nil)))
   (dm get_search> (Path Qs Post User) (new (append (str This) '(+Seach))))
   (dm get_list (Path Qs Post User) 
-    ())
+    (set Q
+      (ifn Qs
+        (search NIL (list (list 'eid This)))
+        ()))
+    (make (for (E Q (search E)) (link (reggae> @)))))
   
   (dm rest_get> (Path Qs Post User) 
     (or (try (intern (pack "get_" (car Path) ">")) This Path Qs Post User) (404))) 
