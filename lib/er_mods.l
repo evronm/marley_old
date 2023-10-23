@@ -1,7 +1,7 @@
 
 #add permissions option
 (extend +relation)
-  (dm perms> (P) (if P (=: perms p) (: perms)))
+  (dm perms> (P) (if P (=: perms P) ( : perms)))
   (dm req> () (isa '+Need This))
   (dm reggae_type> () 
     (if (setq typ (lowc (pack (cdr (chop (car (sect '(+Number +Date +Time +Bool +Password) (type This) )))))))
@@ -70,7 +70,7 @@
     (reggae (list "instance" 
         (list
           (url> This)
-          (mapcar '((R) (list (sym (cdr R)) (reggae> (car R)) )) Rels)))))
+          (mapcar '((R) (list (sym (cdr R)) (reggae_type> (car R)) )) Rels)))))
       
   (dm get_new> (Path Qs Post User) (list 200 (reggae> This T Nil)))
   (dm get_search> (Path Qs Post User) (new (append (str This) '(+Seach))))
