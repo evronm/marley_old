@@ -27,3 +27,8 @@
 (proc_test 'service '(  ("nm" . "serv22") ("duration" . 5) ("price" . 16) ("capacity" . 13) ("max_grp" . 5)) '("ven2@eml.com" . "asdf"))
 
 (proc_test 'service '(  ("nm" . "serv31") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_grp" . 6)) '("ven3@eml.com" . "asdf"))
+
+(test '(c) (may (db 'nm '+Venue 'ven1) 'c '+Service)) #A Venue can create a service.
+(test NIL (may (db 'nm '+Venue 'user1) 'c '+Service)) #But a User cannot.
+(test '(u d) (may (db 'nm '+Venue 'ven1) 'u (db 'nm '+Service 'serv11))) #A venue can update and delete a 
+(test NIL (may (db 'nm '+Venue 'ven2) 'u (db 'nm '+Service 'serv11)))

@@ -3,7 +3,10 @@
 (extend +relation)
   (dm perms> (P) (if P (=: perms p) (: perms)))
   (dm req> () (isa '+Need This))
-  (dm ro> (Pos) ())
+  (dm reggae_type> () 
+    (if (setq typ (lowc (pack (cdr (chop (car (sect '(+Number +Date +Time +Bool +Password) (type This) )))))))
+      typ
+      "text")) #This is kind of ugly but is unlikely to need changing
 
 (redef rel Lst
   (eval (cons 'rel (head -1 Lst) ))
@@ -53,10 +56,10 @@
 
   (dm rels> (User) 
     (setq role_pos (role_pos> This User))
-    (delete NIL (append (try 'rels> (cls> This)) (filter '((r)
+    (delete NIL (append (try 'rels> (cls> This)) (filter '((R)
       (and 
-        ( type (car r))
-        (member 'r (role_pos (perms> (car r)))))) 
+        ( type (car R))
+        (member 'r (role_pos (perms> (car R)))))) 
       (getl This)))))
 
   (dm reggae> (User)
@@ -67,11 +70,11 @@
     (reggae (list "instance" 
         (list
           (url> This)
-          (mapcar '((r) (list (sym (cdr r)) (reggae> (car r)))) Rels)))))
+          (mapcar '((R) (list (sym (cdr R)) (reggae> (car R)) )) Rels)))))
       
   (dm get_new> (Path Qs Post User) (list 200 (reggae> This T Nil)))
   (dm get_search> (Path Qs Post User) (new (append (str This) '(+Seach))))
-  (dm get_list (Path Qs Post User) 
+  (dm get_list> (Path Qs Post User) 
     (set Q
       (ifn Qs
         (search NIL (list (list 'eid This)))

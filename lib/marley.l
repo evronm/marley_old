@@ -39,7 +39,7 @@
 (de may (User Act E R) 
   (ifn R 
     (member Act (perms> E User))
-    (member Act ((role_pos> E User) (perms> E User)))))
+    (member Act ((role_pos> E User) (perms> R User))))) #this test needs to happen here because relation objects don't know their owner.
 
 
 (pool (confv '(pool)))
