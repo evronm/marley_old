@@ -36,10 +36,10 @@
             (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User))))
       (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User))))  #send user even though auth not required; could be logged in anyway.
 
-(de may (User Act E R) 
+(de may (Act User E R) 
   (ifn R 
     (member Act (perms> E User))
-    (member Act ((role_pos> E User) (perms> R User))))) #this test needs to happen here because relation objects don't know their owner.
+    (member Act ((role_pos> E User) (perms> R))))) #this test needs to happen here because relation objects don't know their owner.
 
 
 (pool (confv '(pool)))

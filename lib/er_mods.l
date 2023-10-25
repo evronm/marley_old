@@ -1,8 +1,9 @@
 
 #add permissions option
 (extend +relation)
-  (dm perms> (P) (if P (=: perms P) ( : perms)))
+  (dm perms> (P) (if P ( =: perms P) (map 'chop ( : perms))))
   (dm req> () (isa '+Need This))
+  (dm ro> (User) (not (may 'w User (get This 'cls) This)))
   (dm reggae_type> () 
     (if (setq typ (lowc (pack (cdr (chop (car (sect '(+Number +Date +Time +Bool +Password) (type This) )))))))
       typ
@@ -13,20 +14,16 @@
   (perms> (get *Class (car Lst)) (car (tail 1 Lst))))
 
 #reggae for vaious prefix classes
-(extend +String) (dm reggae> () "text")
-(extend +Number) (dm reggae> () "number")
-(extend +Date) (dm reggae> () "date")
-(extend +Time) (dm reggae> () "time")
-(extend +Bool) (dm reggae> () "bool")
 (extend +List)
   (dm reggae> () "instances")
+
 (class +Password +String)
-  (dm reggae> () "password")
   (dm put> (Obj Old Pw)
     (when (nil? (get Obj 'salt))
       (put> Obj 'salt (sym (in "/dev/urandom" (rd 10)))))
     (super Obj Old (sym (pw_hash Pw (get Obj 'salt))))
   )
+
 (class +Email +String) (dm reggae> () "email")
 
 (class +REntity +Entity) 
@@ -43,7 +40,7 @@
 
   (dm perms> (User)
     (setq Perms (car (or (get This 'perms) (var: perms))))
-    ((role_pos> This User) Perms))
+    (chop ((role_pos> This User) Perms)))
 
   (dm need_auth> (Verb Path) (not (member (req_action Verb Path) (perms> This NIL))))
 
