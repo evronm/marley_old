@@ -28,6 +28,9 @@
       'u 
       (if (= "del" (car Path) 'd 'r)))))
 
+(de lsearch @
+  (make (for (Q (pass search) (search Q)) (link @))))
+
 (de pw_hash (Pw Salt)
   (pipe (out (list 'argon2 Salt '-r) (prin Pw)) (read)))
 
