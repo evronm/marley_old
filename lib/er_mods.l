@@ -44,8 +44,6 @@
 
   (dm need_auth> (Verb Path) (not (member (req_action Verb Path) (perms> This NIL))))
 
-  (dm authz> (Verb Path Qs Post User) (member (req_action Verb Path) (perms> This User)))
-
   (dm owner> () This)
   (dm group_mem> (User) NIL)
   (dm url> (Path) (pack "/" (lowc (cdr (chop (sym This)))) "/" Path  ))

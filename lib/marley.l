@@ -28,10 +28,10 @@
           (let (Obj (db 'id Cls Eid))
             (ifn Obj
               (404)
-              (ifn (authz> Obj Verb Path Qs Post User)
+              (ifn (may (req_action Verb Path) User Cls Obj)
                 (403)
                 (send (any (pack "rest_" Verb ">")) Obj Path Qs Post User))))
-          ( ifn (authz> Cls Verb Path Qs Post User)
+          ( ifn (may (req_action Verb Path) User Cls)
             (403)
             (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User))))
       (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User))))  #send user even though auth not required; could be logged in anyway.
