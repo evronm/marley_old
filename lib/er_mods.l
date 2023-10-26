@@ -1,7 +1,7 @@
 
 #add permissions option
 (extend +relation)
-  (dm perms> (P) (if P ( =: perms P) (map 'chop ( : perms))))
+  (dm perms> (P) (if P ( =: perms P) (mapcar 'chop ( : perms))))
   (dm req> () (isa '+Need This))
   (dm ro> (User) (not (may 'w User (get This 'cls) This)))
   (dm reggae_type> () 
@@ -101,13 +101,4 @@
   
   (dm rest_put> (Path Qs Post User) prinl 'put)
   (dm rest_delete> (Path Qs Post User) prinl 'del)
-
-  #{(dm errs> () 
-    (extract 
-      '((R) 
-        (let (Err (mis> (car R) (get This (cdr R)) This)) 
-          (when Err 
-            (list (cdr R) Err)))) 
-      (filter '((R)(not (ext? (car R)))) (rels> (cls> This))  )))}#
-
 
