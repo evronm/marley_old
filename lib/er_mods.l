@@ -95,7 +95,7 @@
     (if Errs
       (prog 
         (rollback)
-        (list 422 (reggae (cons '(error) Errs))) )
+        (prog1 (list 422 (reggae (cons '(error) Errs))) (setq Errs NIL)) )  #might need an alternative to `push` for Errs
       (commit T)
       (list 201 (reggae '("mesg" "Success" "created successfully")))))
   

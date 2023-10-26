@@ -56,7 +56,7 @@
   (dm group_mem> (User) (isa '+Venue User))
   (dm set_owner>(User) (put> This 'venue User))
 
-  (rel nm (+Need +Idx +String) '(crud cr r))
+  (rel nm (+Need +Aux +Key +String) (venue) '(crud cr r))
   (rel duration (+Need +Number) '(crud cr r))
   (rel price (+Need +Number) '(crud cr r))
   (rel capacity (+Need +Number) '(crud cr r))
