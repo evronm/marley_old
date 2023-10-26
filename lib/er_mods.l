@@ -54,7 +54,7 @@
     (delete NIL (append (try 'rels> (cls> This)) (filter '((R)
       (and 
         ( type (car R))
-        (member 'r (role_pos (perms> (car R)))))) 
+        (n== NIL (role_pos (perms> (car R)))))) 
       (getl This)))))
 
   (dm reggae> (User)
@@ -85,8 +85,14 @@
         (setq E (new T (list This)))
         (try 'set_owner> E User))
       (setq E (db 'id This (car Path))))
-    (for R Post (put> E (intern (car R)) (if (num? (any (cdr R))) (any (cdr R)) (cdr R))))
-    (if (setq Errs (errs> E))
+    (for R (rels> This)
+      (setq V (cdr (assoc (cdr R) Post)))
+      (cond
+        ((isa '+Link (car R)))  #This may have to change; not how I will handle links
+        ((setq Err (mis> E (cdr R) V)) (push 'Errs (list (cdr R) Err )))
+        ((not (may (req_action Verb Path) User This (car R))) (push 'Errs (list (cdr R) "Forbidden")))
+        (T (put> E (cdr R) (if (num? (any V)) (any V) V)))))
+    (if Errs
       (prog 
         (rollback)
         (list 422 (reggae (cons '(error) Errs))) )
@@ -96,12 +102,12 @@
   (dm rest_put> (Path Qs Post User) prinl 'put)
   (dm rest_delete> (Path Qs Post User) prinl 'del)
 
-  (dm errs> () 
+  #{(dm errs> () 
     (extract 
       '((R) 
         (let (Err (mis> (car R) (get This (cdr R)) This)) 
           (when Err 
             (list (cdr R) Err)))) 
-      (filter '((R)(not (ext? (car R)))) (rels> (cls> This))  )))
+      (filter '((R)(not (ext? (car R)))) (rels> (cls> This))  )))}#
 
 
