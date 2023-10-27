@@ -24,7 +24,7 @@
     (super Obj Old (sym (pw_hash Pw (get Obj 'salt))))
   )
 
-(class +Email +String) (dm reggae> () "email")
+(class +Email +String) (dm reggae_type> () "email")
 
 (class +REntity +Entity) 
   (var perms (~(confv '(default_cls_perms)))) #kind of ugly; requires some thought to grok; bear in mind `var` is an f-expression
@@ -57,17 +57,16 @@
         (n== NIL (role_pos (perms> (car R)))))) 
       (getl This)))))
 
-  (dm reggae> (User)
+  (dm reggae_spec> (User)
     (setq Rels 
       (if (ext? This)
         (rels> This User)
         (filter '((R)(not (isa '+Link (car R)))) (rels> This User))))
-    (reggae (list "instance" 
-        (list
-          (url> This)
-          (mapcar '((R) (list (sym (cdr R)) (reggae_type> (car R)) )) Rels)))))
+    (list
+      (url> This)
+      (mapcar '((R) (list (sym (cdr R)) (reggae_type> (car R)) )) Rels)))
       
-  (dm get_new> (Path Qs Post User) (list 200 (reggae> This T Nil)))
+  (dm get_new> (Path Qs Post User) (list 200 (reggae (list "instance" (reggae_spec> This T Nil)))))
   (dm get_search> (Path Qs Post User) (new (append (str This) '(+Seach))))
   (dm get_list> (Path Qs Post User) 
     (set Q
