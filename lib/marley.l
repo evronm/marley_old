@@ -13,8 +13,16 @@
     (setq User (db 'eml Cls (car Creds))))
     (and User (= (pw_hash (cdr Creds) (get User 'salt)) (get User 'pw)) User)) #User needs to show up twice to prevent error and return User.
 
+(de req_action (Verb Path) 
+  (if (and (= "get" Verb) (member (car Path) '("list" "show")))
+    'r
+    (if (or (= "new" (car Path) ) (nil? (car Path)))
+      'c
+      (if (and (= "post" Verb) (num? (any (car Path)))) 
+        'u 
+        (if (= "del" (car Path) 'd NIL))))))
 
-(de process (Verb Path Qs Post Creds)
+(de process (Verb Path QS Post Creds)
   (default Path (confv '(default_path))) 
   (setq Cls (or (isa '+Rest (intern (to_cls_nm (++ Path)) (intern (confv '(ns))))) NIL))
   (setq Eid (any (car Path)))
@@ -28,13 +36,13 @@
           (let (Obj (db 'id Cls Eid))
             (ifn Obj
               (404)
-              (ifn (may (req_action Verb Path) User Cls Obj)
+              ( ifn (may (req_action Verb Path) User Cls Obj)
                 (403)
-                (send (any (pack "rest_" Verb ">")) Obj Path Qs Post User))))
-          ( ifn (may (req_action Verb Path) User Cls)
+                (send (any (pack "rest_" Verb ">")) Obj Path QS Post User))))
+          (! ifn (may (req_action Verb Path) User Cls)
             (403)
-            (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User))))
-      (send (any (pack "rest_" Verb ">")) Cls Path Qs Post User))))  #send user even though auth not required; could be logged in anyway.
+            (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))
+      (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))  #send user even though auth not required; could be logged in anyway.
 
 (de may (Act User E R) 
   (ifn R 

@@ -27,7 +27,7 @@
         (filter '((E)(isa (intern "+User" (intern (confv '(ns)))) E)) (all (intern (confv '(ns))))))))
 
   (dm title> () (confv '(title)) )
-  (dm rest_get> (Path Qs Post User) 
+  (dm rest_get> (Path QS Post User) 
     (list 200($html NIL (list 
       ($head NIL ( list
         #($link '((rel . stylesheet) (href . https://unpkg.com/mvp.css)))
@@ -38,7 +38,7 @@
         ($div '((id . header)) (list
           ($h1 NIL (title> This))
           ($div '((id . account)) (account> This))))
-        ($div '((id . nav)) (nav> This Qs User))
+        ($div '((id . nav)) (nav> This QS User))
         ($div '((id . main))))))) "html")) 
    
 

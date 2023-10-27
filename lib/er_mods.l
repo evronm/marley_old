@@ -65,20 +65,24 @@
     (list
       (url> This)
       (mapcar '((R) (list (sym (cdr R)) (reggae_type> (car R)) )) Rels)))
-      
-  (dm get_new> (Path Qs Post User) (list 200 (reggae (list "instance" (reggae_spec> This T Nil)))))
-  (dm get_search> (Path Qs Post User) (new (append (str This) '(+Seach))))
-  (dm get_list> (Path Qs Post User) 
-    (set Q
-      (ifn Qs
-        (search NIL (list (list 'eid This)))
+  (dm list> (Path QS Post User) 
+    (ifn QS
+        (lsearch NIL (list (list 'eid This)))
         ()))
-    (make (for (E Q (search E)) (link (reggae> @)))))
+  (dm list_vals> (Path QS Post User)
+    (mapcar 
+      '((E)(mapcar car (getl E))) 
+      (list> This Path QS Post User)))
+      
+  (dm get_new> (Path QS Post User) (list 200 (reggae (list "instance" (reggae_spec> This T Nil)))))
+  (dm get_search> (Path QS Post User) (new (append (str This) '(+Seach))))
+  (dm get_list> (Path QS Post User) 
+    (list 200 (reggae (list "instances" (reggae_spec> This NIL User) (list_vals> This Path QS Post User)))))
   
-  (dm rest_get> (Path Qs Post User) 
-    (or (try (intern (pack "get_" (car Path) ">")) This Path Qs Post User) (404))) 
+  (dm rest_get> (Path QS Post User) 
+    (or (try (intern (pack "get_" (car Path) ">")) This Path QS Post User) (404))) 
 
-  (dm rest_post> (Path Qs Post User) 
+  (dm rest_post> (Path QS Post User) 
     (if (or (= (car Path) "new") (nil? (car Path)))
       (prog 
         (setq E (new T (list This)))
@@ -98,6 +102,6 @@
       (commit T)
       (list 201 (reggae '("mesg" "Success" "created successfully")))))
   
-  (dm rest_put> (Path Qs Post User) prinl 'put)
-  (dm rest_delete> (Path Qs Post User) prinl 'del)
+  (dm rest_put> (Path QS Post User) prinl 'put)
+  (dm rest_delete> (Path QS Post User) prinl 'del)
 
