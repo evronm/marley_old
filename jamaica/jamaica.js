@@ -18,7 +18,7 @@ function init() {
 
 function login(e){
   e.preventDefault();
-  fetch('/', { headers: {method: "POST",'Authorization': 'Basic ' + getCreds()}}).then((res) => res.text()).then((text) => {u('html').html(text);init()});
+  fetch('/', { headers: {'Authorization': 'Basic ' + getCreds()}}).then((res) => res.text()).then((text) => {u('html').html(text);init()});
 }
 
 function getCreds() {

@@ -39,7 +39,7 @@
               ( ifn (may (req_action Verb Path) User Cls Obj)
                 (403)
                 (send (any (pack "rest_" Verb ">")) Obj Path QS Post User))))
-          (! ifn (may (req_action Verb Path) User Cls)
+          (ifn (may (req_action Verb Path) User Cls)
             (403)
             (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))
       (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))  #send user even though auth not required; could be logged in anyway.

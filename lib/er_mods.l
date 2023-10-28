@@ -10,8 +10,9 @@
       "text")) #This is kind of ugly but is unlikely to need changing
 
 (redef rel Lst
-  (eval (cons 'rel (head -1 Lst) ))
-  (perms> (get *Class (car Lst)) (car (tail 1 Lst))))
+  (eval (cons 'rel (head -1 Lst) )) #can't use apply here; apparently due to reder
+  (put *Class 'rels (append (get *Class 'rels) (list (car Lst))))
+  (perms> (get *Class (car Lst)) (last Lst)))
 
 #reggae for vaious prefix classes
 (extend +List)
@@ -27,7 +28,7 @@
 (class +Email +String) (dm reggae_type> () "email")
 
 (class +REntity +Entity) 
-  (var perms (~(confv '(default_cls_perms)))) #kind of ugly; requires some thought to grok; bear in mind `var` is an f-expression
+  (var perms (~(confv '(default_cls_perms)))) #kind of ugly; requires some thought to grok; bear in mind `var` is an f-expression  (crud r c) as of now...
 
   (dm T @ (put> This 'eid (genKey 'eid '+REntity)))  #Every addressable entity has a unique ID.
   (rel eid (+Key +Number) NIL)
