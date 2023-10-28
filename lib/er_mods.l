@@ -53,19 +53,17 @@
   (dm rels> (User) 
     (setq role_pos (role_pos> This User))
     (delete NIL (append (try 'rels> (cls> This)) (filter '((R)
-      (and 
-        ( type (car R))
-        (n== NIL (role_pos (perms> (car R)))))) 
-      (getl This)))))
+        (n== NIL (role_pos (perms> (get This R))))) 
+      (get This 'rels)))))
 
   (dm reggae_spec> (User)
     (setq Rels 
       (if (ext? This)
         (rels> This User)
-        (filter '((R)(not (isa '+Link (car R)))) (rels> This User))))
+        (filter '((R)(not (isa '+Link (get This R)))) (rels> This User))))
     (list
       (url> This)
-      (mapcar '((R) (list (sym (cdr R)) (reggae_type> (car R)) )) Rels)))
+      (mapcar '((R) (list (sym (get This R)) (reggae_type> R) )) Rels)))
   (dm list> (Path QS Post User) 
     (ifn QS
         (lsearch NIL (list (list 'eid This)))
@@ -90,12 +88,12 @@
         (try 'set_owner> E User))
       (setq E (db 'id This (car Path))))
     (for R (rels> This)
-      (setq V (cdr (assoc (cdr R) Post)))
+      (setq V (cdr (assoc R Post)))
       (cond
-        ((isa '+Link (car R)))  #This may have to change; not how I will handle links
-        ((setq Err (mis> E (cdr R) V)) (push 'Errs (list (cdr R) Err )))
-        ((not (may (req_action Verb Path) User This (car R))) (push 'Errs (list (cdr R) "Forbidden")))
-        (T (put> E (cdr R) (if (num? (any V)) (any V) V)))))
+        ((isa '+Link (meta E R)))  #This may have to change; not how I will handle links
+        ((setq Err (mis> E R V)) (push 'Errs (list R Err )))
+        ((not (may (req_action Verb Path) User This (meta E R)) (push 'Errs (meta E R) "Forbidden")))
+        (T (put> E R (if (num? (any V)) (any V) V)))))
     (if Errs
       (prog 
         (rollback)

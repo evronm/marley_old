@@ -33,7 +33,7 @@
 (test NIL (may 'u (db 'nm '+Venue 'ven2) (db 'nm '+Service 'serv11)))
 
 
-(test '(422 "[[\"error\"], [\"pw\", \"Input required\"], [\"eml\", \"Input required\"], [\"nm\", \"Input required\"]]") (post 'user ))
-(test '(422 "[[\"error\"], [\"eml\", \"Input required\"], [\"pw\", \"Input required\"]]") (post 'user '(("nm" . "asdf"))) )
+(test '(422 "[[\"error\"], [\"nm\", \"Input required\"], [\"pw\", \"Input required\"], [\"eml\", \"Input required\"]]") (post 'user ))
+(test '(422 "[[\"error\"], [\"pw\", \"Input required\"], [\"eml\", \"Input required\"]]") (post 'user '(("nm" . "asdf"))) )
 
 (test '(422 "[[\"error\"], [\"nm\", \"Not unique\"]]") (post 'service '(  ("nm" . "serv11") ("duration" . 1) ("price" . 10) ("capacity" . 12) ("max_grp" . 4)) '("ven1@eml.com" . "asdf")))
