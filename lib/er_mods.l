@@ -14,9 +14,8 @@
   (put *Class 'rels (append (get *Class 'rels) (list (car Lst))))
   (perms> (get *Class (car Lst)) (last Lst)))
 
-#reggae for vaious prefix classes
 (extend +List)
-  (dm reggae> () "instances")
+  (dm reggae_type> () "instances")
 
 (class +Password +String)
   (dm put> (Obj Old Pw)
@@ -47,7 +46,7 @@
 
   (dm owner> () This)
   (dm group_mem> (User) NIL)
-  (dm url> (Path) (pack "/" (lowc (cdr (chop (sym This)))) "/" Path  ))
+  (dm url> (Path) (lowc (pack "/" (cdr (chop (car (type This)))) "/" Path)  ))
   (dm cls> () (car (type This)))
 
   (dm rels> (User) 
@@ -60,10 +59,11 @@
     (setq Rels 
       (if (ext? This)
         (rels> This User)
-        (filter '((R)(not (isa '+Link (get This R)))) (rels> This User))))
+        (filter '((R)(not (isa '+Link (meta This R)))) (rels> This User))))
+    (setq E (if (ext? This) This (new (list This))))
     (list
-      (url> This)
-      (mapcar '((R) (list (sym (get This R)) (reggae_type> R) )) Rels)))
+      (url> E)
+      (mapcar '((R) (list R (reggae_type> (meta E R)) )) Rels)))
   (dm list> (Path QS Post User) 
     (ifn QS
         (lsearch NIL (list (list 'eid This)))
