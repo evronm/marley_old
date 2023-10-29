@@ -5,6 +5,7 @@ const SRCH=2;
 const {div, p, a, span, pre, form, label, input, textarea, button, submit} = van.tags;
 const labels={
   nm: "Name",
+  desc: "Description"
   pw: "Password",
   addr: "Address",
   eml: "Email",

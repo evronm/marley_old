@@ -10,7 +10,7 @@
       "text")) #This is kind of ugly but is unlikely to need changing
 
 (redef rel Lst
-  (eval (cons 'rel (head -1 Lst) )) #can't use apply here; apparently due to reder
+  (eval (cons 'rel (head -1 Lst) )) #can't use apply here; apparently due to redef; should look into it.
   (put *Class 'rels (append (get *Class 'rels) (list (car Lst))))
   (perms> (get *Class (car Lst)) (last Lst)))
 
@@ -47,6 +47,7 @@
   (dm owner> () This)
   (dm group_mem> (User) NIL)
   (dm url> () (lowc (pack "/" (cdr (chop (car (type This)))) "/" (when (ext? This) (get This 'eid)))  ))
+  (dm reggae_url> () (reggae (list "url" (url> This) (get This 'nm) (get This 'desc))))
   (dm cls> () (car (type This)))
 
   (dm rels> (User) 

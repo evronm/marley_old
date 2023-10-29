@@ -28,7 +28,7 @@
 #eid is unique for all addressable entitities in the DB.
 #additional required parameter for rel's is permissions:  read/write for user, group, other. Implemented in lib/relations.l
 #default class perms can be set in config.l
-#Each class should define a 'nm relation or method.  This needn't be unique, but will be used in link text for individual instances.
+#Each class should define a 'nm and a 'desc relation or method.  This needn't be unique, but will be used in link text for individual instances.
 
 #This default app is an abstraction of a bespoke wine tour app.  The vendors corresond to tasting rooms, the providers to drivers, and the users to tasters.
 #The framework, and the test app, should be sufficiently abstract that customisation required should be minimal for most gig/service oriented apps.
@@ -38,16 +38,18 @@
   (rel pw (+Need +Key +Password) '(cru NIL c))
   (rel salt (+String) NIL)
   (rel addr (+Idx +String) '(crud r c))
-  (rel nm (+Need +Key +String) '(crud r c))
+  (rel nm (+Need +Idx +String) '(crud r c))
   (rel itins (+List +Joint) cust (+Itinerary) '(crud r c))
 
 (class +Venue +User)
   (var perms (crud r cr))
+  (rel desc (+Need +Index +String) '(crud r c))
   (rel providers (+List +Joint) venues (+Provider) '(crd crd cr))
   (rel services (+List +Joint) venue (+Service) '(crud r cr))
 
 (class +Provider +User)
   (var perms (crud r cr))
+  (rel desc (+Need +Index +String) '(crud r c))
   (rel venues (+List +Joint) providers (+Venue) '(crd crd r))
   (rel itins (+List +Joint) provider (+Itinerary) '(rd crd NIL))
 
@@ -58,6 +60,7 @@
   (dm set_owner>(User) (put> This 'venue User))
 
   (rel nm (+Need +Aux +Key +String) (venue) '(crud cr r))
+  (rel desc (+Need +Index +String) '(crud r c))
   (rel duration (+Need +Number) '(crud cr r))
   (rel price (+Need +Number) '(crud cr r))
   (rel capacity (+Need +Number) '(crud cr r))
