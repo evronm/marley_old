@@ -64,13 +64,15 @@
     (list
       (url> E)
       (mapcar '((R) (list R (reggae_type> (meta E R)) )) Rels)))
+
   (dm list> (Path QS Post User) 
     (ifn QS
         (lsearch NIL (list (list 'eid This)))
         ()))
+
   (dm list_vals> (Path QS Post User)
     (mapcar 
-      '((E)(mapcar car (getl E))) 
+      '((E)(mapcar '((R)(meta E R)) (rels> E))) 
       (list> This Path QS Post User)))
       
   (dm get_new> (Path QS Post User) (list 200 (reggae (list "instance" (reggae_spec> This T Nil)))))
