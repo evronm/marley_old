@@ -46,7 +46,7 @@
 
   (dm owner> () This)
   (dm group_mem> (User) NIL)
-  (dm url> (Path) (lowc (pack "/" (cdr (chop (car (type This)))) "/" Path)  ))
+  (dm url> () (lowc (pack "/" (cdr (chop (car (type This)))) "/" (when (ext? This) (get This 'eid)))  ))
   (dm cls> () (car (type This)))
 
   (dm rels> (User) 
@@ -59,11 +59,10 @@
     (setq Rels 
       (if (ext? This)
         (rels> This User)
-        (filter '((R)(not (isa '+Link (meta This R)))) (rels> This User))))
-    (setq E (if (ext? This) This (new (list This))))
+        (filter '((R)(not (isa '+Link (meta (list This) R)))) (rels> This User))))
     (list
-      (url> E)
-      (mapcar '((R) (list R (reggae_type> (meta E R)) )) Rels)))
+      (url> This)
+      (mapcar '((R) (list R (reggae_type> (meta (list This) R)) )) Rels)))
 
   (dm list> (Path QS Post User) 
     (ifn QS
@@ -72,7 +71,7 @@
 
   (dm list_vals> (Path QS Post User)
     (mapcar 
-      '((E)(mapcar '((R)(meta E R)) (rels> E))) 
+      '((E)(mapcar '((R)(meta (list E) R)) (rels> E))) 
       (list> This Path QS Post User)))
       
   (dm get_new> (Path QS Post User) (list 200 (reggae (list "instance" (reggae_spec> This T Nil)))))
@@ -94,12 +93,12 @@
       (cond
         ((isa '+Link (meta E R)))  #This may have to change; not how I will handle links
         ((setq Err (mis> E R V)) (push 'Errs (list R Err )))
-        ((not (may (req_action Verb Path) User This (meta E R)) (push 'Errs (meta E R) "Forbidden")))
+        ((not (may (req_action Verb Path) User This (meta E R)) (push 'Errs R "Forbidden")))
         (T (put> E R (if (num? (any V)) (any V) V)))))
     (if Errs
       (prog 
         (rollback)
-        (prog1 (list 422 (reggae (cons '(error) Errs))) (setq Errs NIL)) )  #might need an alternative to `push` for Errs
+        (prog1 (list 422 (reggae (cons '(error) Errs))) (setq Errs NIL)) ) 
       (commit T)
       (list 201 (reggae '("mesg" "Success" "created successfully")))))
   

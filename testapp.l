@@ -28,6 +28,7 @@
 #eid is unique for all addressable entitities in the DB.
 #additional required parameter for rel's is permissions:  read/write for user, group, other. Implemented in lib/relations.l
 #default class perms can be set in config.l
+#Each class should define a 'nm relation or method.  This needn't be unique, but will be used in link text for individual instances.
 
 #This default app is an abstraction of a bespoke wine tour app.  The vendors corresond to tasting rooms, the providers to drivers, and the users to tasters.
 #The framework, and the test app, should be sufficiently abstract that customisation required should be minimal for most gig/service oriented apps.
