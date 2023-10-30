@@ -24,11 +24,14 @@
 
 (de process (Verb Path QS Post Creds)
   (default Path (confv '(default_path))) 
-  (setq Cls (or (isa '+Rest (intern (to_cls_nm (++ Path)) (intern (confv '(ns))))) NIL))
+  (setq RR (++ Path))  #RR = Requested Resource
+  (setq Cls (or (isa '+Rest (intern (to_cls_nm RR) (intern (confv '(ns))))) NIL))
   (setq Eid (any (car Path)))
   (when Creds (setq User (authn Creds)))
   (ifn Cls
-    (404)
+    (if (setq R (get (cls> User) (intern RR))) 
+      (list> R User )
+      (404))
     (if (need_auth> Cls Verb Path)
       (ifn User
         (401)

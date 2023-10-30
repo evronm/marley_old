@@ -16,6 +16,10 @@
 
 (extend +List)
   (dm reggae_type> () "instances")
+  (dm list> (Parent) 
+    (get Parent (get This 'var)))
+  (dm reggae_spec> ()
+    (reggae_spec> (car (get This 'type))))
 
 (class +Password +String)
   (dm put> (Obj Old Pw)
@@ -46,9 +50,9 @@
 
   (dm owner> () This)
   (dm group_mem> (User) NIL)
-  (dm url> () (lowc (pack "/" (cdr (chop (car (type This)))) "/" (when (ext? This) (get This 'eid)))  ))
+  (dm url> () (lowc (pack "/" (cdr (chop (cls> This))) "/" (when (ext? This) (get This 'eid)))  ))
   (dm reggae_url> () (reggae (list "url" (url> This) (get This 'nm) (get This 'desc))))
-  (dm cls> () (car (type This)))
+  (dm cls> () (if (ext? This) (car (type This)) (name This)))
 
   (dm rels> (User) 
     (setq role_pos (role_pos> This User))
