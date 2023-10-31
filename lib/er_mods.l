@@ -16,10 +16,8 @@
 
 (extend +List)
   (dm reggae_type> () "instances")
-  (dm list> (Parent) 
-    (get Parent (get This 'var)))
-  (dm reggae_spec> ()
-    (reggae_spec> (car (get This 'type))))
+  (dm list> (Parent) (get Parent (get This 'var)))
+  (dm reggae_spec> () (reggae_spec> (car (get This 'type))))
 
 (class +Password +String)
   (dm put> (Obj Old Pw)
@@ -50,16 +48,16 @@
 
   (dm owner> () This)
   (dm group_mem> (User) NIL)
-  (dm url> () (lowc (pack "/" (cdr (chop (cls> This))) "/" (when (ext? This) (get This 'eid)))  ))
-  (dm reggae_url> () (reggae (list "url" (url> This) (get This 'nm) (get This 'desc))))
   (dm cls> () (if (ext? This) (car (type This)) (name This)))
+  (dm url> () (lowc (pack "/" (cdr (chop (cls> This))) "/" (when (ext? This) (get This 'eid)))  ))
 
   (dm rels> (User) 
     (setq role_pos (role_pos> This User))
-    (delete NIL (append (try 'rels> (cls> This)) (filter '((R)
+    (delete NIL (append (try 'rels> (car (type This))) (filter '((R)
         (n== NIL (role_pos (perms> (get This R))))) 
       (get This 'rels)))))
 
+  (dm reggae_url> () (reggae (list "url" (url> This) (get This 'nm) (get This 'desc))))
   (dm reggae_spec> (User)
     (setq Rels 
       (if (ext? This)
@@ -69,15 +67,14 @@
       (url> This)
       (mapcar '((R) (list R (reggae_type> (meta (list This) R)) )) Rels)))
 
+  (dm vals> () (mapcar '((R)(meta (list E) R)) (rels> This)))
+
   (dm list> (Path QS Post User) 
     (ifn QS
         (lsearch NIL (list (list 'eid This)))
         ()))
 
-  (dm list_vals> (Path QS Post User)
-    (mapcar 
-      '((E)(mapcar '((R)(meta (list E) R)) (rels> E))) 
-      (list> This Path QS Post User)))
+  (dm list_vals> (Path QS Post User) (mapcar '((E) (vals> E)) (list> This Path QS Post User)))
       
   (dm get_new> (Path QS Post User) (list 200 (reggae (list "instance" (reggae_spec> This T Nil)))))
   (dm get_search> (Path QS Post User) (new (append (str This) '(+Seach))))

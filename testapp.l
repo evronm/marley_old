@@ -35,7 +35,7 @@
 
 (class +User  +REntity +Rest)
   (rel eml (+Need +Key +Email) '(crud r c))
-  (rel pw (+Need +Key +Password) '(cru NIL c))
+  (rel pw (+Need +Key +Password) '(cu NIL c))
   (rel salt (+String) NIL)
   (rel addr (+Idx +String) '(crud r c))
   (rel nm (+Need +Idx +String) '(crud r c))
