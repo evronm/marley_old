@@ -1,4 +1,6 @@
+(call 'rm 'DB)
 (load 'testapp.l)
+
 
 (de post @
   (process "post" (list (next) "new") NIL (next) (next)  ))
@@ -24,7 +26,7 @@
 
 (post 'service '(  ("nm" . "serv31") ("desc" . "serv31 desc") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_grp" . 6)) '("ven3@eml.com" . "asdf"))
 
-(test 35 (length (lsearch NIL '((nm +User)))))
+(test 35 (length (lsearch NIL '((eid +User)))))
 (test 6 (length (lsearch NIL '((nm +Service)))))
 
 (test '(c) (may  'c (db 'nm '+Venue 'ven1) '+Service)) #A Venue can create a service.

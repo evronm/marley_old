@@ -39,7 +39,7 @@
           (let (Obj (db 'id Cls Eid))
             (ifn Obj
               (404)
-              ( ifn (may (req_action Verb Path) User Cls Obj)
+              ( ifn (may (req_action Verb Path) User Obj)
                 (403)
                 (send (any (pack "rest_" Verb ">")) Obj Path QS Post User))))
           (ifn (may (req_action Verb Path) User Cls)
@@ -50,7 +50,7 @@
 (de may (Act User E R) 
   (ifn R 
     (member Act (perms> E User))
-    (member Act ((role_pos> E User) (perms> R))))) #this test needs to happen here because relation objects don't know their owner.
+    (member Act  (perms> (or (get E R) (meta E R)) User)))) 
 
 
 (pool (confv '(pool)))
