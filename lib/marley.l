@@ -14,7 +14,7 @@
     (and User (= (pw_hash (cdr Creds) (get User 'salt)) (get User 'pw)) User)) #User needs to show up twice to prevent error and return User.
 
 (de req_action (Verb Path) 
-  (if (and (= "get" Verb) (member (car Path) '("list" "show")))
+  (if (and (= "get" Verb) (member (car Path) '("list" "show" NIL)))
     'r
     (if (or (= "new" (car Path) ) (nil? (car Path)))
       'c

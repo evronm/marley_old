@@ -4,11 +4,16 @@
   (dm perms> (User) ((role_pos> (get This 'cls) User) (mapcar 'chop ( : perms))))
   (dm set_perms> (P)  ( =: perms P) )
   (dm req> () (isa '+Need This))
-  #(dm ro> (User) (not (may 'w User (get This 'cls) This)))
+  (dm ro> (User Act) (not (may Act User (get This 'cls) (get This 'var))))
   (dm reggae_type> () 
     (if (setq typ (lowc (pack (cdr (chop (car (sect '(+Number +Date +Time +Bool +Password) (type This) )))))))
       typ
       "text")) #This is kind of ugly but is unlikely to need changing
+  (dm reggae_restrict> (User Act)
+    (setq Restr Nil)
+    (when (isa '+Need This ) (push 'Restr 'req))
+    (when (ro> This User Act) (push 'Restr 'ro))
+    Restr)
 
 (redef rel Lst
   (eval (cons 'rel (head -1 Lst) )) #can't use apply here; apparently due to redef; should look into it.
@@ -45,7 +50,8 @@
     (setq Perms (car (or (get This 'perms) (var: perms))))
     (chop ((role_pos> This User) Perms)))
 
-  (dm need_auth> (Verb Path) (not (member (req_action Verb Path) (perms> This NIL))))
+  #(dm need_auth> (Verb Path) (not (member (req_action Verb Path) (perms> This NIL))))
+  (dm need_auth> (Verb Path) (not (may (req_action Verb Path) NIL This)))
 
   (dm owner> () This)
   (dm group_mem> (User) NIL)
@@ -63,7 +69,9 @@
         (filter '((R)(not (isa '+Link (meta (list This) R)))) (rels> This User Act))))
     (list
       (url> This)
-      (mapcar '((R) (list R (reggae_type> (meta (list This) R)) )) Rels)))
+      (mapcar '((R) 
+        (setq Rel (meta (list This) R))
+        (list R (reggae_type> Rel) (reggae_restrict> Rel) )) Rels)))
 
   (dm vals> (User Act) (mapcar '((R)(meta (list E) R)) (rels> This User Act)))
 
@@ -80,6 +88,7 @@
     (list 200 (reggae (list "instances" (reggae_spec> This User 'r) (list_vals> This Path QS Post User)))))
   
   (dm rest_get> (Path QS Post User) 
+    (default Path '("list"))
     (or (try (intern (pack "get_" (car Path) ">")) This Path QS Post User) (404))) 
 
   (dm rest_post> (Path QS Post User) 
