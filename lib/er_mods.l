@@ -5,11 +5,11 @@
   (dm set_perms> (P)  ( =: perms P) )
   (dm req> () (isa '+Need This))
   (dm ro> (User Act) (not (may Act User (get This 'cls) (get This 'var))))
-  (dm reggae_type> () 
+  (dm type> () 
     (if (setq typ (lowc (pack (cdr (chop (car (sect '(+Number +Date +Time +Bool +Password) (type This) )))))))
       typ
       "text")) #This is kind of ugly but is unlikely to need changing
-  (dm reggae_restrict> (User Act)
+  (dm restrict> (User Act)
     (setq Restr Nil)
     (when (isa '+Need This ) (push 'Restr 'req))
     (when (ro> This User Act) (push 'Restr 'ro))
@@ -21,9 +21,9 @@
   (set_perms> (get *Class (car Lst)) (last Lst)))
 
 (extend +List)
-  (dm reggae_type> () "instances")
+  (dm type> () "instances")
   (dm list> (Parent) (get Parent (get This 'var)))
-  (dm reggae_spec> () (reggae_spec> (car (get This 'type))))
+  (dm spec> () (spec> (car (get This 'type))))
 
 (class +Password +String)
   (dm put> (Obj Old Pw)
@@ -32,7 +32,7 @@
     (super Obj Old (sym (pw_hash Pw (get Obj 'salt))))
   )
 
-(class +Email +String) (dm reggae_type> () "email")
+(class +Email +String) (dm type> () "email")
 
 (class +REntity +Entity) 
   (var perms (~(confv '(default_cls_perms)))) #kind of ugly; requires some thought to grok; bear in mind `var` is an f-expression  (crud r c) as of now...
@@ -61,8 +61,8 @@
   (dm rels> (User Act) 
     (delete NIL (append (try 'rels> (car (type This)) User Act ) (filter '((R) ( may Act User This R)) (get This 'rels)) )))
 
-  (dm reggae_url> () (reggae (list "url" (url> This) (get This 'nm) (get This 'desc))))
-  (dm reggae_spec> (User Act)
+  (dm link> () (list "url" (url> This) (get This 'nm) (get This 'desc)))
+  (dm spec> (User Act)
     (setq Rels 
       (if (ext? This)
         (rels> This User Act)
@@ -71,7 +71,7 @@
       (url> This)
       (mapcar '((R) 
         (setq Rel (meta (list This) R))
-        (list R (reggae_type> Rel) (reggae_restrict> Rel) )) Rels)))
+        (list R (type> Rel) (restrict> Rel) )) Rels)))
 
   (dm vals> (User Act) (mapcar '((R)(meta (list E) R)) (rels> This User Act)))
 
@@ -82,10 +82,10 @@
 
   (dm list_vals> (Path QS Post User) (mapcar '((E) (vals> E User 'r)) (list> This Path QS Post User)))
       
-  (dm get_new> (Path QS Post User) (list 200 (reggae (list "instance" (reggae_spec> This User 'c)))))
+  (dm get_new> (Path QS Post User) (list 200 (list "instance" (spec> This User 'c))))
   (dm get_search> (Path QS Post User) (new (append (str This) '(+Seach))))
   (dm get_list> (Path QS Post User) 
-    (list 200 (reggae (list "instances" (reggae_spec> This User 'r) (list_vals> This Path QS Post User)))))
+    (list 200 (list "instances" (spec> This User 'r) (list_vals> This Path QS Post User))))
   
   (dm rest_get> (Path QS Post User) 
     (default Path '("list"))
@@ -107,9 +107,9 @@
     (if Errs
       (prog 
         (rollback)
-        (prog1 (list 422 (reggae (cons '(error) Errs))) (setq Errs NIL)) ) 
+        (prog1 (list 422 (cons '(error) Errs)) (setq Errs NIL)) ) 
       (commit T)
-      (list 201 (reggae '("mesg" "Success" "created successfully")))))
+      (list 201 '("mesg" "Success" "created successfully"))))
   
   (dm rest_put> (Path QS Post User) prinl 'put)
   (dm rest_delete> (Path QS Post User) prinl 'del)
