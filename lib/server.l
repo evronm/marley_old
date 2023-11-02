@@ -38,7 +38,8 @@
 )
 
 
-(de respond (Stat Body Ty)
+(de respond (Stat Bdy Ty)
+  (setq Body (if (atom Bdy) Bdy (reggae Bdy)))
   (default Ty "json")
   (out *Sock
     (case Stat
@@ -48,8 +49,7 @@
       (422 (prinl "HTTP/1.1 422 Validation Failed\n" "Server: Marley\n" "Content-Type: text/" Ty "; charset=UTF-8\n\n" Body))
       (401 (prinl "HTTP/1.1 401 Unauthorized\n" "WWW-Authenticate: Basic realm=\"Please Log In\"\n"))
       (403 (prinl "HTTP/1.1 403 Forbidden\n" ))
-      (404 (prinl "HTTP/1.1 404 Not Found\n" ))
-      )))
+      (404 (prinl "HTTP/1.1 404 Not Found\n" )))))
 
 
 (de start (Processor)

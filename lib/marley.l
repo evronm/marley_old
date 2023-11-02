@@ -1,4 +1,3 @@
-(setq *READ 2 *WRITE 1)
 
 (load "lib/util.l")
 (load "lib/server.l")
