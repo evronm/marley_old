@@ -64,7 +64,7 @@
   (dm link> () (list "url" (url> This) (get This 'nm) (get This 'desc)))
   (dm spec> (User Act)
     (setq Rels 
-      (if (ext? This)
+      (if (n== Act 'c)
         (rels> This User Act)
         (filter '((R)(not (isa '+Link (meta (list This) R)))) (rels> This User Act))))
     (list

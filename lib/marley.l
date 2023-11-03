@@ -23,28 +23,28 @@
 
 (de process (Verb Path QS Post Creds)
   (default Path (confv '(default_path))) 
-  (setq RR (++ Path))  #RR = Requested Resource
-  (setq Cls (or (isa '+Rest (intern (to_cls_nm RR) (intern (confv '(ns))))) NIL))
-  (setq Eid (any (car Path)))
-  (when Creds (setq User (authn Creds)))
-  (ifn Cls
-    (if (setq R (get (cls> User) (intern RR))) 
-      (list> R User )
-      (404))
-    (if (need_auth> Cls Verb Path)
-      (ifn User
-        (401)
-        (if (num? Eid)
-          (let (Obj (db 'id Cls Eid))
-            (ifn Obj
-              (404)
-              ( ifn (may (req_action Verb Path) User Obj)
+  (let (RR (++ Path)  #RR = Requested Resource
+    Cls (or (isa '+Rest (intern (to_cls_nm RR) (intern (confv '(ns))))) NIL)
+    Eid (any (car Path))
+    User (authn Creds))
+      (ifn Cls
+        (if (setq R (get (cls> User) (intern RR))) 
+          (list> R User )
+          (404))
+        (if (need_auth> Cls Verb Path)
+          (ifn User
+            (401)
+            (if (num? Eid)
+              (let (Obj (db 'id Cls Eid))
+                (ifn Obj
+                  (404)
+                  ( ifn (may (req_action Verb Path) User Obj)
+                    (403)
+                    (send (any (pack "rest_" Verb ">")) Obj Path QS Post User))))
+              (ifn (may (req_action Verb Path) User Cls)
                 (403)
-                (send (any (pack "rest_" Verb ">")) Obj Path QS Post User))))
-          (ifn (may (req_action Verb Path) User Cls)
-            (403)
-            (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))
-      (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))  #send user even though auth not required; could be logged in anyway.
+                (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))
+          (send (any (pack "rest_" Verb ">")) Cls Path QS Post User)))))  #send user even though auth not required; could be logged in anyway.
 
 (de may (Act User E R) 
   (ifn R 
