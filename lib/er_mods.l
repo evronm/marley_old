@@ -1,4 +1,3 @@
-
 #add permissions option
 (extend +relation)
   (dm perms> (User) ((role_pos> (get This 'cls) User) (mapcar 'chop ( : perms))))
@@ -50,7 +49,6 @@
     (setq Perms (car (or (get This 'perms) (var: perms))))
     (chop ((role_pos> This User) Perms)))
 
-  #(dm need_auth> (Verb Path) (not (member (req_action Verb Path) (perms> This NIL))))
   (dm need_auth> (Verb Path) (not (may (req_action Verb Path) NIL This)))
 
   (dm owner> () This)
@@ -58,22 +56,23 @@
   (dm cls> () (if (ext? This) (car (type This)) (name This)))
   (dm url> () (lowc (pack "/" (cdr (chop (cls> This))) "/" (when (ext? This) (get This 'eid)))  ))
 
+  (dm rel> (R) (meta (list This) R))
   (dm rels> (User Act) 
-    (delete NIL (append (try 'rels> (car (type This)) User Act ) (filter '((R) ( may Act User This R)) (get This 'rels)) )))
+    (uniq (delete NIL (append (try 'rels> (car (type This)) User Act ) (filter '((R) ( may Act User This R)) (get This 'rels)) ))))
 
   (dm link> () (list "url" (url> This) (get This 'nm) (get This 'desc)))
   (dm spec> (User Act)
     (setq Rels 
       (if (n== Act 'c)
         (rels> This User Act)
-        (filter '((R)(not (isa '+Link (meta (list This) R)))) (rels> This User Act))))
+        (filter '((R)(not (isa '+Link (rel> This R)))) (rels> This User Act))))
     (list
       (url> This)
       (mapcar '((R) 
-        (setq Rel (meta (list This) R))
-        (list R (type> Rel) (restrict> Rel) )) Rels)))
+        (setq Rel (rel> This R))
+        (list R (type> Rel) (restrict> Rel User Act) )) Rels)))
 
-  (dm vals> (User Act) (mapcar '((R)(meta (list E) R)) (rels> This User Act)))
+  (dm vals> (User Act) (mapcar '((R)(rel> This R)) (rels> This User Act)))
 
   (dm list> (Path QS Post User) 
     (ifn QS
