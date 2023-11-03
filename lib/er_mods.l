@@ -4,7 +4,7 @@
   (dm set_perms> (P)  ( =: perms P) )
   (dm req> () (isa '+Need This))
   (dm ro> (User Act) (not (may Act User (get This 'cls) (get This 'var))))
-  (dm type> () 
+  (dm spec> () 
     (if (setq typ (lowc (pack (cdr (chop (car (sect '(+Number +Date +Time +Bool +Password) (type This) )))))))
       typ
       "text")) #This is kind of ugly but is unlikely to need changing
@@ -20,9 +20,8 @@
   (set_perms> (get *Class (car Lst)) (last Lst)))
 
 (extend +List)
-  (dm type> () "instances")
   (dm list> (Parent) (get Parent (get This 'var)))
-  (dm spec> () (spec> (car (get This 'type))))
+  (dm spec> (User Act) "instances")
 
 (class +Password +String)
   (dm put> (Obj Old Pw)
@@ -41,9 +40,9 @@
 
   (dm role_pos> (User)
     (cond 
-    ((= User (owner> This)) 'car)
-    ((group_mem> This User) 'cadr)
-    (T 'last )))
+      ((= User (owner> This)) 'car)
+      ((group_mem> This User) 'cadr)
+      (T 'last )))
 
   (dm perms> (User)
     (setq Perms (car (or (get This 'perms) (var: perms))))
@@ -70,15 +69,18 @@
       (url> This)
       (mapcar '((R) 
         (setq Rel (rel> This R))
-        (list R (type> Rel) (restrict> Rel User Act) )) Rels)))
-
-  (dm vals> (User Act) (mapcar '((R)(rel> This R)) (rels> This User Act)))
+        (list R (spec> Rel User Act) (restrict> Rel User Act) )) Rels)))
 
   (dm list> (Path QS Post User) 
     (ifn QS
         (lsearch NIL (list (list 'eid This)))
         ()))
-
+  (dm val> (R) 
+    (let (V (get This R))
+      (if (atom V)
+        V
+        (mapcar '((E)(url> E)) V))))
+  (dm vals> (User Act) (mapcar '((R)(val> This R)) (rels> This User Act)))
   (dm list_vals> (Path QS Post User) (mapcar '((E) (vals> E User 'r)) (list> This Path QS Post User)))
       
   (dm get_new> (Path QS Post User) (list 200 (list "instance" (spec> This User 'c))))
@@ -110,6 +112,4 @@
       (commit T)
       (list 201 '("mesg" "Success" "created successfully"))))
   
-  (dm rest_put> (Path QS Post User) prinl 'put)
-  (dm rest_delete> (Path QS Post User) prinl 'del)
 
