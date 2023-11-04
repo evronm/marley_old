@@ -79,7 +79,7 @@
     (let (V (get This R))
       (if (atom V)
         V
-        (mapcar '((E)(url> E)) V))))
+        (mapcar '((E)(link> E)) V))))
   (dm vals> (User Act) (mapcar '((R)(val> This R)) (rels> This User Act)))
   (dm list_vals> (Path QS Post User) (mapcar '((E) (vals> E User 'r)) (list> This Path QS Post User)))
       
