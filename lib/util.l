@@ -24,9 +24,9 @@
 (de lsearch @
   (make (for (Q (pass search) (search Q)) (link @))))
 
-(de qs2srch (Cls Qs)
+(de qs2srch (Cls QS)
   (make
-    (for KV Qs (chain (list (sym (cadr KV)) (list (list (car KV) Cls)))))))
+    (for KV QS (chain (list (sym (cdr KV)) (list (list (car KV) Cls)))))))
 
 (de pw_hash (Pw Salt)
   (pipe (out (list 'argon2 Salt '-r) (prin Pw)) (read)))

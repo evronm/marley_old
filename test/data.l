@@ -28,6 +28,8 @@
 
 (test 35 (length (lsearch NIL '((eid +User)))))
 (test 6 (length (lsearch NIL '((nm +Service)))))
+(test 11 (length (list> '+User NIL '((nm . user1)))))
+(test 1 (length (list> '+User NIL '((nm . user9)))))
 
 (test '(c) (may  'c (db 'nm '+Venue 'ven1) '+Service)) #A Venue can create a service.
 (test NIL (may 'c (db 'nm '+Venue 'user1) '+Service)) #But a User cannot.
@@ -39,3 +41,5 @@
 (test '(422 ((error) (pw "Input required") (eml "Input required"))) (post 'user '(("nm" . "asdf"))) )
 
 (test '(422 ((error) (desc "Input required") (nm "Not unique"))) (post 'service '(  ("nm" . "serv11") ("duration" . 1) ("price" . 10) ("capacity" . 12) ("max_grp" . 4)) '("ven1@eml.com" . "asdf")))
+
+

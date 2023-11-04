@@ -74,7 +74,7 @@
   (dm list> (Path QS Post User) 
     (ifn QS
         (lsearch NIL (list (list 'eid This)))
-        ()))
+        (apply lsearch (qs2srch This QS))))
   (dm val> (R) 
     (let (V (get This R))
       (if (atom V)
