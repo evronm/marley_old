@@ -24,18 +24,24 @@
                      D
                      (link
                         (char (| (>> -6 (& C 3)) D)) ) ) ) ) ) ) ) )
+(de spl_comma (Str)
+  (if (sub? "," Str) 
+    (mapcar '((I)(any (pack I))) (sc Str ","))
+    Str))
+
+(de parse_qs (QS)
+  (mapcar '((Pr) 
+    (let  (Kv (split Pr "="))
+      (cons (url_dec (car Kv)) (spl_comma (url_dec (cadr Kv))) )
+    ) ) (split QS '&)))
+
 (de url_dec (S) 
   (let (s (split (replace S "+" " ") '%))
     (pack 
       (cons 
         (car s)
         (mapcar '((s)
-          (cons (char (hex (pack (head 2 s)))) (nth s 3))
-        ) (cdr s))
-      )
-    )
-  )
-)
+          (cons (char (hex (pack (head 2 s)))) (nth s 3))) (cdr s))))))
 
 
 (de respond (Stat Bdy Ty)

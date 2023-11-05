@@ -93,23 +93,36 @@
     (or (try (intern (pack "get_" (car Path) ">")) This Path QS Post User) (404))) 
 
   (dm rest_post> (Path QS Post User) 
-    (if (or (= (car Path) "new") (nil? (car Path)))
-      (prog 
-        (setq E (new T (list This)))
-        (try 'set_owner> E User))
-      (setq E (db 'id This (car Path))))
-    (for R (rels> This User (req_action Verb Path))
-      (setq V (cdr (assoc R Post)))
-      (cond
-        ((isa '+Link (meta E R)))  #This may have to change; not how I will handle links
-        ((setq Err (mis> E R V)) (push 'Errs (list R Err )))
-        ((not (may (req_action Verb Path) User This R) (push 'Errs R "Forbidden")))
-        (T (put> E R (if (num? (any V)) (any V) V)))))
+    (if (= "del" (caar Post))
+      (rest_del> This (cdr Post) User)
+      (if (or (= (car Path) "new") (nil? (car Path)))
+        (prog 
+          (setq E (new T (list This)))
+          (try 'set_owner> E User))
+        (setq E (db 'id This (car Path))))
+      (for R (rels> This User (req_action Verb Path))
+        (setq V (cdr (assoc R Post)))
+        (cond
+          ((isa '+Link (meta E R)))  #This may have to change; not how I will handle links
+          ((setq Err (mis> E R V)) (push 'Errs (list R Err )))
+          ((not (may (req_action Verb Path) User This R) (push 'Errs (list R "Forbidden"))))
+          (T (put> E R (if (num? (any V)) (any V) V)))))
+      (if Errs
+        (prog 
+          (rollback)
+          (prog1 (list 422 (cons '(error) Errs)) (setq Errs NIL)) ) 
+        (commit T)
+        (list 201 '("mesg" "Success" "created successfully")))))
+   (dm rest_del> (Eids User) 
+     (for (ID Eids)
+       (let (E (db 'eid '+REntity ID))
+         (if (may 'd User E)
+           (zap> E)
+           (push 'Errs (list R "Forbidden")))))
     (if Errs
-      (prog 
-        (rollback)
-        (prog1 (list 422 (cons '(error) Errs)) (setq Errs NIL)) ) 
-      (commit T)
-      (list 201 '("mesg" "Success" "created successfully"))))
-  
+        (prog 
+          (rollback)
+          (prog1 (list 403 (cons '(error) Errs)) (setq Errs NIL)) ) 
+        (commit T)
+        (list 204 '("mesg" "Success" "deleted successfully"))) ) 
 

@@ -15,12 +15,6 @@
 (de confv (Lst)
   (cdr (conf Lst)))
 
-(de parse_qs (QS)
-  (mapcar '((Pr) 
-    (let  (Kv (split Pr "="))
-      (cons (url_dec (car Kv)) (url_dec (cadr Kv))) 
-    ) ) (split QS '&)))
-
 (de lsearch @
   (make (for (Q (pass search) (search Q)) (link @))))
 
