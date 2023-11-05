@@ -42,4 +42,6 @@
 
 (test '(422 ((error) (desc "Input required") (nm "Not unique"))) (post 'service '(  ("nm" . "serv11") ("duration" . 1) ("price" . 10) ("capacity" . 12) ("max_grp" . 4)) '("ven1@eml.com" . "asdf")))
 
-
+(test '(403 ((error) (NIL "Forbidden"))) (process "post" '("user") NIL '((del (25)) )))
+(test '(204 ("mesg" "Success" "deleted successfully")) (process "post" '("user") NIL '((del (20)) ) '("user20@eml.com" "asdf")))
+(test 34 (length (lsearch Nil '((eid +User)))))

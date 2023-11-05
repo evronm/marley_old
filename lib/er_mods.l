@@ -94,7 +94,7 @@
 
   (dm rest_post> (Path QS Post User) 
     (if (= "del" (caar Post))
-      (rest_del> This (cdr Post) User)
+      (rest_del> This (cadar Post) User)
       (if (or (= (car Path) "new") (nil? (car Path)))
         (prog 
           (setq E (new T (list This)))
@@ -114,10 +114,10 @@
         (commit T)
         (list 201 '("mesg" "Success" "created successfully")))))
    (dm rest_del> (Eids User) 
-     (for (ID Eids)
+     (for ID Eids
        (let (E (db 'eid '+REntity ID))
          (if (may 'd User E)
-           (zap> E)
+           (lose> E)
            (push 'Errs (list R "Forbidden")))))
     (if Errs
         (prog 
