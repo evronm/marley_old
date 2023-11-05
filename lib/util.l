@@ -1,5 +1,5 @@
 #(symbols 'util 'pico)
-(load "lib/plursing.l")
+#(load "lib/plursing.l")
 
 (de reggae (Lst)
   (cond 
@@ -32,8 +32,8 @@
   (cdr (assoc K Lst)))
 
 (de capitalize (Str)
-  (let s (chop Str)
-    (pack (uppc (car s)) (cdr s))))
+  (let S (chop Str)
+    (pack (uppc (car S)) (cdr S))))
 
 (de camelize (Str)
   (pack (mapcar 'capitalize (sc Str "_") )))
@@ -61,7 +61,7 @@
 
 
 (when *Dbg
-  ~(assert (= 'cbc25a53074d0702178e1f0cb015c2a4667f6af5b6ba1ba9289b289afaa7ca26 (pw_hash 'password '12345678)))
+  ~(assert (= "cbc25a53074d0702178e1f0cb015c2a4667f6af5b6ba1ba9289b289afaa7ca26" (pw_hash 'password '12345678)))
   ~(assert (= "xasdfx" (surr "asdf" "x")))
   ~(assert (= "(asdf)" (surr "asdf" "(")))
   ~(assert (= "[asdf]" (surr "asdf" "[")))

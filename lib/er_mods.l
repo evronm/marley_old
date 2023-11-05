@@ -9,7 +9,7 @@
       typ
       "text")) #This is kind of ugly but is unlikely to need changing
   (dm restrict> (User Act)
-    (setq Restr Nil)
+    (setq Restr NIL)
     (when (isa '+Need This ) (push 'Restr 'req))
     (when (ro> This User Act) (push 'Restr 'ro))
     Restr)
@@ -111,7 +111,7 @@
         (prog 
           (rollback)
           (prog1 (list 422 (cons '(error) Errs)) (setq Errs NIL)) ) 
-        (commit T)
+        (commit)
         (list 201 '("mesg" "Success" "created successfully")))))
    (dm rest_del> (Eids User) 
      (for ID Eids
@@ -123,6 +123,6 @@
         (prog 
           (rollback)
           (prog1 (list 403 (cons '(error) Errs)) (setq Errs NIL)) ) 
-        (commit T)
+        (commit)
         (list 204 '("mesg" "Success" "deleted successfully"))) ) 
 

@@ -51,6 +51,8 @@
     (member Act (perms> E User))
     (member Act  (perms> (or (get E R) (meta E R)) User)))) 
 
+(de go ()
+  (start process) )
 
 (pool (confv '(pool)))
 

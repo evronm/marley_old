@@ -36,12 +36,12 @@
     ) ) (split QS '&)))
 
 (de url_dec (S) 
-  (let (s (split (replace S "+" " ") '%))
+  (let (Str (split (replace S "+" " ") '%))
     (pack 
       (cons 
-        (car s)
-        (mapcar '((s)
-          (cons (char (hex (pack (head 2 s)))) (nth s 3))) (cdr s))))))
+        (car Str)
+        (mapcar '((Str)
+          (cons (char (hex (pack (head 2 Str)))) (nth Str 3))) (cdr Str))))))
 
 
 (de respond (Stat Bdy Ty)

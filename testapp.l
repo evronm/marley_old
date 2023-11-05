@@ -82,9 +82,6 @@
   (rel services (+List +Joint) itins (+Service) (crud r NIL))
   (rel provider (+Joint) itins (+Venue) (crud r NIL))
 
-(de go ()
-  (start process) )
-
 (de dbg () (!))
 
 (load T)

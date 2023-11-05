@@ -1,4 +1,5 @@
 
+
 (de tag (Tag)
   (setq @Tag (name Tag))
   (fill '((Attrs Cont) 
@@ -9,7 +10,6 @@
 (for Tag '(html head script link body h1 h2 h3 a p em strong div form label input textarea submit button) (set (intern (pack "$" Tag)) (tag Tag)))
 
 (class +Jamaica)
-  (var js  ~(pack (in "jamaica/jamaica.js" (till))))
   (dm need_auth> () NIL)
   (dm nav> (User) )
   (dm account> (User)
@@ -19,7 +19,8 @@
       ($input '((name . eml)(type . text)) )
       ($label '((for . pw)) "Password:") 
       ($input '((name . pw)(type . password)) )
-      ($button '((id . login)) "Login")))
+      ($button '((id . login)) "Login")
+      ($button '((id . logout)) "Logout")))
 
       ($a '((href . /user/new)) "Sign up")
       (mapcar 
@@ -33,7 +34,8 @@
         #($link '((rel . stylesheet) (href . https://unpkg.com/mvp.css)))
         ($script '((type text/javascript) (src . https://cdn.jsdelivr.net/npm/umbrellajs)))
         ($script '((type text/javascript) (src . https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.2.0.nomodule.min.js)))
-        ($script '((type text/javascript)) (var: js))))
+        ($script '((type text/javascript)) (pack (in "jamaica/reggae.js" (till))))
+        ($script '((type text/javascript)) (pack (in "jamaica/jamaica.js" (till))))))
       ($body NIL (list 
         ($div '((id . header)) (list
           ($h1 NIL (title> This))
