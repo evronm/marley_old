@@ -16,6 +16,7 @@ const Reggae={
     return form({action: url, method: method}, fields, input({type:"submit", value: (srch ? "Search" : "Save")}));
 
   },
+  instances: (json) => {return new Table(json).dom()},
   mesg: (title, content) => {
     return "asdf";
   },
@@ -46,3 +47,12 @@ Field.prototype.password=function() {
   return [this.default(), [label({for: "confirmpw"}, "Confirm Password:"), input({type: this.type, name: "confirmpw"})]];
 }
 
+
+function Table(json) {
+  this.url=json[1][0];
+  this.spec=json[1][1];
+  this.data=json[2];
+}
+Table.prototype.dom=function() {
+  return table(thead(tr( this.spec.map ((s) => th({class: s[1]}, s[0]) ))));
+}

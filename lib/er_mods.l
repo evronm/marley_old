@@ -15,7 +15,7 @@
     Restr)
 
 (redef rel Lst
-  (eval (cons 'rel (head -1 Lst) )) #can't use apply here; apparently due to redef; should look into it.
+  (eval (cons 'rel (head -1 Lst) )) 
   (put *Class 'rels (append (get *Class 'rels) (list (car Lst))))
   (set_perms> (get *Class (car Lst)) (last Lst)))
 
