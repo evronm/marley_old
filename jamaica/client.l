@@ -25,9 +25,9 @@
       ($script '((type text/javascript)) (pack (in "jamaica/jamaica.js" (till))))))) 
 
   (dm account> (User)
-    (ifn User
+    ($div '((id . creds))  
       (list 
-        ($form '((id . creds))  
+        ($form NIL
           (list ($label '((for . eml)) "Email:") 
           ($input '((name . eml)(type . text)) )
           ($label '((for . pw)) "Password:") 
@@ -37,8 +37,7 @@
           ($a '((href . /user/new)) "Sign up")
           (mapcar 
             '((U) ($a (list (cons 'href (pack (cls_to_str U) "/new") )) (pack "Register as a " (cls_to_str U)))) 
-            (filter '((E)(isa (intern "+User" (intern (confv '(ns)))) E)) (all (intern (confv '(ns)))))))
-      ($button '((id . logout)) "Logout")))
+            (filter '((E)(isa (intern "+User" (intern (confv '(ns)))) E)) (all (intern (confv '(ns)))))))))
 
   (dm title> () (confv '(title)) )
   (dm rest_get> (Path QS Post User) 

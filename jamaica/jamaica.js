@@ -20,14 +20,14 @@ function init() {
 
 function login(e){
   e.preventDefault();
-  fetch('/', { headers: {'Authorization': 'Basic ' + getCreds()}}).then((res) => res.text()).then((text) => {u('html').html(text);init()});
+  //fetch('/', { headers: {'Authorization': 'Basic ' + getCreds()}}).then((res) => res.text()).then((text) => {u('html').html(text);init()});
+  fetch('/?nav', { headers: {'Authorization': 'Basic ' + getCreds()}})
+    .then((res) => res.text())
+    .then((html) => u('#nav').html(html))
+    .catch((err) => console.error("error:", err));
 }
+
 function logout(e){
-  u('[name=eml]').nodes[0].value="";
-  u('[name=pw').nodes[0].value="";
-  login(e);
-  u('[name=eml]').nodes[0].value="";
-  u('[name=pw').nodes[0].value="";
 
 }
 
