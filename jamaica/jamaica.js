@@ -20,10 +20,9 @@ function init() {
 
 function login(e){
   e.preventDefault();
-  //fetch('/', { headers: {'Authorization': 'Basic ' + getCreds()}}).then((res) => res.text()).then((text) => {u('html').html(text);init()});
   fetch('/?nav', { headers: {'Authorization': 'Basic ' + getCreds()}})
     .then((res) => res.text())
-    .then((html) => u('#nav').html(html))
+    .then((html) => {u('#nav').html(html);u('#nav a').handle('click', navclick)})
     .catch((err) => console.error("error:", err));
 }
 
@@ -41,7 +40,7 @@ function val(name) {
 
 function req(url, meth, body) {
   if (! meth) {meth="get"}
-  return fetch(url, {method: meth, headers: {'Authorization': 'Basic ' + btoa(val('eml') + ":" + val('pw'))}})
+  return fetch(url, {method: meth, headers: {'Authorization': 'Basic ' + getCreds()}})
     .then((res) => res.json())
 }
 
