@@ -47,7 +47,7 @@
           (list (head> This User) 
           ($body NIL 
             (list (header> This User) ($div '((id . nav)) (nav> This QS User)) ($div '((id . main)))))))
-      (mapcar '((Part)(send (intern (pack Part ">")) This)) (sc QS ","))) 
+      (mapcar '((Part)(send (intern (pack Part ">")) This User)) (sc QS ","))) 
     "html"))
    
 

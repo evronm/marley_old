@@ -9,14 +9,14 @@
 #Jamaica is the only client to date.  It is, however settable in config.l
 #`process looks in the ns (from config.l) namespace (default 'enitities as above) for classes with (isa '+Rest) for "entity"
 (class +Client +Jamaica +Rest)
-  (dm home> (QS User)
+  (dm home> (User)
     (cond 
       ((not User))
       ((isa '+Venue User))
       ((isa '+Provider User))
       ((isa '+User User))
       ()))
-  (dm nav> (QS User)
+  (dm nav> (User)
     (cond 
       ((not User) (list ($a '((href . "/venue/list")) "Browse Venues") ($a '((href . "/provider/list")) "Browse providers") ))
       ((isa '+Venue User) (list ($a '((href . "/service/new")) "New Service") ($a '((href . "/service/list")) "Browse Services") ($a '((href . "/itineraries/list")) "Browse Upcoming visitors") ))
