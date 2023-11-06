@@ -13,25 +13,33 @@ const labels={
 }
 
 function init() {
-  u('a').handle ('click', navclick)
+  u('#nav a').handle ('click', navclick)
   u('#login').handle('click',login);
-  u('#logout').handle('click',logout)
 }
 
 function login(e){
   e.preventDefault();
   fetch('/?nav', { headers: {'Authorization': 'Basic ' + getCreds()}})
     .then((res) => res.text())
-    .then((html) => {u('#nav').html(html);u('#nav a').handle('click', navclick)})
+    .then((html) => {
+      u('#nav').html(html);
+      u('#nav a').handle('click', navclick);
+      u('#creds').attr('hidden', 'true');
+      u('#creds').after(button({id: "logout"}, "Logout"));
+      u('#logout').handle('click',logout)
+    })
+
     .catch((err) => console.error("error:", err));
 }
 
 function logout(e){
-
+  location.reload();
+  
 }
 
 function getCreds() {
   return btoa(val('eml') + ":" + val('pw'));
+  u('#creds').attr('hidden', 'false');
 }
 
 function val(name) {
