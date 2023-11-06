@@ -14,12 +14,21 @@ const labels={
 
 function init() {
   u('a').handle ('click', navclick)
-  u('#creds').handle('submit',login);
+  u('#login').handle('click',login);
+  u('#logout').handle('click',logout)
 }
 
 function login(e){
   e.preventDefault();
   fetch('/', { headers: {'Authorization': 'Basic ' + getCreds()}}).then((res) => res.text()).then((text) => {u('html').html(text);init()});
+}
+function logout(e){
+  u('[name=eml]').nodes[0].value="";
+  u('[name=pw').nodes[0].value="";
+  login(e);
+  u('[name=eml]').nodes[0].value="";
+  u('[name=pw').nodes[0].value="";
+
 }
 
 function getCreds() {
