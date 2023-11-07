@@ -35,7 +35,7 @@
           (ifn User
             (401)
             (if (num? Eid)
-              (let (Obj (db 'id Cls Eid))
+              (let (Obj (db 'eid Cls Eid))
                 (ifn Obj
                   (404)
                   ( ifn (may (req_action Verb Path) User Obj)
