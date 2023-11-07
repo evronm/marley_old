@@ -1,11 +1,16 @@
 
 function reggae2dom(json) {
-  if (typeof(json[0])=="string") {
-    return (Reggae[json[0]](json));
+  if (typeof(json)=="object") {
+    if (typeof(json[0])=="string") {
+      return (Reggae[json[0]](json));
+    } else {
+      return json.map((m) => Reggae[m[0]](m));
+    }
   } else {
-    return json.map((m) => Reggae[m[0]](m));
+    return json
   }
 }
+
 const Reggae={
   instance: (json) => {
     var spec=json[1];
@@ -54,5 +59,7 @@ function Table(json) {
   this.data=json[2];
 }
 Table.prototype.dom=function() {
-  return table(thead(tr( this.spec.map ((s) => th({class: s[1]}, s[0]) ))));
+  return table(
+    thead(tr( this.spec.map ((s) => th({class: s[1]}, s[0]) ))),
+    tbody(this.data.map((r) => tr(r.map((f) => td(reggae2dom (f)))))));
 }

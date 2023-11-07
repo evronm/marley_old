@@ -13,7 +13,7 @@ const labels={
 }
 
 function init() {
-  u('#nav a').handle ('click', navclick)
+  u('a').handle ('click', urlClick)
   u('#login').handle('click',login);
 }
 
@@ -52,7 +52,7 @@ function req(url, meth, body) {
     .then((res) => res.json())
 }
 
-function navclick(e) {
+function urlClick(e) {
   req(e.target.href)
     .then((json) => show('#main', json))
     .catch((err) => console.error("error:", err));
@@ -61,6 +61,7 @@ function navclick(e) {
 function show(target, json) {
   u(target).empty().append(reggae2dom(json));
   u('#main form').on('submit', formSubmit);
+  u('a').handle ('click', urlClick)
 }
 
 function processResponse(json) {
