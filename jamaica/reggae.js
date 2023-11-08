@@ -2,7 +2,7 @@
 function reggae2dom(json) {
   if (typeof(json)=="object") {
     if (typeof(json[0])=="string") {
-      return (Reggae[json[0]](json));
+      return (Reggae[json.shift()](json));
     } else {
       return json.map((m) => Reggae[m[0]](m));
     }
@@ -13,12 +13,11 @@ function reggae2dom(json) {
 
 const Reggae={
   instance: (json) => {
-    var url=spec[0];
-    var flags=json[1];
-    var spec=json[2];
+    var url=json[0][0];
+    var flags=json[0][1];
     var srch=false;
     var method= (srch ? "get" : "post");
-    var fields=spec[1].map((s) => {return new Field(s).dom()});
+    var fields=json[0][2].map((s) => {return new Field(s).dom()});
     return form({action: url, method: method}, fields, input({type:"submit", value: (srch ? "Search" : "Save")}));
 
   },
@@ -55,10 +54,10 @@ Field.prototype.password=function() {
 
 
 function Table(json) {
-  this.url=json[1][0];
-  this.flags=json[1][1];
-  this.spec=json[1][2];
-  this.data=json[2];
+  this.url=json[0][0];
+  this.flags=json[0][1];
+  this.spec=json[0][2];
+  this.data=json[1];
 }
 Table.prototype.dom=function() {
   return table(

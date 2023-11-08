@@ -14,7 +14,7 @@ url ::= url_value
 
 description ::= string_value
 
-instance_spec ::= '[' url ',' '[' (flag) (',' flag)* ']''[' field_spec (',' field_spec)* ']' ']'
+instance_spec ::= '[' url ',' '[' '[' (flag) (',' flag)* '] 'field_spec (',' field_spec)* ']' ']'
 
 flag ::= new | ro | del
 

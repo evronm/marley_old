@@ -23,7 +23,7 @@ function login(e){
     .then((res) => res.text())
     .then((html) => {
       u('#nav').html(html);
-      u('#nav a').handle('click', navclick);
+      u('#nav a').handle('click', urlClick);
       u('#creds').attr('hidden', 'true');
       u('#creds').after(button({id: "logout"}, "Logout"));
       u('#logout').handle('click',logout)
