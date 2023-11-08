@@ -5,15 +5,15 @@
   (dm T @ (put> This 'eid (genKey 'eid '+REntity)))  #Every addressable entity has a unique ID.
   (rel eid (+Key +Number) NIL)
 
-  (dm role_pos> (User Obj)
+  (dm role_pos> (User)
     (cond 
-      ((= User (owner> This Obj)) 'car)
-      ((group_mem> This User Obj) 'cadr)
+      ((= User (owner> This)) 'car)
+      ((group_mem> This User) 'cadr)
       (T 'last )))
 
-  (dm perms> (User Obj)
+  (dm perms> (User)
     (setq Perms (car (or (get This 'perms) (var: perms))))
-    (chop ((role_pos> This User Obj) Perms)))
+    (chop ((role_pos> This User) Perms)))
 
   (dm need_auth> (Verb Path) (not (may (req_action Verb Path) NIL This)))
 
@@ -24,7 +24,7 @@
 
   (dm rel> (R) (meta (list This) R))
   (dm rels> (User Act) 
-    (uniq (delete NIL (append (try 'rels> (car (type This)) User Act ) (filter '((R) ( may Act User This R)) (get This 'rels)) ))))
+    (! filter '((R) (may Act User This R)) (uniq (delete NIL (append (try 'rels> (car (type This)) User Act ) (get This 'rels)) ))))
 
   (dm link> () (list "url" (url> This) (get This 'nm) (get This 'desc)))
   (dm spec> (User Act Obj)
@@ -34,10 +34,11 @@
         (filter '((R)(not (isa '+Link (rel> This R)))) (rels> This User Act))))
     (list
       (url> This)
-      (flags> This User Act Obj)
+      #(flags> This User Act Obj)
       (mapcar '((R) 
         (setq Rel (rel> This R))
         (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u)) )) Rels)))
+
   (dm flags> (User Act Obj) 
     (off Flags)
     (when (= 'c Act) (push Flags "new"))

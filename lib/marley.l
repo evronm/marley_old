@@ -54,10 +54,10 @@
                     (send (any (pack "rest_" Verb ">")) Obj Path QS Post User))))
             (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))))  #send user even though auth not required; could be logged in anyway.
 
-(de may (Act User E R Obj) 
+(de may (Act User E R) 
   (ifn R 
     (member Act (perms> E User))
-    (member Act  (perms> (or (get E R) (meta E R)) User)))) 
+    (member Act  (perms> (ifn (ext? This) (get E R) (meta E R)) User)))) 
 
 (de go ()
   (start process) )
