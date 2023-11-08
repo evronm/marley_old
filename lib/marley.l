@@ -2,6 +2,7 @@
 (load "lib/util.l")
 (load "lib/server.l")
 (load "config.l")
+(load "lib/rentity.l")
 (load "lib/er_mods.l")
 
 
@@ -13,7 +14,7 @@
     (and User (= (pw_hash (cdr Creds) (get User 'salt)) (get User 'pw)) User)) #User needs to show up twice to prevent error and return User.
 
 (de req_action (Verb Path) 
-  (if (and (= "get" Verb) (member (car Path) '("list" "show" NIL)))
+  (if (and (= "get" Verb) (or (num? (any (car Path))) (member (car Path) '("list" "show" NIL))))
     'r
     (if (or (= "new" (car Path) ) (nil? (car Path)))
       'c
@@ -38,15 +39,22 @@
               (let (Obj (db 'eid Cls Eid))
                 (ifn Obj
                   (404)
-                  ( ifn (may (req_action Verb Path) User Obj)
+                  (ifn (may (req_action Verb Path) User Obj)
                     (403)
                     (send (any (pack "rest_" Verb ">")) Obj Path QS Post User))))
               (ifn (may (req_action Verb Path) User Cls)
                 (403)
                 (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))
-          (send (any (pack "rest_" Verb ">")) Cls Path QS Post User)))))  #send user even though auth not required; could be logged in anyway.
+          (if (num? Eid)
+            (let (Obj (db 'eid Cls Eid))
+                (ifn Obj
+                  (404)
+                  (ifn (may (req_action Verb Path) User Obj)
+                    (403)
+                    (send (any (pack "rest_" Verb ">")) Obj Path QS Post User))))
+            (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))))  #send user even though auth not required; could be logged in anyway.
 
-(de may (Act User E R) 
+(de may (Act User E R Obj) 
   (ifn R 
     (member Act (perms> E User))
     (member Act  (perms> (or (get E R) (meta E R)) User)))) 
