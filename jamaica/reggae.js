@@ -13,8 +13,9 @@ function reggae2dom(json) {
 
 const Reggae={
   instance: (json) => {
-    var spec=json[1];
     var url=spec[0];
+    var flags=json[1];
+    var spec=json[2];
     var srch=false;
     var method= (srch ? "get" : "post");
     var fields=spec[1].map((s) => {return new Field(s).dom()});
@@ -55,7 +56,8 @@ Field.prototype.password=function() {
 
 function Table(json) {
   this.url=json[1][0];
-  this.spec=json[1][1];
+  this.flags=json[1][1];
+  this.spec=json[1][2];
   this.data=json[2];
 }
 Table.prototype.dom=function() {

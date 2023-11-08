@@ -24,26 +24,26 @@
 
   (dm rel> (R) (meta (list This) R))
   (dm rels> (User Act) 
-    (! filter '((R) (may Act User This R)) (uniq (delete NIL (append (try 'rels> (car (type This)) User Act ) (get This 'rels)) ))))
+    (filter '((R) (may Act User This R)) (uniq (delete NIL (append (try 'rels> (car (type This)) User Act ) (get This 'rels)) ))))
 
   (dm link> () (list "url" (url> This) (get This 'nm) (get This 'desc)))
-  (dm spec> (User Act Obj)
+  (dm spec> (User Act)
     (setq Rels 
       (if (n== Act 'c)
         (rels> This User Act)
         (filter '((R)(not (isa '+Link (rel> This R)))) (rels> This User Act))))
     (list
       (url> This)
-      #(flags> This User Act Obj)
+      (flags> This User Act)
       (mapcar '((R) 
         (setq Rel (rel> This R))
         (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u)) )) Rels)))
 
-  (dm flags> (User Act Obj) 
+  (dm flags> (User Act) 
     (off Flags)
     (when (= 'c Act) (push Flags "new"))
-    (when (or (and (= 'c Act) (not (may 'c User Obj))) (and (= 'u Act) (not (may 'u User Obj))) )  (push Flags "ro"))
-    (when (may 'd User Obj) (push Flags "del"))
+    (when (or (and (= 'c Act) (not (may 'c User This))) (and (= 'u Act) (not (may 'u User This))) )  (push Flags "ro"))
+    (when (may 'd User This) (push Flags "del"))
     Flags)
 
   (dm list> (Path QS Post User) 
