@@ -57,7 +57,7 @@
 (de may (Act User E R) 
   (ifn R 
     (member Act (perms> E User))
-    (member Act  (perms> (ifn (ext? This) (get E R) (meta E R)) User)))) 
+    (member Act  (perms> (if (type (get E R)) (get E R) (meta E R)) User)))) 
 
 (de go ()
   (start process) )

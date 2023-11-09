@@ -40,7 +40,7 @@
         (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u)) )) Rels)))
 
   (dm flags> (User Act) 
-    (off 'Flags)
+    (off Flags)
     (when (= 'c Act) (push 'Flags "new"))
     (when (or (and (= 'c Act) (not (may 'c User This))) (and (= 'u Act) (not (may 'u User This))) )  (push 'Flags "ro"))
     (when (may 'd User This) (push 'Flags "del"))
