@@ -42,7 +42,7 @@
   (dm flags> (User Act) 
     (off Flags)
     (when (= 'c Act) (push 'Flags "new"))
-    (when (or (and (= 'c Act) (not (may 'c User This))) (and (= 'u Act) (not (may 'u User This))) )  (push 'Flags "ro"))
+    (unless (or (and (= 'c Act) (may 'c User This)) (and (= 'u Act) (may 'u User This)) )  (push 'Flags "ro"))
     (when (may 'd User This) (push 'Flags "del"))
     Flags)
 
