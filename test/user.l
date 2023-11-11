@@ -31,10 +31,8 @@
 #anon searches for venues whose name starts with "ven1"
 (test (200 ("instances" ("/venue/" ("ro") ((nm "text" (ro req)) (desc "text" (ro req)) (providers "instances" (ro)) (services "instances" (ro)))) (("ven1" "venue desc 1" NIL (("url" "/service/38" "serv13" "serv13 desc") ("url" "/service/37" "serv12" "serv12 desc") ("url" "/service/36" "serv11" "serv11 desc"))) ("ven10" "venue desc 10" NIL NIL)))) (process "get" '("venue") '((nm . ven1))))
 
-
 #anon browses all providers
-
-#anon browses services from a particular venue
+(test (200 ("instances" ("/provider/" ("ro") ((nm "text" (ro req)) (desc "text" (ro req)) (venues "instances" (ro)))) (("prov1" "prov desc 1" NIL) ("prov2" "prov desc 2" NIL) ("prov3" "prov desc 3" NIL) ("prov4" "prov desc 4" NIL) ("prov5" "prov desc 5" NIL)))) (process "get" '("provider")))
 
 #user creates itinerary with 3 services
 

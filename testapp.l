@@ -67,7 +67,7 @@
   (rel price (+Need +Number) (crud cr r))
   (rel capacity (+Need +Number) (crud cr r))
   (rel max_grp (+Number) (crud cr r))
-  (rel venue (+Need +Joint) services (+Venue) (crud cr r))
+  (rel venue (+Need +Joint +Idx) services (+Venue) (crud cr r))
   (rel itins (+List +Joint) services (+Itinerary) (r crud NIL))
 
 
