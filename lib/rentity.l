@@ -2,8 +2,7 @@
 (class +REntity +Entity) 
   (var perms (~(confv '(default_cls_perms)))) #kind of ugly; requires some thought to grok; bear in mind `var` is an f-expression  (crud r c) as of now...
 
-  (dm T @ (put> This 'eid (genKey 'eid '+REntity)))  #Every addressable entity has a unique ID.
-  (rel eid (+Key +Number) NIL)
+  (dm eid> () (pack (head -1 (cdr (chop (sym This))))))
 
   (dm role_pos> (User)
     (cond 
@@ -20,7 +19,7 @@
   (dm owner> () This)
   (dm group_mem> (User) NIL)
   (dm cls> () (if (ext? This) (car (type This)) (name This)))
-  (dm url> () (lowc (pack "/" (cdr (chop (cls> This))) "/" (when (ext? This) (get This 'eid)))  ))
+  (dm url> () (lowc (pack "/" (cdr (chop (cls> This))) "/" (when (ext? This) (eid> This)))  ))
 
   (dm rel> (R) (meta (list This) R))
   (dm rels> (User Act) 
@@ -48,7 +47,7 @@
 
   (dm list> (Path QS Post User) 
     (ifn QS
-        (lsearch NIL (list (list 'eid This)))
+        (lsearch NIL (list (list 'nm This)))
         (apply lsearch (qs2srch This QS))))
   (dm val> (R) 
     (let (V (get This R))
@@ -70,8 +69,8 @@
       (or (try (intern (pack "get_" (car Path) ">")) This Path QS Post User) (404))) )
 
   (dm rest_post> (Path QS Post User) 
-    (if (= "del" (caar Post))
-      (rest_del> This (cadar Post) User)
+    (if (= "del" (car Post))
+      (rest_del> This (cdr Post) User)
       (if (or (= (car Path) "new") (nil? (car Path)))
         (prog 
           (setq E (new T (list This)))
@@ -92,7 +91,7 @@
         (list 201 '("mesg" "Success" "created successfully")))))
    (dm rest_del> (Eids User) 
      (for ID Eids
-       (let (E (db 'eid '+REntity ID))
+       (let (E (extern ID))
          (if (may 'd User E)
            (lose> E)
            (push 'Errs (list R "Forbidden")))))

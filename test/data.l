@@ -26,7 +26,9 @@
 
 (post 'service '(  ("nm" . "serv31") ("desc" . "serv31 desc") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_grp" . 6)) '("ven3@eml.com" . "asdf"))
 
-(test 35 (length (lsearch NIL '((eid +User)))))
+(test 20 (length (lsearch NIL '((nm +User)))))
+(test 10 (length (lsearch NIL '((nm +Venue)))))
+(test 5 (length (lsearch NIL '((nm +Provider)))))
 (test 6 (length (lsearch NIL '((nm +Service)))))
 (test 11 (length (list> '+User NIL '((nm . user1)))))
 (test 1 (length (list> '+User NIL '((nm . user9)))))
@@ -42,6 +44,7 @@
 
 (test '(422 ((error) (desc "Input required") (nm "Not unique"))) (post 'service '(  ("nm" . "serv11") ("duration" . 1) ("price" . 10) ("capacity" . 12) ("max_grp" . 4)) '("ven1@eml.com" . "asdf")))
 
-(test '(403 ((error) (NIL "Forbidden"))) (process "post" '("user") NIL '((del (25)) )))
-(test '(204 ("mesg" "Success" "deleted successfully")) (process "post" '("user") NIL '((del (20)) ) '("user20@eml.com" "asdf")))
-(test 34 (length (lsearch Nil '((eid +User)))))
+(setq uid (eid> (db 'nm '+User "user20")))
+(test '(403 ((error) (NIL "Forbidden"))) (process "post" '("user") NIL (list "del" uid) ))
+(test '(204 ("mesg" "Success" "deleted successfully")) (process "post" '("user") NIL (list "del" uid) '("user20@eml.com" "asdf")))
+(test 19 (length (lsearch Nil '((nm +User)))))
