@@ -33,7 +33,16 @@
 #This default app is an abstraction of a bespoke wine tour app.  The vendors corresond to tasting rooms, the providers to drivers, and the users to tasters.
 #The framework, and the test app, should be sufficiently abstract that customisation required should be minimal for most gig/service oriented apps.
 
-(class +User  +REntity +Rest)
+(class +Nd +Entity)
+  (rel lt (+UB +Aux +Ref +Number) (ln) NIL 6 NIL)
+  (rel ln (+Number) 6 NIL)                       
+  (rel w (+List +Joint +Ref) nd (+Way) NIL)         
+
+(class +Way +Entity)
+  (rel nm (+Fold +Ref +String) NIL) 
+  (rel nd (+List +Joint +Ref) w (+Nd) NIL)
+
+(class +User +REntity +Rest)
   (rel eml (+Need +Key +Email) (crud r c))
   (rel pw (+Need +Key +Password) (cu NIL c))
   (rel salt (+String) NIL)
@@ -47,6 +56,7 @@
   (rel desc (+Need +Idx +String) (crud r rc))
   (rel providers (+List +Joint) venues (+Provider) (crd crd cr))
   (rel services (+List +Joint) venue (+Service) (crud r cr))
+  (rel loc (+Ref +Link) NIL (+Nd) NIL)
 
 (class +Provider +User)
   (var perms (crud r cr))
@@ -67,7 +77,7 @@
   (rel price (+Need +Number) (crud cr r))
   (rel capacity (+Need +Number) (crud cr r))
   (rel max_grp (+Number) (crud cr r))
-  (rel venue (+Need +Joint +Idx) services (+Venue) (crud cr r))
+  (rel venue (+Need +Joint +Ref) services (+Venue) (crud cr r))
   (rel itins (+List +Joint) services (+Itinerary) (r crud NIL))
 
 
