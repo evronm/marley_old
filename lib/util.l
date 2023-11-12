@@ -20,7 +20,14 @@
 
 (de qs2srch (Cls QS)
   (make
-    (for KV QS (chain (list (sym (cdr KV)) (list (list (car KV) Cls)))))))
+    (for KV QS 
+      (chain 
+        (list 
+          (if (isa '+Link (get Cls (intern (car KV))))
+            (extern (cdr KV))
+            (sym (cdr KV)) )
+          (list (list (intern (car KV)) Cls)))))))
+
 
 (de pw_hash (Pw Salt)
   (pipe (out (list 'argon2 Salt '-r) (prin Pw)) (read)))

@@ -31,6 +31,9 @@
 #anon browses all providers
 (test (200 ("instances" ("/provider/" ("ro") ("eid" ("ro")) ((nm "text" (ro req)) (desc "text" (ro req)) (venues "instances" (ro)))) ((@ID "prov1" "prov desc 1" NIL) (@ID "prov2" "prov desc 2" NIL) (@ID "prov3" "prov desc 3" NIL) (@ID "prov4" "prov desc 4" NIL) (@ID "prov5" "prov desc 5" NIL)))) (process "get" '("provider")))
 
+#anon browses services from ven2
+(process "get" '("service") (list (cons "venue"  (eid> (db 'nm '+Venue "ven2")))))
+
 #user creates itinerary with 3 services
 
 #user adds service to existing itinerary
