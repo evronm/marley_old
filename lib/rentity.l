@@ -2,7 +2,7 @@
 (class +REntity +Entity) 
   (var perms (~(confv '(default_cls_perms)))) #kind of ugly; requires some thought to grok; bear in mind `var` is an f-expression  (crud r c) as of now...
 
-  (dm eid> () (pack (head -1 (cdr (chop (sym This))))))
+  (dm eid> () (if (ext? This) (pack (head -1 (cdr (chop (sym This))))) NIL))
 
   (dm role_pos> (User)
     (cond 
@@ -19,7 +19,8 @@
   (dm owner> () This)
   (dm group_mem> (User) NIL)
   (dm cls> () (if (ext? This) (car (type This)) (name This)))
-  (dm url> () (lowc (pack "/" (cdr (chop (cls> This))) "/" (when (ext? This) (eid> This)))  ))
+  (dm cls_nm> () (lowc (pack (cdr (chop (cls> This)))) ))
+  (dm url> () (pack "/" (cls_nm> This) "/" (when (ext? This) (eid> This))))
 
   (dm rel> (R) (meta (list This) R))
   (dm rels> (User Act) 
@@ -31,12 +32,14 @@
       (if (n== Act 'c)
         (rels> This User Act)
         (filter '((R)(not (isa '+Link (rel> This R)))) (rels> This User Act))))
-    (list
-      (url> This)
-      (flags> This User Act)
-      (mapcar '((R) 
-        (setq Rel (rel> This R))
-        (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u)) )) Rels)))
+      (delete NIL 
+        (list
+          (url> This)
+          (flags> This User Act)
+          (when (n== Act 'c)'("eid" ("ro")))
+          (mapcar '((R) 
+            (setq Rel (rel> This R))
+            (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u)) )) Rels))))
 
   (dm flags> (User Act) 
     (off Flags)
@@ -54,7 +57,11 @@
       (if (atom V)
         V
         (mapcar '((E)(link> E)) V))))
-  (dm vals> (User Act) (mapcar '((R)(val> This R)) (rels> This User Act)))
+  (dm vals> (User Act) 
+    (if (== 'c Act)
+      (mapcar '((R)(val> This R)) (rels> This User Act))
+      (cons (eid> This) (mapcar '((R)(val> This R)) (rels> This User Act)))))
+
   (dm list_vals> (Path QS Post User) (mapcar '((E) (vals> E User 'r)) (list> This Path QS Post User)))
       
   (dm get_new> (Path QS Post User) (list 200 (list "instance" (spec> This User 'c))))
