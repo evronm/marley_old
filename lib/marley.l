@@ -36,7 +36,7 @@
           (ifn User
             (401)
             (if (num? Eid)
-              (let (Obj (extern Eid))
+              (let (Obj (extern (sym Eid)))
                 (ifn Obj
                   (404)
                   (ifn (may (req_action Verb Path) User Obj)
@@ -46,7 +46,7 @@
                 (403)
                 (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))
           (if (num? Eid)
-            (let (Obj (extern Eid))
+            (let (Obj (extern (sym Eid)))
                 (ifn Obj
                   (404)
                   (ifn (may (req_action Verb Path) User Obj)

@@ -32,7 +32,9 @@
 (test (200 ("instances" ("/provider/" ("ro") ("eid" ("ro")) ((nm "text" (ro req)) (desc "text" (ro req)) (venues "instances" (ro)))) ((@ID "prov1" "prov desc 1" NIL) (@ID "prov2" "prov desc 2" NIL) (@ID "prov3" "prov desc 3" NIL) (@ID "prov4" "prov desc 4" NIL) (@ID "prov5" "prov desc 5" NIL)))) (process "get" '("provider")))
 
 #anon browses services from ven2
-(process "get" '("service") (list (cons "venue"  (eid> (db 'nm '+Venue "ven2")))))
+(test (200 ("instances" ("/service/" ("ro") ("eid" ("ro")) ((nm "text" (ro req)) (duration "number" (ro req)) (price "number" (ro req)) (capacity "number" (ro req)) (max_grp "number" (ro)) (venue "text" (ro req)))) ((@Serv1 "serv21" 4 15 12 4 @V1) (@Serv2 "serv22" 5 16 13 5 @V1)))) (process "get" '("service") (list (cons "venue"  (eid> (db 'nm '+Venue "ven2"))))))
+
+#anon requests new itinerary form
 
 #user creates itinerary with 3 services
 

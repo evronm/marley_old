@@ -82,7 +82,7 @@
 
 
 (class +Itinerary +REntity +Rest)
-  (dm owner> () (cust This))
+  (dm owner> () (get This 'cust))
   (dm grp> () (provider This))
   (rel start_addr (+Need +String) (crud r NIL))
   (rel dt (+Need +Idx +Date) (crud r NIL))
