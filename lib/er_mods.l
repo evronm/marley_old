@@ -32,3 +32,13 @@
 
 (class +Email +String) (dm type> () "email")
 
+(class +FDate +Date)
+  (dm put> (Obj Old Dt) (super Obj Old ($dat Dt "-")))
+  (dm spec> () "date")
+  (dm mis> (Dt E) (super ($dat Dt "-") E))
+
+
+(class +FTime +Time)
+  (dm put> (Obj Old Tm) (super Obj Old ($tim Tm ":")))
+  (dm spec> () "time")
+  (dm mis> (Tm E) (super ($tim Tm ":") E))

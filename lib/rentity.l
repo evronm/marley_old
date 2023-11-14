@@ -4,10 +4,11 @@
 
   (dm eid> () (if (ext? This) (pack (head -1 (cdr (chop (sym This))))) NIL))
 
-  (dm role_pos> (User)
+  (dm role_pos> (User) #usually users and anons get the same perms; and caddr and last happen to be the same.  Need to watch out for this and may want to change it.
     (cond 
       ((= User (owner> This)) 'car)
       ((group_mem> This User) 'cadr)
+      ((bool User) 'caddr)
       (T 'last )))
 
   (dm perms> (User)
@@ -82,9 +83,14 @@
         (prog 
           (setq E (new T (list This)))
           (try 'set_owner> E User))
-        (setq E (db 'id This (car Path))))
+        (setq E (extern (car Path))))
       (for R (rels> This User (req_action Verb Path))
-        (setq V (cdr (assoc R Post)))
+        (if (isa '+Link (meta E R))
+          (for (cdr (assoc R Post))
+            (ifn (setq Ent (extern (sym @)))
+              (push Errs (list @ "Does not exist"))
+              (rel> E Ent)))
+          (setq V (cdr (assoc R Post))))
         (cond
           ((isa '+Link (meta E R)))  #This may have to change; not how I will handle links
           ((setq Err (mis> E R V)) (push 'Errs (list R Err )))
@@ -95,7 +101,7 @@
           (rollback)
           (prog1 (list 422 (cons '(error) Errs)) (setq Errs NIL)) ) 
         (commit)
-        (list 201 '("mesg" "Success" "created successfully")))))
+        (list 201 (eid> E)))))
    (dm rest_del> (Eids User) 
      (for ID Eids
        (let (E (extern ID))

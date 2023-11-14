@@ -82,17 +82,18 @@
 
 
 (class +Itinerary +REntity +Rest)
+  (var perms (crud r c NIL))
   (dm owner> () (get This 'cust))
-  (dm grp> () (provider This))
-  (rel start_addr (+Need +String) (crud r NIL))
-  (rel dt (+Need +Idx +Date) (crud r NIL))
-  (rel tm (+Need +Time) (crud r NIL))
-  (rel cust (+Need +Joint) itins (+User) (crud r NIL))
-  (rel ppl (+Need +Number) (crud r NIL))
-  (rel services (+List +Joint) itins (+Service) (crud r NIL))
-  (rel provider (+Joint) itins (+Venue) (crud r NIL))
+  (dm set_owner>(User) (put> This 'cust User))
+  (dm grp_mem> (User) (= User (get This 'provider)))
 
-(de dbg () (!))
+  (rel start_addr (+Need +String) (crud r c NIL))
+  (rel dt (+Need +Idx +FDate) (crud r c NIL))
+  (rel tm (+Need +FTime) (crud r c NIL))
+  (rel cust (+Joint) itins (+User) (crud r NIL))
+  (rel ppl (+Need +Number) (crud r c NIL))
+  (rel services (+List +Joint) itins (+Service) (crud r cd NIL))
+  (rel provider (+Joint) itins (+Venue) (crud r NIL))
 
 (load T)
 #(bye)

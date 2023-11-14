@@ -19,7 +19,7 @@
 (test (422 ((error) (nm "Input required") (pw "Input required"))) (process "post" '("user") NIL '((eml . "adasdf@eml.com"))))
 
 #anon creates new user
-(test (201 ("mesg" "Success" "created successfully")) (process "post" '("user") NIL '((eml . "adasdf@eml.com") (nm . "asdfa") (pw . "asdf"))))
+(test (201 @N) (process "post" '("user") NIL '((eml . "adasdf@eml.com") (nm . "asdfa") (pw . "asdf"))))
 
 #duplicate email
 (test (422 ((error) (eml "Not unique"))) (process "post" '("user") NIL '((eml . "adasdf@eml.com") (nm . "asdfa") (pw . "asdf"))))
@@ -35,10 +35,23 @@
 (test (200 ("instances" ("/service/" ("ro") ("eid" ("ro")) ((nm "text" (ro req)) (duration "number" (ro req)) (price "number" (ro req)) (capacity "number" (ro req)) (max_grp "number" (ro)) (venue "text" (ro req)))) ((@Serv1 "serv21" 4 15 12 4 @V1) (@Serv2 "serv22" 5 16 13 5 @V1)))) (process "get" '("service") (list (cons "venue"  (eid> (db 'nm '+Venue "ven2"))))))
 
 #anon requests new itinerary form
+(test (401) (process "get" '("Itinerary" "new")))
 
-#user creates itinerary with 3 services
+#user requests new itinerary form
+(test (200 ("instance" ("/itinerary/" ("new") ((start_addr "text" (req)) (dt "date" (req)) (tm "time" (req)) (ppl "number" (req)))))) (process "get" '("Itinerary" "new") NIL NIL '("user1@eml.com" "asdf")))
+
+#user tries to create an itenerary with no data
+(test (422 ((error) (ppl "Input required") (tm "Input required") (dt "Input required") (start_addr "Input required"))) (process "post" '("itinerary" "new") NIL NIL '("user1@eml.com" . "asdf")))
+
+#user tries to create itinerary with incomplete data
+(test (422 ((error) (tm "Input required") (dt "Input required"))) (process "post" '("itinerary" "new") NIL '((ppl . 2) (start_addr . "asdf asdf")) '("user1@eml.com" . "asdf")))
+
+#user creates itinerary successfully; grab ID to add services in next test
+(match '(@Code @Id) (process "post" '("itinerary" "new") NIL '((ppl . 2) (start_addr . "asdf asdf") (dt . "2024-01-03") (tm . "11:30")) '("user1@eml.com" . "asdf")))
+(test (201) @Code)
 
 #user adds service to existing itinerary
+(process "post" (list "itinerary" (car @Id)) NIL (list "services" (eid> (db 'nm '+Service "serv11"))) '("user1@eml.com" . "asdf"))
 
 #user view itinerary
 
