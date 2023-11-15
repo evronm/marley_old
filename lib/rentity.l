@@ -35,12 +35,12 @@
       (if (n== Act 'c)
         (rels> This User Act)
         (filter '((R)(not (isa '+Link (rel> This R)))) (rels> This User Act))))
-        (list
-          (url> This)
-          (flags> This User Act)
-          (mapcar '((R) 
-            (setq Rel (rel> This R))
-            (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u)) )) Rels)))
+    (list
+      (url> This)
+      (flags> This User Act)
+      (mapcar '((R) 
+        (setq Rel (rel> This R))
+        (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u)) )) Rels)))
 
   (dm flags> (User Act) 
     (off Flags)
@@ -53,11 +53,13 @@
     (ifn QS
         (lsearch NIL (list (list 'nm This)))
         (apply lsearch (qs2srch This QS))))
+
   (dm val> (R) 
     (let (V (get This R))
       (if (atom V)
         V
         (mapcar '((E)(link> E)) V))))
+
   (dm vals> (User Act) 
     (if (== 'c Act)
       (mapcar '((R)(val> This R)) (rels> This User Act))

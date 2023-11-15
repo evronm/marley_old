@@ -26,13 +26,13 @@
 
 
 #anon searches for venues whose name starts with "ven1"
-#(test  (200 ("instances" ("/venue/" ("ro") ("eid" ("ro")) ((nm "text" (ro req)) (desc "text" (ro req)) (providers "instances" (ro)) (services "instances" (ro)))) ((@ID "ven1" "venue desc 1" NIL (("url" @URL "serv13" "serv13 desc") ("url" @URL "serv12" "serv12 desc") ("url" @URL "serv11" "serv11 desc"))) (@ID "ven10" "venue desc 10" NIL NIL)))) (process "get" '("venue") '((nm . ven1))))
+(test  (200 ("instances" ("/venue/" ("ro") ((nm "text" (ro req)) (desc "text" (ro req)) (providers "instances" (ro)) (services "instances" (ro)))) ((26 "ven1" "venue desc 1" NIL (("url" "/service/38" "serv13" "serv13 desc") ("url" "/service/37" "serv12" "serv12 desc") ("url" "/service/36" "serv11" "serv11 desc"))) (35 "ven10" "venue desc 10" NIL NIL)))) (process "get" '("venue") '((nm . ven1))))
 
 #anon browses all providers
-#(test (200 ("instances" ("/provider/" ("ro") ("eid" ("ro")) ((nm "text" (ro req)) (desc "text" (ro req)) (venues "instances" (ro)))) ((@ID "prov1" "prov desc 1" NIL) (@ID "prov2" "prov desc 2" NIL) (@ID "prov3" "prov desc 3" NIL) (@ID "prov4" "prov desc 4" NIL) (@ID "prov5" "prov desc 5" NIL)))) (process "get" '("provider")))
+(test (200 ("instances" ("/provider/" ("ro") ((nm "text" (ro req)) (desc "text" (ro req)) (venues "instances" (ro)))) ((21 "prov1" "prov desc 1" NIL) (22 "prov2" "prov desc 2" NIL) (23 "prov3" "prov desc 3" NIL) (24 "prov4" "prov desc 4" NIL) (25 "prov5" "prov desc 5" NIL)))) (process "get" '("provider")))
 
 #anon browses services from ven2
-#(test (200 ("instances" ("/service/" ("ro") ("eid" ("ro")) ((nm "text" (ro req)) (duration "number" (ro req)) (price "number" (ro req)) (capacity "number" (ro req)) (max_grp "number" (ro)) (venue "text" (ro req)))) ((@Serv1 "serv21" 4 15 12 4 @V1) (@Serv2 "serv22" 5 16 13 5 @V1)))) (process "get" '("service") (list (cons "venue"  (eid> (db 'nm '+Venue "ven2"))))))
+(test (200 ("instances" ("/service/" ("ro") ((nm "text" (ro req)) (duration "number" (ro req)) (price "number" (ro req)) (capacity "number" (ro req)) (max_grp "number" (ro)) (venue "text" (ro req)))) ((39 "serv21" 4 15 12 4 @V2) (40 "serv22" 5 16 13 5 @V2)))) (process "get" '("service") (list (cons "venue"  (get (db 'nm '+Venue "ven2") 'eid)))))
 
 #anon requests new itinerary form
 (test (401) (process "get" '("Itinerary" "new")))
@@ -51,7 +51,7 @@
 (test (201) @Code)
 
 #user adds service to existing itinerary
-#(process "post" (list "itinerary" (car @Id)) NIL (list "services" (eid> (db 'nm '+Service "serv11"))) '("user1@eml.com" . "asdf"))
+(process "post" (list "itinerary" (car @Id)) NIL (list "services" (get (db 'nm '+Service "serv11") 'eid)) '("user1@eml.com" . "asdf"))
 
 #user view itinerary
 
@@ -67,14 +67,3 @@
 
 #user attempts to delete from past itinerary
 
-#user 
-
-
-
-
-
-
-
-#
-#
-#
