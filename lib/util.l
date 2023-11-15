@@ -24,7 +24,7 @@
       (chain 
         (list 
           (if (isa '+Link (get Cls (intern (car KV))))
-            (extern (cdr KV))
+            (db 'id '+REntity (cdr KV))
             (sym (cdr KV)) )
           (list (list (intern (car KV)) Cls)))))))
 

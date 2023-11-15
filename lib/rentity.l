@@ -2,7 +2,8 @@
 (class +REntity +Entity) 
   (var perms (~(confv '(default_cls_perms)))) #kind of ugly; requires some thought to grok; bear in mind `var` is an f-expression  (crud r c) as of now...
 
-  (dm eid> () (if (ext? This) (pack (head -1 (cdr (chop (sym This))))) NIL))
+   (dm T @ (put> This 'eid (genKey 'eid '+REntity)))  #Every addressable entity has a unique ID.
+   (rel eid (+Key +Number) NIL)
 
   (dm role_pos> (User) #usually users and anons get the same perms; and caddr and last happen to be the same.  Need to watch out for this and may want to change it.
     (cond 
@@ -21,11 +22,12 @@
   (dm group_mem> (User) NIL)
   (dm cls> () (if (ext? This) (car (type This)) (name This)))
   (dm cls_nm> () (lowc (pack (cdr (chop (cls> This)))) ))
-  (dm url> () (pack "/" (cls_nm> This) "/" (when (ext? This) (eid> This))))
+  (dm url> () (pack "/" (cls_nm> This) "/" (when (ext? This) (get This 'eid))))
 
   (dm rel> (R) (meta (list This) R))
   (dm rels> (User Act) 
-    (filter '((R) (may Act User This R)) (uniq (delete NIL (append (try 'rels> (car (type This)) User Act ) (get This 'rels)) ))))
+    (filter '((R) (may Act User (if (ext? This) (type This) This) R)) 
+      (uniq (delete NIL (append (try 'rels> (car (type This)) User Act ) ((if (ext? This) meta get) This 'rels)) ))))
 
   (dm link> () (list "url" (url> This) (get This 'nm) (get This 'desc)))
   (dm spec> (User Act)
@@ -33,14 +35,12 @@
       (if (n== Act 'c)
         (rels> This User Act)
         (filter '((R)(not (isa '+Link (rel> This R)))) (rels> This User Act))))
-      (delete NIL 
         (list
           (url> This)
           (flags> This User Act)
-          (when (n== Act 'c)'("eid" ("ro")))
           (mapcar '((R) 
             (setq Rel (rel> This R))
-            (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u)) )) Rels))))
+            (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u)) )) Rels)))
 
   (dm flags> (User Act) 
     (off Flags)
@@ -61,7 +61,7 @@
   (dm vals> (User Act) 
     (if (== 'c Act)
       (mapcar '((R)(val> This R)) (rels> This User Act))
-      (cons (eid> This) (mapcar '((R)(val> This R)) (rels> This User Act)))))
+      (cons (get This 'eid) (mapcar '((R)(val> This R)) (rels> This User Act)))))
 
   (dm list_vals> (Path QS Post User) (mapcar '((E) (vals> E User 'r)) (list> This Path QS Post User)))
       
@@ -83,11 +83,11 @@
         (prog 
           (setq E (new T (list This)))
           (try 'set_owner> E User))
-        (setq E (extern (car Path))))
+        (setq E (db 'id '+REntity (car Path))))
       (for R (rels> This User (req_action Verb Path))
         (if (isa '+Link (meta E R))
           (for (cdr (assoc R Post))
-            (ifn (setq Ent (extern (sym @)))
+            (ifn (setq Ent (db 'id '+REntity (sym @)))
               (push Errs (list @ "Does not exist"))
               (rel> E Ent)))
           (setq V (cdr (assoc R Post))))
@@ -101,10 +101,10 @@
           (rollback)
           (prog1 (list 422 (cons '(error) Errs)) (setq Errs NIL)) ) 
         (commit)
-        (list 201 (eid> E)))))
+        (list 201 (get E 'eid)))))
    (dm rest_del> (Eids User) 
      (for ID Eids
-       (let (E (extern ID))
+       (let (E (db 'eid '+REntity ID))
          (if (may 'd User E)
            (lose> E)
            (push 'Errs (list R "Forbidden")))))

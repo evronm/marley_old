@@ -44,7 +44,7 @@
 
 (test '(422 ((error) (desc "Input required") (nm "Not unique"))) (post 'service '(  ("nm" . "serv11") ("duration" . 1) ("price" . 10) ("capacity" . 12) ("max_grp" . 4)) '("ven1@eml.com" . "asdf")))
 
-(setq uid (eid> (db 'nm '+User "user20")))
+(setq uid (get (db 'nm '+User "user20") 'eid))
 (test '(403 ((error) (NIL "Forbidden"))) (process "post" '("user") NIL (list "del" uid) ))
 (test '(204 ("mesg" "Success" "deleted successfully")) (process "post" '("user") NIL (list "del" uid) '("user20@eml.com" "asdf")))
 (test 19 (length (lsearch Nil '((nm +User)))))
