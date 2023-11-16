@@ -89,9 +89,9 @@
       (for R (rels> E User (req_action Verb Path))
         (if (isa '+Link (meta E R))
           (for Eid (cdr (assoc R Post))
-            (ifn (! setq Ent (db 'eid '+REntity (any Eid)))
+            (ifn (setq Ent (db 'eid '+REntity (any Eid)))
               (push 'Errs (list Eid "Does not exist"))
-              (! put> E R Ent)))
+              (put> E R Ent)))
           (let (V (cdr (assoc R Post)))
             (cond
               ((setq Err (mis> E R (or V (get E R)))) (push 'Errs (list R Err )))
