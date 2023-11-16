@@ -2,8 +2,8 @@
 (class +REntity +Entity) 
   (var perms (~(confv '(default_cls_perms)))) #kind of ugly; requires some thought to grok; bear in mind `var` is an f-expression  (crud r c) as of now...
 
-   (dm T @ (put> This 'eid (genKey 'eid '+REntity)))  #Every addressable entity has a unique ID.
-   (rel eid (+Key +Number) NIL)
+  (dm T @ (put> This 'eid (genKey 'eid '+REntity)))  #Every addressable entity has a unique ID.
+  (rel eid (+Key +Number) NIL)
 
   (dm role_pos> (User) #usually users and anons get the same perms; and caddr and last happen to be the same.  Need to watch out for this and may want to change it.
     (cond 
@@ -26,7 +26,7 @@
 
   (dm rel> (R) (meta (list This) R))
   (dm rels> (User Act) 
-    (filter '((R) (may Act User (if (ext? This) (type This) This) R)) 
+    (filter '((R) (may Act User This R) )
       (uniq (delete NIL (append (try 'rels> (car (type This)) User Act ) ((if (ext? This) meta get) This 'rels)) ))))
 
   (dm link> () (list "url" (url> This) (get This 'nm) (get This 'desc)))
@@ -85,19 +85,18 @@
         (prog 
           (setq E (new T (list This)))
           (try 'set_owner> E User))
-        (setq E (db 'id '+REntity (car Path))))
-      (for R (rels> This User (req_action Verb Path))
+        (setq E This))
+      (for R (rels> E User (req_action Verb Path))
         (if (isa '+Link (meta E R))
-          (for (cdr (assoc R Post))
-            (ifn (setq Ent (db 'id '+REntity (sym @)))
-              (push Errs (list @ "Does not exist"))
-              (rel> E Ent)))
-          (setq V (cdr (assoc R Post))))
-        (cond
-          ((isa '+Link (meta E R)))  #This may have to change; not how I will handle links
-          ((setq Err (mis> E R V)) (push 'Errs (list R Err )))
-          ((not (may (req_action Verb Path) User This R) (push 'Errs (list R "Forbidden"))))
-          (T (put> E R (if (num? (any V)) (any V) V)))))
+          (for Eid (cdr (assoc R Post))
+            (ifn (! setq Ent (db 'eid '+REntity (any Eid)))
+              (push 'Errs (list Eid "Does not exist"))
+              (! put> E R Ent)))
+          (let (V (cdr (assoc R Post)))
+            (cond
+              ((setq Err (mis> E R (or V (get E R)))) (push 'Errs (list R Err )))
+              ((and V (not (may (req_action Verb Path) User This R))) (push 'Errs (list R "Forbidden")))
+              (V (put> E R (if (num? (any V)) (any V) V)))))))
       (if Errs
         (prog 
           (rollback)

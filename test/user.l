@@ -51,7 +51,7 @@
 (test (201) @Code)
 
 #user adds service to existing itinerary
-(process "post" (list "itinerary" (car @Id)) NIL (list "services" (get (db 'nm '+Service "serv11") 'eid)) '("user1@eml.com" . "asdf"))
+(process "post" (list "itinerary" (car @Id)) NIL (list (list "services" (get (db 'nm '+Service "serv11") 'eid))) '("user1@eml.com" . "asdf"))
 
 #user view itinerary
 

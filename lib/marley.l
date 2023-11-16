@@ -36,7 +36,7 @@
           (ifn User
             (401)
             (if (num? Eid)
-              (let (Obj (db 'id '+REntity Eid))
+              (let (Obj (db 'eid '+REntity Eid))
                 (ifn Obj
                   (404)
                   (ifn (may (req_action Verb Path) User Obj)
@@ -57,7 +57,7 @@
 (de may (Act User E R) 
   (ifn R 
     (member Act (perms> E User))
-    (member Act  (perms> (if (type (get E R)) (get E R) (meta E R)) User)))) 
+    (member Act  (perms> (if (type (get E R)) (get E R) (meta E R)) User E)))) 
 
 (de go ()
   (start process) )

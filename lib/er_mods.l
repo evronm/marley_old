@@ -1,6 +1,6 @@
 #add permissions option
 (extend +relation)
-  (dm perms> (User) ((role_pos> (get This 'cls) User) (mapcar 'chop ( : perms))))
+  (dm perms> (User E) ((role_pos> (if E E (get This 'cls)) User) (mapcar 'chop ( : perms))))
   (dm set_perms> (P)  ( =: perms P) )
   (dm req> () (isa '+Need This))
   (dm ro> (User Act) (not (may Act User (get This 'cls) (get This 'var))))

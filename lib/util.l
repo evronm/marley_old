@@ -67,7 +67,7 @@
 )
 
 
-(when *Dbg
+#{(when *Dbg
   ~(assert (= "cbc25a53074d0702178e1f0cb015c2a4667f6af5b6ba1ba9289b289afaa7ca26" (pw_hash 'password '12345678)))
   ~(assert (= "xasdfx" (surr "asdf" "x")))
   ~(assert (= "(asdf)" (surr "asdf" "(")))
@@ -77,5 +77,5 @@
   ~(assert (= "+AsdfXxx" (to_cls_nm 'asdf_xxx)))
 
 
-)
+)}#
 
