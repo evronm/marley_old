@@ -59,8 +59,15 @@
 (test '(@N @N @N) (get (db 'eid '+Itinerary (car @Id)) 'services))
 
 #user creates another itinerary
+(match '(@Code @Id) (process "post" '("itinerary" "new") NIL '((ppl . 4) (start_addr . "xxxxxx") (dt . "2024-02-08") (tm . "12:20")) '("user1@eml.com" . "asdf")))
+(test (201) @Code)
+
+#user adds 2 services to new itinerary
+(test (201 @N) (process "post" (list "itinerary" (car @Id)) NIL (list (list "services" (get (db 'nm '+Service "serv13") 'eid) (get (db 'nm '+Service "serv21") 'eid))) '("user1@eml.com" . "asdf")))
+(test '(@N @N) (get (db 'eid '+Itinerary (car @Id)) 'services))
 
 #user lists itineraries
+(test '(@N @N) (process "get" '("itins") NIL NIL '("user1@eml.com" "asdf")))
 
 #user views second itinerary
 
