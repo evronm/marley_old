@@ -21,6 +21,7 @@
 
 (extend +List)
   (dm list> (Parent) (get Parent (get This 'var)))
+  (dm rest_list> (Parent) (200 "instances" (spec>)))
   (dm spec> (User Act) "instances")
 
 (class +Password +String)

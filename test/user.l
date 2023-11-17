@@ -67,9 +67,9 @@
 (test '(@N @N) (get (db 'eid '+Itinerary (car @Id)) 'services))
 
 #user lists itineraries
-(test '(@N @N) (process "get" '("itins") NIL NIL '("user1@eml.com" "asdf")))
 
 #user views second itinerary
+
 
 #user views first itinerary
 

@@ -28,9 +28,9 @@
     Cls (or (isa '+Rest (intern (to_cls_nm RR) (intern (confv '(ns))))) NIL)
     Eid (any (car Path))
     User (authn Creds))
-      (ifn Cls
+      (ifn Cls  #This is sort of hacky syntactic sugar I may have to ditch
         (if (setq R (get (cls> User) (intern RR))) 
-          (list> R User )
+          (rest_list> R User )
           (404))
         (if (need_auth> Cls Verb Path)
           (ifn User

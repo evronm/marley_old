@@ -74,7 +74,12 @@
   
   (dm rest_get> (Path QS Post User) 
     (if (ext? This)
-      (list 200 (list "instance" (spec> (cls> This) User 'r This) (vals> This User 'r)))
+      (ifn Path
+        (list 200 (list "instance" (spec> (cls> This) User 'r) (vals> This User 'r)))
+        (let (Rs (get This (intern (cadr Path))) Kls (intern (get (get (cls> This) (intern (cadr Path))) 'type)))
+          (ifn Kls
+            (404)
+            (list 200 (list (! spec> Kls User 'r) (mapcar '((R)(vals> R User 'r)) Rs))))))
       (default Path '("list"))
       (or (try (intern (pack "get_" (car Path) ">")) This Path QS Post User) (404))) )
 
