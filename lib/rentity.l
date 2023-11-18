@@ -39,7 +39,7 @@
       (url> This)
       (flags> This User Act)
       (mapcar '((R) 
-        (setq Rel (rel> This R))
+        (setq Rel (rel> (if (ext? This) (cls> This) This) R))
         (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u)) )) Rels)))
 
   (dm flags> (User Act) 
@@ -77,9 +77,9 @@
       (ifn Path
         (list 200 (list "instance" (spec> (cls> This) User 'r) (vals> This User 'r)))
         (let (Rs (get This (intern (cadr Path))) Kls (intern (get (get (cls> This) (intern (cadr Path))) 'type)))
-          (ifn Kls
+          (ifn Kls  #The whol mishigas above is just for this test :/
             (404)
-            (list 200 (list (! spec> Kls User 'r) (mapcar '((R)(vals> R User 'r)) Rs))))))
+            (list 200 (list (spec> (car Rs) User 'r) (mapcar '((R)(vals> R User 'r)) Rs)))))) #Use first result for spec; not sure what to do if no results
       (default Path '("list"))
       (or (try (intern (pack "get_" (car Path) ">")) This Path QS Post User) (404))) )
 
