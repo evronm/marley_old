@@ -26,10 +26,20 @@
 
 (post 'service '(  ("nm" . "serv31") ("desc" . "serv31 desc") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_grp" . 6)) '("ven3@eml.com" . "asdf"))
 
+
+(post 'service '(  ("nm" . "serv41") ("desc" . "serv41 desc") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_grp" . 6)) '("ven4@eml.com" . "asdf"))
+(post 'service '(  ("nm" . "serv42") ("desc" . "serv42 desc") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_grp" . 6)) '("ven4@eml.com" . "asdf"))
+
+
+(post 'service '(  ("nm" . "serv51") ("desc" . "serv51 desc") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_grp" . 6)) '("ven4@eml.com" . "asdf"))
+(post 'service '(  ("nm" . "serv52") ("desc" . "serv52 desc") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_grp" . 6)) '("ven4@eml.com" . "asdf"))
+(post 'service '(  ("nm" . "serv53") ("desc" . "serv53 desc") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_grp" . 6)) '("ven4@eml.com" . "asdf"))
+(post 'service '(  ("nm" . "serv54") ("desc" . "serv54 desc") ("duration" . 6) ("price" . 17) ("capacity" . 14) ("max_grp" . 6)) '("ven4@eml.com" . "asdf"))
+
 (test 20 (length (lsearch NIL '((nm +User)))))
 (test 10 (length (lsearch NIL '((nm +Venue)))))
 (test 5 (length (lsearch NIL '((nm +Provider)))))
-(test 6 (length (lsearch NIL '((nm +Service)))))
+(test 12 (length (lsearch NIL '((nm +Service)))))
 (test 11 (length (list> '+User NIL '((nm . user1)))))
 (test 1 (length (list> '+User NIL '((nm . user9)))))
 
@@ -37,7 +47,6 @@
 (test NIL (may 'c (db 'nm '+Venue 'user1) '+Service)) #But a User cannot.
 (test '(u d) (may 'u (db 'nm '+Venue 'ven1) (db 'nm '+Service 'serv11))) #A venue can update and delete a 
 (test NIL (may 'u (db 'nm '+Venue 'ven2) (db 'nm '+Service 'serv11)))
-
 
 (test '(422 ((error) (nm "Input required") (pw "Input required") (eml "Input required"))) (post 'user ))
 (test '(422 ((error) (pw "Input required") (eml "Input required"))) (post 'user '(("nm" . "asdf"))) )
@@ -48,3 +57,5 @@
 (test '(403 ((error) (NIL "Forbidden"))) (process "post" '("user") NIL (list "del" uid) ))
 (test '(204 ("mesg" "Success" "deleted successfully")) (process "post" '("user") NIL (list "del" uid) '("user20@eml.com" "asdf")))
 (test 19 (length (lsearch Nil '((nm +User)))))
+
+

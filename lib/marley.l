@@ -28,10 +28,10 @@
     Cls (or (isa '+Rest (intern (to_cls_nm RR) (intern (confv '(ns))))) NIL)
     Eid (any (car Path))
     User (authn Creds))
-      (ifn Cls  #This is sort of hacky syntactic sugar I may have to ditch
-        (if (setq R (get (cls> User) (intern RR))) 
-          (rest_list> R User )
-          (404))
+      (ifn Cls  #This is kind of syntactic sugar, but it really makes URL's a lot cleaner.
+        (if (or (not User) (not (= "get" Verb)))
+          (403)
+          (rest_get> User (list NIL RR) QS Post User))
         (if (need_auth> Cls Verb Path)
           (ifn User
             (401)
