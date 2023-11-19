@@ -47,38 +47,38 @@
 (test (422 ((error) (tm "Input required") (dt "Input required"))) (process "post" '("itinerary" "new") NIL '((ppl . 2) (start_addr . "asdf asdf")) '("user1@eml.com" . "asdf")))
 
 #user creates itinerary successfully; grab ID to add services in next test
-(match '(@Code @Id) (process "post" '("itinerary" "new") NIL '((ppl . 2) (start_addr . "asdf asdf") (dt . "2024-01-03") (tm . "11:30")) '("user1@eml.com" . "asdf")))
+(match '(@Code @Itin1) (process "post" '("itinerary" "new") NIL '((ppl . 2) (start_addr . "asdf asdf") (dt . "2024-01-03") (tm . "11:30")) '("user1@eml.com" . "asdf")))
 (test (201) @Code)
 
 #user adds service to existing itinerary
-(test (201 @N) (process "post" (list "itinerary" (car @Id)) NIL (list (list "services" (get (db 'nm '+Service "serv11") 'eid))) '("user1@eml.com" . "asdf")))
-(test '(@N) (get (db 'eid '+Itinerary (car @Id)) 'services))
+(test (201 @N) (process "post" (list "itinerary" (car @Itin1)) NIL (list (list "services" (get (db 'nm '+Service "serv11") 'eid))) '("user1@eml.com" . "asdf")))
+(test '(@N) (get (db 'eid '+Itinerary (car @Itin1)) 'services))
 
 #user adds 2 more services
-(test (201 @N) (process "post" (list "itinerary" (car @Id)) NIL (list (list "services" (get (db 'nm '+Service "serv22") 'eid) (get (db 'nm '+Service "serv31") 'eid))) '("user1@eml.com" . "asdf")))
-(test '(@N @N @N) (get (db 'eid '+Itinerary (car @Id)) 'services))
+(test (201 @N) (process "post" (list "itinerary" (car @Itin1)) NIL (list (list "services" (get (db 'nm '+Service "serv22") 'eid) (get (db 'nm '+Service "serv31") 'eid))) '("user1@eml.com" . "asdf")))
+(test '(@N @N @N) (get (db 'eid '+Itinerary (car @Itin1)) 'services))
 
 #user creates another itinerary
-(match '(@Code @Id) (process "post" '("itinerary" "new") NIL '((ppl . 4) (start_addr . "xxxxxx") (dt . "2024-02-08") (tm . "12:20")) '("user1@eml.com" . "asdf")))
+(match '(@Code @Itin2) (process "post" '("itinerary" "new") NIL '((ppl . 4) (start_addr . "xxxxxx") (dt . "2024-02-08") (tm . "12:20")) '("user1@eml.com" . "asdf")))
 (test (201) @Code)
 
 #user adds 2 services to new itinerary
-(test (201 @N) (process "post" (list "itinerary" (car @Id)) NIL (list (list "services" (get (db 'nm '+Service "serv13") 'eid) (get (db 'nm '+Service "serv21") 'eid))) '("user1@eml.com" . "asdf")))
-(test '(@N @N) (get (db 'eid '+Itinerary (car @Id)) 'services))
+(test (201 @N) (process "post" (list "itinerary" (car @Itin2)) NIL (list (list "services" (get (db 'nm '+Service "serv13") 'eid) (get (db 'nm '+Service "serv21") 'eid))) '("user1@eml.com" . "asdf")))
+(test '(@N @N) (get (db 'eid '+Itinerary (car @Itin2)) 'services))
 
 #user lists itineraries
 (test (200 (("/itinerary/50" ("del" "ro") ((start_addr "text" (ro req)) (dt "date" (ro req)) (tm "time" (ro req)) (cust "text" (ro)) (ppl "number" (ro req)) (services "instances" (ro)) (provider "text" (ro)))) ((50 "xxxxxx" 739230 44400 @N 4 (("url" "/service/39" "serv21" "serv21 desc") ("url" "/service/38" "serv13" "serv13 desc")) NIL) (49 "asdf asdf" 739194 41400 @N 2 (("url" "/service/41" "serv31" "serv31 desc") ("url" "/service/40" "serv22" "serv22 desc") ("url" "/service/36" "serv11" "serv11 desc")) NIL)))) (process "get" '("itins") NIL NIL '("user1@eml.com" "asdf") ))
 
 #user3 creates itinerary
-(match '(@Code @Id) (process "post" '("itinerary" "new") NIL '((ppl . 2) (start_addr . "asdf asdf") (dt . "2024-01-03") (tm . "11:30")) '("user3@eml.com" . "asdf")))
+(match '(@Code @Itin3) (process "post" '("itinerary" "new") NIL '((ppl . 2) (start_addr . "asdf asdf") (dt . "2024-01-03") (tm . "11:30")) '("user3@eml.com" . "asdf")))
 (test (201) @Code)
 
 #User 1 attempts to add services to user 3's itinerary
-(test (403) (process "post" (list "itinerary" (car @Id)) NIL (list (list "services" (get (db 'nm '+Service "serv13") 'eid) (get (db 'nm '+Service "serv21") 'eid))) '("user1@eml.com" . "asdf")))
+(test (403) (process "post" (list "itinerary" (car @Itin3)) NIL (list (list "services" (get (db 'nm '+Service "serv13") 'eid) (get (db 'nm '+Service "serv21") 'eid))) '("user1@eml.com" . "asdf")))
 
 #user3 adds 3 services to itinerary just created
-(test (201 @N) (process "post" (list "itinerary" (car @Id)) NIL (list (list "services" (get (db 'nm '+Service "serv53") 'eid) (get (db 'nm '+Service "serv21") 'eid) (get (db 'nm '+Service "serv31") 'eid))) '("user3@eml.com" . "asdf")))
-(test '(@N @N @N) (get (db 'eid '+Itinerary (car @Id)) 'services))
+(test (201 @N) (process "post" (list "itinerary" (car @Itin3)) NIL (list (list "services" (get (db 'nm '+Service "serv53") 'eid) (get (db 'nm '+Service "serv21") 'eid) (get (db 'nm '+Service "serv31") 'eid))) '("user3@eml.com" . "asdf")))
+(test '(@N @N @N) (get (db 'eid '+Itinerary (car @Itin3)) 'services))
 
 
 #user views second itinerary
