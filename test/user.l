@@ -82,11 +82,10 @@
 
 
 #user views second itinerary
-
+(test (200 ("instance" ("/itinerary/50" ("del" "ro") ((start_addr "text" (ro req)) (dt "date" (ro req)) (tm "time" (ro req)) (cust "text" (ro)) (ppl "number" (ro req)) (services "instances" (ro)) (provider "text" (ro)))) (50 "xxxxxx" 739230 44400 {2} 4 (("url" "/service/39" "serv21" "serv21 desc") ("url" "/service/38" "serv13" "serv13 desc")) NIL))) (process "get" (list "itinerary" (car @Itin2)) NIL NIL '("user1@eml.com" "asdf")))
 
 #user views first itinerary
+(test (200 ("instance" ("/itinerary/49" ("del" "ro") ((start_addr "text" (ro req)) (dt "date" (ro req)) (tm "time" (ro req)) (cust "text" (ro)) (ppl "number" (ro req)) (services "instances" (ro)) (provider "text" (ro)))) (49 "asdf asdf" 739194 41400 @N 2 (("url" "/service/41" "serv31" "serv31 desc") ("url" "/service/40" "serv22" "serv22 desc") ("url" "/service/36" "serv11" "serv11 desc")) NIL))) (process "get" (list "itinerary" (car @Itin1)) NIL NIL '("user1@eml.com" "asdf")))
 
-#user attempts to add to past itinerary
-
-#user attempts to delete from past itinerary
-
+#user 2 tries to look at user1's itinerary
+(test (403) (process "get" (list "itinerary" (car @Itin2)) NIL NIL '("user2@eml.com" "asdf")))
