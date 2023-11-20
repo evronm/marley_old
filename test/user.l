@@ -1,6 +1,13 @@
 
 (load 'test/data.l)
 (symbols 'entities 'pico)
+
+#deletion permission tests
+(setq uid (get (db 'nm '+User "user20") 'eid))
+(test '(403 ((error) (NIL "Forbidden"))) (process "post" '("user") NIL (list "del" uid) ))
+(test '(204 ("mesg" "Success" "deleted successfully")) (process "post" '("user") NIL (list "del" uid) '("user20@eml.com" "asdf")))
+(test 19 (length (lsearch Nil '((nm +User)))))
+
 #anon requests new user form
 (test (200 ("instance" ("/user/" ("new") ((eml "text" (req)) (pw "password" (req)) (addr "text" NIL) (nm "text" (req)))))) (process "get" '("user" "new")))
 

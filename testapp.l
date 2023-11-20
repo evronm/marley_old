@@ -21,7 +21,7 @@
       ((not User) ($div '((id . nav)) (list ($a '((href . "/venue/list")) "Browse Venues") ($a '((href . "/provider/list")) "Browse providers") )))
       ((isa '+Venue User) ($div '((id . nav)) (list ($a '((href . "/service/new")) "New Service") ($a '((href . "/service/list")) "Browse Services") ($a '((href . "/itineraries/list")) "Browse Upcoming visitors") )))
       ((isa '+Provider User))
-      ((isa '+User User))
+      ((isa '+User User)($div '((id . nav)) (list ($a '((href . "/venue/list")) "Browse Venues") ($a '((href . "/provider/list")) "Browse providers") )))
       ()))
 
 #+REntity inherits from +Entity, adding rest methods and overriding a couple.  URL syntax is /entity/[new|search|eid] .

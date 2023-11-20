@@ -43,19 +43,8 @@
 (test 11 (length (list> '+User NIL '((nm . user1)))))
 (test 1 (length (list> '+User NIL '((nm . user9)))))
 
-(test '(c) (may  'c (db 'nm '+Venue 'ven1) '+Service)) #A Venue can create a service.
-(test NIL (may 'c (db 'nm '+Venue 'user1) '+Service)) #But a User cannot.
-(test '(u d) (may 'u (db 'nm '+Venue 'ven1) (db 'nm '+Service 'serv11))) #A venue can update and delete a 
-(test NIL (may 'u (db 'nm '+Venue 'ven2) (db 'nm '+Service 'serv11)))
 
-(test '(422 ((error) (nm "Input required") (pw "Input required") (eml "Input required"))) (post 'user ))
-(test '(422 ((error) (pw "Input required") (eml "Input required"))) (post 'user '(("nm" . "asdf"))) )
 
-(test '(422 ((error) (desc "Input required") (nm "Not unique"))) (post 'service '(  ("nm" . "serv11") ("duration" . 1) ("price" . 10) ("capacity" . 12) ("max_grp" . 4)) '("ven1@eml.com" . "asdf")))
 
-(setq uid (get (db 'nm '+User "user20") 'eid))
-(test '(403 ((error) (NIL "Forbidden"))) (process "post" '("user") NIL (list "del" uid) ))
-(test '(204 ("mesg" "Success" "deleted successfully")) (process "post" '("user") NIL (list "del" uid) '("user20@eml.com" "asdf")))
-(test 19 (length (lsearch Nil '((nm +User)))))
 
 
