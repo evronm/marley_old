@@ -16,7 +16,7 @@
 
 (redef rel Lst
   (eval (cons 'rel (head -1 Lst) )) 
-  (put *Class 'rels (append (get *Class 'rels) (list (car Lst))))
+  (put *Class 'rels (append (get *Class 'rels) (list (car Lst)))) #push goes in the wrong order
   (set_perms> (get *Class (car Lst)) (last Lst)))
 
 (extend +List)

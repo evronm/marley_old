@@ -62,5 +62,5 @@ function Table(json) {
 Table.prototype.dom=function() {
   return table(
     thead(tr( this.spec.map ((s) => th({class: s[1]}, s[0]) ))),
-    tbody(this.data.map((r) => tr(r.map((f) => td(reggae2dom (f)))))));
+    tbody(this.data.map((r) => tr({"eid": r.shift()}, r.map((f) => td(reggae2dom (f)))))));
 }
