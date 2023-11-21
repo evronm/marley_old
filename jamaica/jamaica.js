@@ -38,7 +38,8 @@ function login(e){
 
 function logout(e){
   location.reload();
-  
+  u('#account [name=eml]').nodes[0].value=""; 
+  u('#account [name=pw]').nodes[0].value=""; 
 }
 
 function getCreds() {
