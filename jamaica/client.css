@@ -170,3 +170,52 @@ tr:hover {
         text-align: left;
     }
 }
+/* Generic Form Styling within #main to match the page style */
+#main form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #cccccc;
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+#main form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333333;
+}
+
+#main form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    background-color: #e8e8e8;
+}
+
+#main form input[type="submit"] {
+    background-color: #800000;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#main form input[type="submit"]:hover {
+    background-color: #4a4a4a;
+}
+
+/* Responsive design for form elements in #main on smaller screens */
+@media screen and (max-width: 768px) {
+    #main form {
+        width: 90%;
+        margin: 20px auto;
+    }
+}
