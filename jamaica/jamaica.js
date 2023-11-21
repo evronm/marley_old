@@ -9,7 +9,11 @@ const labels={
   pw: "Password",
   addr: "Address",
   eml: "Email",
-  max_grp: "Max Group"
+  max_grp: "Max Group",
+  start_addr: "Starting Address",
+  dt: "Date",
+  tm: "Time",
+  ppl: "Number of People"
 }
 
 function init() {
