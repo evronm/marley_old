@@ -48,21 +48,21 @@
   (rel salt (+String) NIL)
   (rel addr (+Idx +String) (crud r c))
   (rel nm (+Need +Sn +Idx +String) (crud r c))
-  (rel itins (+List +Joint) cust (+Itinerary) (crud r c))
+  (rel itins (+List +Joint) cust (+Itinerary) (rud r NIL))
 
 (class +Venue +User)
   (var perms (crud r cr))
   (rel nm (+Need +Sn +Idx +String) (crud r rc))
   (rel desc (+Need +Idx +String) (crud r rc))
-  (rel providers (+List +Joint) venues (+Provider) (crd crd cr))
-  (rel services (+List +Joint) venue (+Service) (crud r cr))
+  (rel providers (+List +Joint) venues (+Provider) (crd crd r))
+  (rel services (+List +Joint) venue (+Service) (rud r r))
   (rel loc (+Ref +Link) NIL (+Nd) NIL)
 
 (class +Provider +User)
   (var perms (crud r cr))
   (rel nm (+Need +Sn +Idx +String) (crud r rc))
   (rel desc (+Need +Idx +String) (crud r rc))
-  (rel venues (+List +Joint) providers (+Venue) (crd crd r))
+  (rel venues (+List +Joint) providers (+Venue) (rd crd r))
   (rel itins (+List +Joint) provider (+Itinerary) (rd crd NIL))
 
 (class +Service +REntity +Rest)
@@ -77,8 +77,8 @@
   (rel price (+Need +Number) (crud cr r))
   (rel capacity (+Need +Number) (crud cr r))
   (rel max_grp (+Number) (crud cr r))
-  (rel venue (+Need +Ref +Joint) NIL services (+Venue) (crud cr r))
-  (rel itins (+List +Ref +Joint) NIL services (+Itinerary) (r crud NIL))
+  (rel venue (+Need +Ref +Joint) NIL services (+Venue) (rud cr r))
+  (rel itins (+List +Ref +Joint) NIL services (+Itinerary) (r))
 
 
 (class +Itinerary +REntity +Rest)

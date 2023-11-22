@@ -74,7 +74,7 @@
   
   (dm rest_get> (Path QS Post User) 
     (if (ext? This)
-      (if (num? (car Path)) #Really don't like this; may need to restructure `process` because of it.
+      (if (num? (any (car Path))) #Really don't like this; may need to restructure `process` because of it.
         (list 200 (list "instance" (spec> This User 'r) (vals> This User 'r)))
         (let (Rs (get This (intern (cadr Path))) Kls (intern (get (get (cls> This) (intern (cadr Path))) 'type)))
           (ifn Kls  #The whol mishigas above is just for this test :/
