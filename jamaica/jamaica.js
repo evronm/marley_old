@@ -43,8 +43,8 @@ function logout(e){
 }
 
 function getCreds() {
-  return btoa(val('eml') + ":" + val('pw'));
   u('#creds').attr('hidden', 'false');
+  return btoa(val('eml') + ":" + val('pw'));
 }
 
 function val(name) {

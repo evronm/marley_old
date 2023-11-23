@@ -14,11 +14,17 @@ function reggae2dom(json) {
 const Reggae={
   instance: (json) => {
     var url=json[0][0];
+    try {var [foo, typ, eid] = url.match(/\/(.+)\/(.+)\//);} catch (e) {}
     var flags=json[0][1];
-    var srch=false;
+    var vals=json[1] || [];
+    var srch=false;  //change to implement search
     var method= (srch ? "get" : "post");
-    var fields=json[0][2].map((s) => {return new Field(s).dom()});
-    return form({action: url, method: method}, fields, input({type:"submit", value: (srch ? "Search" : "Save")}));
+    var fields=json[0][2].map((s,i) => {return new Field(s, vals[i+1]).dom()});
+    if (flags=="ro"){
+      return div({class:typ, id:eid}, fields);
+    } else {
+      return form({action: url, method: method}, fields, input({type:"submit", value: (srch ? "Search" : "Save")}));
+    }
 
   },
   instances: (json) => {return new Table(json).dom()},
@@ -31,13 +37,17 @@ const Reggae={
 }
 
 
-function Field (spec) {
+function Field (spec, val) {
   this.name=spec[0];
   this.type=spec[1].replace('bool', 'checkbox'); //yes, facepalm :/
   this.restrictions=spec[2];
+  this.val=val;
 }
 
 Field.prototype.dom=function() {
+  if (this.restrictions.indexOf("ro")>-1) {
+    return this.ro();
+  }
   if (this[this.type]){
     return this[this.type]();
   } else {
@@ -46,12 +56,15 @@ Field.prototype.dom=function() {
 }
 
 Field.prototype.default=function() {
-  return [label({for: this.name}, (labels[this.name] ? labels[this.name] : this.name) + ":"), input({type: this.type, name: this.name})]
+  return [label({for: this.name}, (labels[this.name] ? labels[this.name] : this.name) + ":"), input({type: this.type, name: this.val})]
 }
 Field.prototype.password=function() {
   return [this.default(), [label({for: "confirmpw"}, "Confirm Password:"), input({type: this.type, name: "confirmpw"})]];
 }
 
+Field.prototype.ro=function() {
+  return [label({for: this.name}, (labels[this.name] ? labels[this.name] : this.name) + ":"), span({class: "ro"}, this.val)];
+}
 
 function Table(json) {
   this.url=json[0][0];
