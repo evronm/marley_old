@@ -14,14 +14,13 @@ function reggae2dom(json) {
 const Reggae={
   instance: (json) => {
     var url=json[0][0];
-    try {var [foo, typ, eid] = url.match(/\/(.+)\/(.+)\//);} catch (e) {}
     var flags=json[0][1];
     var vals=json[1] || [];
     var srch=false;  //change to implement search
     var method= (srch ? "get" : "post");
     var fields=json[0][2].map((s,i) => {return new Field(s, vals[i+1]).dom()});
     if (flags=="ro"){
-      return div({class:typ, id:eid}, fields);
+      return div({class:"ro", id:url}, fields);
     } else {
       return form({action: url, method: method}, fields, input({type:"submit", value: (srch ? "Search" : "Save")}));
     }

@@ -57,7 +57,7 @@
   (dm val> (R) 
     (let (V (get This R))
       (if (atom V)
-        V
+        (if (ext? V ) (link> V) V)
         (mapcar '((E)(link> E)) V))))
 
   (dm vals> (User Act) 

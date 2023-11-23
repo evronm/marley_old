@@ -181,14 +181,14 @@ tr:hover {
     margin: 20px auto;
 }
 
-#main form label {
+#main label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
     color: #333333;
 }
 
-#main form input {
+#main form input, main span.ro {
     width: 100%;
     padding: 8px;
     margin-bottom: 15px;

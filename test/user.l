@@ -39,7 +39,7 @@
 (test (200 ("instances" ("/provider/" ("ro") ((nm "text" (ro req)) (desc "text" (ro req)) (venues "instances" (ro)))) ((21 "prov1" "prov desc 1" NIL) (22 "prov2" "prov desc 2" NIL) (23 "prov3" "prov desc 3" NIL) (24 "prov4" "prov desc 4" NIL) (25 "prov5" "prov desc 5" NIL)))) (process "get" '("provider")))
 
 #anon browses services from ven2
-(test (200 ("instances" ("/service/" ("ro") ((nm "text" (ro req)) (duration "number" (ro req)) (price "number" (ro req)) (capacity "number" (ro req)) (max_grp "number" (ro)) (venue "text" (ro req)))) ((39 "serv21" 4 15 12 4 @V2) (40 "serv22" 5 16 13 5 @V2)))) (process "get" '("service") (list (cons "venue"  (get (db 'nm '+Venue "ven2") 'eid)))))
+(test (200 ("instances" ("/service/" ("ro") ((nm "text" (ro req)) (duration "number" (ro req)) (price "number" (ro req)) (capacity "number" (ro req)) (max_grp "number" (ro)) (venue "text" (ro req)) (itins "instances" (ro)))) ((39 "serv21" 4 15 12 4 @N NIL) (40 "serv22" 5 16 13 5 @N NIL)))) (process "get" '("service") (list (cons "venue"  (get (db 'nm '+Venue "ven2") 'eid)))))
 
 #anon requests new itinerary form
 (test (401) (process "get" '("Itinerary" "new")))
@@ -89,7 +89,7 @@
 
 
 #user views second itinerary
-(test (200 ("instance" ("/itinerary/50" ("del" "ro") ((start_addr "text" (ro req)) (dt "date" (ro req)) (tm "time" (ro req)) (cust "text" (ro)) (ppl "number" (ro req)) (services "instances" (ro)) (provider "text" (ro)))) (50 "xxxxxx" 739230 44400 {2} 4 (("url" "/service/39" "serv21" "serv21 desc") ("url" "/service/38" "serv13" "serv13 desc")) NIL))) (process "get" (list "itinerary" (car @Itin2)) NIL NIL '("user1@eml.com" "asdf")))
+(test (200 ("instance" ("/itinerary/50" ("del" "ro") ((start_addr "text" (ro req)) (dt "date" (ro req)) (tm "time" (ro req)) (cust "text" (ro)) (ppl "number" (ro req)) (services "instances" (ro)) (provider "text" (ro)))) (50 "xxxxxx" 739230 44400 ("url" "/user/1" "user1" NIL) 4 (("url" "/service/39" "serv21" "serv21 desc") ("url" "/service/38" "serv13" "serv13 desc")) NIL))) (process "get" (list "itinerary" (car @Itin2)) NIL NIL '("user1@eml.com" "asdf")))
 
 #user views first itinerary
 (test (200 ("instance" ("/itinerary/49" ("del" "ro") ((start_addr "text" (ro req)) (dt "date" (ro req)) (tm "time" (ro req)) (cust "text" (ro)) (ppl "number" (ro req)) (services "instances" (ro)) (provider "text" (ro)))) (49 "asdf asdf" 739194 41400 @N 2 (("url" "/service/41" "serv31" "serv31 desc") ("url" "/service/40" "serv22" "serv22 desc") ("url" "/service/36" "serv11" "serv11 desc")) NIL))) (process "get" (list "itinerary" (car @Itin1)) NIL NIL '("user1@eml.com" "asdf")))
