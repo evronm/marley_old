@@ -4,7 +4,7 @@ function reggae2dom(json) {
     if (typeof(json[0])=="string") {
       return (Reggae[json.shift()](json));
     } else {
-      return json.map((m) => Reggae[m[0]](m));
+      return json.map((m) => reggae2dom(m));
     }
   } else {
     return json
@@ -31,7 +31,7 @@ const Reggae={
     return "asdf";
   },
   url: (json) => {
-    return a({href: json[1]}, json[2]);
+    return a({href: json[0]}, json[1]);
   }
 }
 
@@ -62,7 +62,7 @@ Field.prototype.password=function() {
 }
 
 Field.prototype.ro=function() {
-  return [label({for: this.name}, (labels[this.name] ? labels[this.name] : this.name) + ":"), span({class: "ro"}, this.val)];
+  return [label({for: this.name}, (labels[this.name] ? labels[this.name] : this.name) + ":"), span({class: "ro"}, reggae2dom(this.val))];
 }
 
 function Table(json) {
