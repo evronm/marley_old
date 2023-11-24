@@ -80,7 +80,7 @@
         (let (Rs (get This (intern (cadr Path))) Kls (intern (get (get (cls> This) (intern (cadr Path))) 'type)))
           (ifn Kls  #The whol mishigas above is just for this test :/
             (404)
-            (list 200 (list (spec> Kls User 'r) (mapcar '((R)(vals> R User 'r)) Rs)))))) #Use first result for spec; not sure what to do if no results
+            (list 200 (list "instances" (spec> Kls User 'r) (mapcar '((R)(vals> R User 'r)) Rs)))))) #Use first result for spec; not sure what to do if no results
       (default Path '("list"))
       (or (try (intern (pack "get_" (car Path) ">")) This Path QS Post User) (404))) )
 
