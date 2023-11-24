@@ -36,7 +36,8 @@
         (rels> This User Act)
         (filter '((R)(not (isa '+Link (rel> This R)))) (rels> This User Act))))
     (list
-      (url> This)
+      (cls_nm> This)
+      (if (ext? This) (get This 'eid) "new")
       (flags> This User Act)
       (mapcar '((R) 
         (setq Rel (rel> (if (ext? This) (cls> This) This) R))
@@ -107,7 +108,7 @@
           (rollback)
           (prog1 (list 422 (cons '(error) Errs)) (setq Errs NIL)) ) 
         (commit)
-        (list 201 (get E 'eid)))))
+        (list 201 (list "instance" (spec> E User 'u) (vals> E User 'u)))) ) )
    (dm rest_del> (Eids User) 
      (for ID Eids
        (let (E (db 'eid '+REntity ID))

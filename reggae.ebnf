@@ -15,13 +15,17 @@ url ::= url_value
 
 description ::= string_value
 
-instance_spec ::= '[' url ',' '[' '[' (flag) (',' flag)* '] 'field_spec (',' field_spec)* ']' ']'
+instance_spec ::= '[' type ','  id ',' '[' (flag) (',' flag)* ']' ',' '[' field_spec (',' field_spec)* ']' ']'
 
 flag ::= new | ro | del
 
 field_spec ::= '[' name ',' type ',' restrictions ']'
 
 err_spec ::= '[' field ',' err ']'
+
+type ::= string_value
+
+id ::= integer_value | "new" | "search" | ""
 
 name ::= string_value
 
