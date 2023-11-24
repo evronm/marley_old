@@ -13,12 +13,14 @@ function reggae2dom(json) {
 
 const Reggae={
   instance: (json) => {
-    var url=json[0][0];
-    var flags=json[0][1];
+    var typ=json[0][0];
+    var eid=json[0][1];
+    var url="/" + typ + "/" + eid;
+    var flags=json[0][2];
     var vals=json[1] || [];
     var srch=false;  //change to implement search
     var method= (srch ? "get" : "post");
-    var fields=json[0][2].map((s,i) => {return new Field(s, vals[i+1]).dom()});
+    var fields=json[0][3].map((s,i) => {return new Field(s, vals[i+1]).dom()});
     if (flags=="ro"){
       return div({class:"ro", id:url}, fields);
     } else {
@@ -66,9 +68,11 @@ Field.prototype.ro=function() {
 }
 
 function Table(json) {
-  this.url=json[0][0];
-  this.flags=json[0][1];
-  this.spec=json[0][2];
+  this.typ=json[0][0];
+  this.eid=json[0][1];
+  this.url="/" + this.typ + "/" + this.eid;
+  this.flags=json[0][2];
+  this.spec=json[0][3];
   this.data=json[1];
 }
 Table.prototype.dom=function() {
