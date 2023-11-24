@@ -43,6 +43,7 @@
   (rel nd (+List +Joint +Ref) w (+Nd) NIL)
 
 (class +User +REntity +Rest)
+  (var perms (cud r c))
   (rel eml (+Need +Key +Email) (crud r c))
   (rel pw (+Need +Key +Password) (cu NIL c))
   (rel salt (+String) NIL)
@@ -90,7 +91,7 @@
   (rel start_addr (+Need +String) (crud r cr NIL))
   (rel dt (+Need +Idx +FDate) (crud r cr NIL))
   (rel tm (+Need +FTime) (crud r cr NIL))
-  (rel cust (+Joint) itins (+User) (crud r NIL))
+  (rel cust (+Joint) itins (+User) (c r NIL))
   (rel ppl (+Need +Number) (crud r rc NIL))
   (rel services (+List +Joint) itins (+Service) (crud r crd NIL))
   (rel provider (+Joint) itins (+Venue) (crud r cr NIL))
