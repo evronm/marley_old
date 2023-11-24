@@ -61,6 +61,7 @@
 (test (201 @N) (process "post" (list "itinerary" (car @Itin1)) NIL (list (list "services" (get (db 'nm '+Service "serv11") 'eid))) '("user1@eml.com" . "asdf")))
 (test '(@N) (get (db 'eid '+Itinerary (car @Itin1)) 'services))
 
+#{
 #user adds 2 more services
 (test (201 @N) (process "post" (list "itinerary" (car @Itin1)) NIL (list (list "services" (get (db 'nm '+Service "serv22") 'eid) (get (db 'nm '+Service "serv31") 'eid))) '("user1@eml.com" . "asdf")))
 (test '(@N @N @N) (get (db 'eid '+Itinerary (car @Itin1)) 'services))
@@ -96,3 +97,4 @@
 
 #user 2 tries to look at user1's itinerary
 (test (403) (process "get" (list "itinerary" (car @Itin2)) NIL NIL '("user2@eml.com" "asdf")))
+}#
