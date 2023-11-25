@@ -56,15 +56,23 @@ Field.prototype.dom=function() {
   }
 }
 
+Field.prototype.label=function() {
+  return label({for: this.name}, (labels[this.name] ? labels[this.name] : this.name) + ":");
+}
+
 Field.prototype.default=function() {
-  return [label({for: this.name}, (labels[this.name] ? labels[this.name] : this.name) + ":"), input({type: this.type, name: this.name, value: this.val})];
+  return [this.label(), input({type: this.type, name: this.name, value: this.val})];
 }
 Field.prototype.password=function() {
   return [this.default(), [label({for: "confirmpw"}, "Confirm Password:"), input({type: this.type, name: "confirmpw"})]];
 }
 
 Field.prototype.ro=function() {
-  return [label({for: this.name}, (labels[this.name] ? labels[this.name] : this.name) + ":"), span({class: "ro"}, reggae2dom(this.val))];
+  return [this.label(), span({class: "ro"}, reggae2dom(this.val))];
+}
+
+Field.prototype.instances=function() {
+  return [this.label(), button({id: this.name + "add"}, "+")]
 }
 
 function Table(json) {

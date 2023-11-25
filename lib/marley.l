@@ -57,7 +57,13 @@
 (de may (Act User E R) 
   (ifn R 
     (member Act (perms> E User))
-    (member Act  (perms> (if (type (get E R)) (get E R) (meta E R)) User E)))) 
+    (member Act  
+      (perms> 
+        (if 
+          (and (type (get E R)) (not (ext? (get E R))))  #make sure perms are for the relation, not the target entity.
+          (get E R) 
+          (meta E R)) 
+        User E)))) 
 
 (de go ()
   (start process) )
