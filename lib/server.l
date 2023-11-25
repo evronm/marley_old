@@ -70,7 +70,7 @@
           (setq QS (parse_qs (cdr Pq)))))
       (setq Headers (mapcar '((H) (let (F (sc H ":")) (cons (pack (car F)) (pack (cdr F))))) (cdr Req)))
       (when (setq Len (format (cdr (assoc "Content-Length" Headers))))
-        (setq Post (parse_qs (in *Sock (make (do (- Len 1) (link (char))))))))
+        (setq Post (parse_qs (in *Sock (ht:Read Len)))))
       
       (setq Creds (mapcar 'pack (sc (decode64 (pack (tail 1 (sc (cdr (assoc "Authorization" Headers)) " ")))) ":")) )
       (apply 'respond
