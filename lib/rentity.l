@@ -100,7 +100,7 @@
               (put> E R Ent)))
           (let (V (cdr (assoc R Post)))
             (cond
-              ((setq Err (mis> E R (or V (get E R)))) (push 'Errs (list R Err )))
+              ((setq Err (mis> E R (or (if (num? (any V)) (any V) V) (get E R)))) (push 'Errs (list R Err )))
               ((and V (not (may (req_action Verb Path) User This R))) (push 'Errs (list R "Forbidden")))
               (V (put> E R (if (num? (any V)) (any V) V)))))))
       (if Errs

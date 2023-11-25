@@ -53,7 +53,7 @@ function val(name) {
 
 function req(url, meth, body) {
   if (! meth) {meth="get"}
-  return fetch(url, {method: meth, headers: {'Authorization': 'Basic ' + getCreds()}})
+  return fetch(url, {method: meth, headers: {'Authorization': 'Basic ' + getCreds()}, body: body})
     .then((res) => res.json())
 }
 
@@ -86,8 +86,7 @@ function showError(json) {
 
 function formSubmit(e) {
   e.preventDefault();
-  fetch(e.target.action, {method: "POST", body: u(e.target).serialize()}).
-    then((res) => res.json()).
+  req(e.target.action, "POST", u(e.target).serialize()).
     then((json) => processResponse(json)).
     catch((err) => console.error("error:", err));
 }
