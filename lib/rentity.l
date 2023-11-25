@@ -41,7 +41,7 @@
       (flags> This User Act)
       (mapcar '((R) 
         (setq Rel (rel> (if (ext? This) (cls> This) This) R))
-        (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u)) )) Rels)))
+        (list R (spec> Rel User Act) (restrict> Rel User (if (= 'c Act) 'c 'u) This) )) Rels)))
 
   (dm flags> (User Act) 
     (off Flags)

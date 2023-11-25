@@ -3,15 +3,15 @@
   (dm perms> (User E) ((role_pos> (if E E (get This 'cls)) User) (mapcar 'chop ( : perms))))
   (dm set_perms> (P)  ( =: perms P) )
   (dm req> () (isa '+Need This))
-  (dm ro> (User Act) (not (may Act User (get This 'cls) (get This 'var))))
+  (dm ro> (User Act E) (not (may Act User E (get This 'var))))
   (dm spec> () 
     (if (setq typ (lowc (pack (cdr (chop (car (sect '(+Number +Date +Time +Bool +Password) (type This) )))))))
       typ
       "text")) #This is kind of ugly but is unlikely to need changing
-  (dm restrict> (User Act)
+  (dm restrict> (User Act E)
     (setq Restr NIL)
     (when (isa '+Need This ) (push 'Restr 'req))
-    (when (ro> This User Act) (push 'Restr 'ro))
+    (when (ro> This User Act E) (push 'Restr 'ro))
     Restr)
 
 (redef rel Lst
