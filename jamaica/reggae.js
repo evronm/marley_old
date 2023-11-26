@@ -72,19 +72,17 @@ Field.prototype.ro=function() {
 }
 
 Field.prototype.instances=function() {
-  return [this.label(), button({id: this.name + "add"}, "+")]
+  return [this.label(), button({id: "add_" + this.name}, "+")]
 }
 
 function Table(json) {
   this.typ=json[0][0];
-  this.eid=json[0][1];
-  this.url="/" + this.typ + "/" + this.eid;
   this.flags=json[0][2];
   this.spec=json[0][3];
   this.data=json[1];
 }
 Table.prototype.dom=function() {
-  return table(
+  return table( {class: this.typ},
     thead(tr( this.spec.map ((s) => th({class: s[1]}, s[0]) ))),
     tbody(this.data.map((r) => tr({"eid": r.shift()}, r.map((f) => td(reggae2dom (f)))))));
 }

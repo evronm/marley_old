@@ -63,10 +63,19 @@ function urlClick(e) {
     .catch((err) => console.error("error:", err));
 }
 
+function rowClick(e) {
+  if (e.target.tagName == 'A') {return}
+  var url = "/" + e.target.closest('table').classList[0] + "/" + u(e.target).parent('tr').attr('eid');
+  req(url)
+    .then((json) => show('#main', json))
+    .catch((err) => console.error("error:", err));
+}
+
 function show(target, json) {
   u(target).empty().append(reggae2dom(json));
   u('#main form').on('submit', formSubmit);
-  u('a').handle ('click', urlClick)
+  u('a').handle('click', urlClick)
+  u('tr').handle('click', rowClick);
 }
 
 function processResponse(json) {
