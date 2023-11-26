@@ -8,6 +8,7 @@
 
 (load (pack (confv '(client)) "/client.l"))
 
+# Authentication.  Creds is a list of (email . password) cons cells.
 (de authn (Creds)
   (let (Cls (intern "+User" (intern (confv '(ns)))))
     (setq User (db 'eml Cls (car Creds))))
@@ -22,7 +23,8 @@
         'u 
         (if (= "del" (car Path) 'd NIL))))))
 
-(de process (Verb Path QS Post Creds)
+#This is the default processor that gets sent to the server.
+(de process (Verb Path QS Post Creds)  #Verb is the HTTP verb, Path is the path, QS is the query string, Post is the post data, Creds is the credentials.
   (default Path (confv '(default_path))) 
   (let (RR (++ Path)  #RR = Requested Resource
     Cls (or (isa '+Rest (intern (to_cls_nm RR) (intern (confv '(ns))))) NIL)
@@ -54,6 +56,7 @@
                     (send (any (pack "rest_" Verb ">")) Obj Path QS Post User))))
             (send (any (pack "rest_" Verb ">")) Cls Path QS Post User))))))  #send user even though auth not required; could be logged in anyway.
 
+#This gets used all over the place.  It is entirely about frontend capabilities.
 (de may (Act User E R) 
   (ifn R 
     (member Act (perms> E User))

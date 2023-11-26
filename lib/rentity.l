@@ -1,10 +1,12 @@
 
+#This is a wrapper class for +Entity which adds a bunch of REST methods.
 (class +REntity +Entity) 
   (var perms (~(confv '(default_cls_perms)))) #kind of ugly; requires some thought to grok; bear in mind `var` is an f-expression  (crud r c) as of now...
 
   (dm T @ (put> This 'eid (genKey 'eid '+REntity)))  #Every addressable entity has a unique ID.
   (rel eid (+Key +Number) NIL)
 
+  #override this to use more than the default permission slots (owner, group, logged in, and anon)
   (dm role_pos> (User) #usually users and anons get the same perms; and caddr and last happen to be the same.  Need to watch out for this and may want to change it.
     (cond 
       ((= User (owner> This)) 'car)
@@ -19,17 +21,17 @@
   (dm need_auth> (Verb Path) (not (may (req_action Verb Path) NIL This)))
 
   (dm owner> () This)
-  (dm group_mem> (User) NIL)
+  (dm group_mem> (User) NIL) #no priveleged groups by default
   (dm cls> () (if (ext? This) (car (type This)) (name This)))
   (dm cls_nm> () (lowc (pack (cdr (chop (cls> This)))) ))
   (dm url> () (pack "/" (cls_nm> This) "/" (when (ext? This) (get This 'eid))))
+  (dm link> () (list "url" (url> This) (get This 'nm) (get This 'desc)))
 
   (dm rel> (R) (meta (list This) R))
   (dm rels> (User Act) 
     (filter '((R) (may Act User This R) )
       (uniq (delete NIL (append (try 'rels> (car (type This)) User Act ) ((if (ext? This) meta get) This 'rels)) ))))
 
-  (dm link> () (list "url" (url> This) (get This 'nm) (get This 'desc)))
   (dm spec> (User Act)
     (setq Rels 
       (if (n== Act 'c)
@@ -72,6 +74,9 @@
   (dm get_search> (Path QS Post User) (new (append (str This) '(+Seach))))
   (dm get_list> (Path QS Post User) 
     (list 200 (list "instances" (spec> This User 'r) (list_vals> This Path QS Post User))))
+  (dm get_rel_options> (Path QS Post User) #not working yet
+    (let (E (get (get This (cadr Path)) 'cls)) 
+      (get_list> E)))
   
   (dm rest_get> (Path QS Post User) 
     (if (ext? This)
