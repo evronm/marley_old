@@ -71,10 +71,21 @@ function rowClick(e) {
     .catch((err) => console.error("error:", err));
 }
 
+function showRels(e) {
+  e.preventDefault();
+  var url="/"+e.target.classList[1]+"/";
+  var div_id=e.target.classList[1]+" list";
+  u(e.target).after(div({id:div_id, class:"select"}));
+  req(url)
+    .then((json) =>(show("#"+div_id, json)))
+    .catch((err) => console.error("error:", err));
+}
+
 function show(target, json) {
   u(target).empty().append(reggae2dom(json));
   u('#main form').on('submit', formSubmit);
   u('a').handle('click', urlClick)
+  u('.showRels').handle('click', showRels)
   u('tr').handle('click', rowClick);
 }
 

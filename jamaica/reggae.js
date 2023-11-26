@@ -72,7 +72,7 @@ Field.prototype.ro=function() {
 }
 
 Field.prototype.instances=function() {
-  return [this.label(), button({id: "add_" + this.name}, "+")]
+  return [this.label(), reggae2dom(this.val), button({class: "showRels " + this.name}, "+")]
 }
 
 function Table(json) {
